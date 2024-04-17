@@ -13,10 +13,17 @@ public interface IUserDAO {
     public User addUser(String userName, String password);
 
     /**
+     * gets the parentalLock value for a given id
+     * @param id user id
+     * @return parental lock value
+     */
+    public boolean getParentalLock(int id);
+
+    /**
      * checks the username and password and returns the id
      * @param userName userName of the user
      * @param password password of the user
-     * @return the id of the user or -1 if not found
+     * @return user object null if no user found
      */
-    public int login(String userName, String password);
+    public User login(String userName, String password);
 }
