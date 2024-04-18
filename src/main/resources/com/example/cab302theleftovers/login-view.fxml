@@ -1,13 +1,13 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.control.PasswordField?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.cab302theleftovers.HelloController">
 
@@ -28,8 +28,9 @@
         <TextField fx:id="userNameTextField" promptText="Username"/>
         <PasswordField fx:id="passwordTextField" promptText="Password"/>
         <HBox spacing="10.0" alignment="BOTTOM_CENTER">
-            <Button text="Back" />
-            <Button text="Login" />
+            <Button fx:id="backButton" text="Back" onAction="#onBackButtonClick" />
+            <Button fx:id="loginButton" text="Login" onAction="#onLoginButtonClick" />
         </HBox>
+        <Label fx:id="denyLoginLabel"/>
     </VBox>
 </VBox>

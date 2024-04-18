@@ -6,13 +6,9 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.control.PasswordField?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.cab302theleftovers.HelloController">
@@ -33,12 +29,13 @@
         </VBox>
 
         <Label text="Create new account:" />
-        <TextField fx:id="userNameTextField1" promptText="Username"/>
-        <PasswordField fx:id="passwordTextField1" promptText="Password"/>
-        <PasswordField fx:id="confirmpasswordTextField1" promptText="Confirm Password"/>
+        <TextField fx:id="regUserNameTextField" promptText="Username"/>
+        <PasswordField fx:id="regPasswordTextField" promptText="Password"/>
+        <PasswordField fx:id="confirmPasswordTextField" promptText="Confirm Password"/>
         <HBox spacing="10.0" alignment="BOTTOM_CENTER">
-            <Button text="Back" />
-            <Button text="Confirm" />
+            <Button fx:id="backButton" text="Back" onAction="#onBackButtonClick" />
+            <Button fx:id="confirmButton" text="Confirm" onAction="#onConfirmButtonClick" />
         </HBox>
+        <Label fx:id="denyRegisterLabel"/>
     </VBox>
 </VBox>
