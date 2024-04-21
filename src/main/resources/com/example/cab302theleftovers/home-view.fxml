@@ -34,7 +34,13 @@ concentrate fully on your tasks and achieve your goals efficiently." style="-fx-
 
     <VBox spacing="10.0" alignment="CENTER">
         <Label text="Don't have an Account? Sign up Now!" style="-fx-font-size: 18px;" wrapText="true"/>
-        <Button text="Get Started" style="-fx-font-size: 24px; -fx-border-color: black; -fx-background-color: #43aed9;" maxWidth="Infinity"/>
+        <Button fx:id="registerButton"
+                text="Get Started"
+                style="-fx-font-size: 24px; -fx-border-color: black; -fx-background-color: #43aed9;"
+                maxWidth="Infinity"
+                onAction="#onLoginButtonClick"
+                disable="false"
+        />
 
     </VBox>
 
@@ -42,7 +48,13 @@ concentrate fully on your tasks and achieve your goals efficiently." style="-fx-
 
     <VBox spacing="10.0" alignment="CENTER">
         <Label text="Already Signed Up? Log In!" style="-fx-font-size: 18px;" wrapText="true"/>
-        <Button text="Login" style="-fx-font-size: 24px; -fx-border-color: black; -fx-background-color: #43aed9;" maxWidth="Infinity"/>
+        <Button fx:id="loginButton"
+                text="Login"
+                style=" -fx-font-size: 24px; -fx-border-color: black; -fx-background-color: #43aed9;"
+                maxWidth="Infinity"
+                onAction="#onRegisterButtonClick"
+                disable="true"
+        />
 
     </VBox>
 

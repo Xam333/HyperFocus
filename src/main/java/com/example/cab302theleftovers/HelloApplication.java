@@ -10,7 +10,7 @@ import java.io.IOException;
 public class HelloApplication extends Application {
 
     // Constants defining the window title and size
-    public static final String TITLE = "The Leftover Project";
+    public static final String TITLE = "Focus App";
     public static final int WIDTH = 390;
     public static final int HEIGHT = 644;
 
@@ -19,7 +19,7 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), WIDTH, HEIGHT);
-        stage.setTitle("Test Menu");
+        stage.setTitle(TITLE);
         stage.setScene(scene);
         stage.show();
     }

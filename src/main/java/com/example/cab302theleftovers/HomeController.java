@@ -1,6 +1,7 @@
 package com.example.cab302theleftovers;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -14,8 +15,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class HomeController {
 
+    public Button loginButton;
+    public Button registerButton;
     @FXML
     private ImageView imageView;
 
@@ -30,17 +35,26 @@ public class HomeController {
     }
 
     @FXML
-    private TextField firstNameTextField;
+    protected void onRegisterButtonClick() throws IOException {
+        Stage stage = (Stage) registerButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(""));
+        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+        stage.setScene(scene);
+    }
+
     @FXML
-    private TextField lastNameTextField;
-    @FXML
-    private TextField emailTextField;
-    @FXML
-    private TextField phoneTextField;
-    @FXML
-    private VBox contactContainer;
+    protected void onLoginButtonClick() throws IOException {
+        Stage stage = (Stage) loginButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(""));
+        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+        stage.setScene(scene);
+    }
+
+
     public HomeController(){
     }
+
+
 
     /**
      * Programmatically selects a contact in the list view and
