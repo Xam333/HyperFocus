@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.shape.Line?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.cab302theleftovers.BlockedController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <children>
+        <VBox spacing="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" AnchorPane.bottomAnchor="10.0">
+            <children>
+                <HBox spacing="5.0" alignment="CENTER">
+                    <children>
+                        <Button text="&#x3C;" />
+                        <Label text="Blocked List" />
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Button text="X" />
+                    </children>
+
+                </HBox>
+                <Line startX="0.0" startY="0.0" endX="380" endY="0.0" stroke="BLACK" />
+
+                <TextField fx:id="searchField" promptText="Search" />
+                <HBox spacing="10.0" alignment="CENTER">
+                    <children>
+                        <Button text="Website +"/>
+                        <Button text="Application +"/>
+                    </children>
+                </HBox>
+                <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn text="Name" />
+                        <TableColumn text="Web/File Link" />
+                    </columns>
+                </TableView>
+                <Button fx:id="saveButton" text="Save" maxWidth="Infinity" VBox.vgrow="NEVER" />
+            </children>
+        </VBox>
+    </children>
+
+</AnchorPane>

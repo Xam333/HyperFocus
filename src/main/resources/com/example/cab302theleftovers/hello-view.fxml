@@ -42,7 +42,7 @@
     <Button fx:id="blockedButton"
             text="Blocked"
             onAction="#onBlockedButtonClick"
-            disable="true"
+            disable="false"
     />
     <Button fx:id="timerButton"
             text="Timer"

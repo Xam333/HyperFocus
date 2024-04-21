@@ -85,7 +85,7 @@ public class HelloController {
     @FXML
     protected void onBlockedButtonClick() throws IOException {
         Stage stage = (Stage) blockedButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(""));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("blocked-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
         stage.setScene(scene);
     }
