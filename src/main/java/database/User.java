@@ -26,8 +26,4 @@ public class User {
     public void setParentalLock(boolean parentalLock) {
         this.parentalLock = parentalLock;
     }
-
-    public boolean login(String password) {
-        return false;
-    }
 }
