@@ -21,7 +21,7 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
 
-    <ImageView fx:id="imageView"/>
+    <ImageView fx:id="focusAppLogo"/>
     <Region minHeight="25"/>
 
     <VBox>
@@ -41,7 +41,6 @@ concentrate fully on your tasks and achieve your goals efficiently." style="-fx-
                 onAction="#onLoginButtonClick"
                 disable="false"
         />
-
     </VBox>
 
     <Region minHeight="50"/>
@@ -55,9 +54,5 @@ concentrate fully on your tasks and achieve your goals efficiently." style="-fx-
                 onAction="#onRegisterButtonClick"
                 disable="true"
         />
-
     </VBox>
-
-
-
 </VBox>
