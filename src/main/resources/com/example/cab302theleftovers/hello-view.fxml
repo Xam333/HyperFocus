@@ -32,7 +32,7 @@
     <Button fx:id="mainButton"
             text="Main"
             onAction="#onMainButtonClick"
-            disable="true"
+            disable="false"
     />
     <Button fx:id="menuButton"
             text="Menu"
