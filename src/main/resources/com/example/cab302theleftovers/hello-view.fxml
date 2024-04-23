@@ -13,4 +13,40 @@
 
     <Label fx:id="welcomeText"/>
     <Button text="Hello!" onAction="#onHelloButtonClick"/>
+
+    <Button fx:id="homeButton"
+            text="Home"
+            onAction="#onHomeButtonClick"
+            disable="false"
+    />
+    <Button fx:id="registerButton"
+            text="Register"
+            onAction="#onRegisterButtonClick"
+            disable="true"
+    />
+    <Button fx:id="loginButton"
+            text="Login"
+            onAction="#onLoginButtonClick"
+            disable="true"
+    />
+    <Button fx:id="mainButton"
+            text="Main"
+            onAction="#onMainButtonClick"
+            disable="true"
+    />
+    <Button fx:id="menuButton"
+            text="Menu"
+            onAction="#onMenuButtonClick"
+            disable="true"
+    />
+    <Button fx:id="blockedButton"
+            text="Blocked"
+            onAction="#onBlockedButtonClick"
+            disable="false"
+    />
+    <Button fx:id="timerButton"
+            text="Timer"
+            onAction="#onTimerButtonClick"
+            disable="true"
+    />
 </VBox>
