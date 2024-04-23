@@ -34,7 +34,10 @@
                         <Region HBox.hgrow="ALWAYS" />
                         <Button>
                             <graphic>
+                                <ImageView fx:id="youtubeIcon"/>
+                                <ImageView fx:id="redditIcon"/>
                                 <ImageView fx:id="userIcon"/>
+
                             </graphic>
                         </Button>
                     </children>
@@ -48,9 +51,9 @@
                 </HBox>
                 <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn text="" minWidth="50" prefWidth="50" maxWidth="50" />
-                        <TableColumn text="Name" minWidth="100" prefWidth="100" maxWidth="100"/>
-                        <TableColumn text="Web/File Link" minWidth="200" prefWidth="250" maxWidth="300" />
+                        <TableColumn fx:id="iconColumn" text="" minWidth="50" prefWidth="50" maxWidth="50" style="-fx-alignment: center;"/>
+                        <TableColumn fx:id="nameColumn" text="Name" minWidth="100" prefWidth="100" maxWidth="100" style="-fx-alignment: center;"/>
+                        <TableColumn fx:id="locationColumn" text="Web/File Link" minWidth="200" prefWidth="250" maxWidth="300" style="-fx-alignment: center;" />
                     </columns>
                 </TableView>
                 <Button fx:id="saveButton" text="Save" maxWidth="Infinity" VBox.vgrow="NEVER" />
