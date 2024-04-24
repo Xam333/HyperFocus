@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.shape.Rectangle?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.cab302theleftovers.TimerController"
+            prefHeight="400.0" prefWidth="600.0"
+            style="-fx-background-color: #d8f2eb;">
+
+    <VBox fx:id="vBoxContainer" spacing="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" AnchorPane.bottomAnchor="10.0">
+
+        <HBox fx:id="hBoxHeader" spacing="5.0" alignment="CENTER_LEFT">
+            <Button fx:id="BackBtn" text="&#x3C;" onAction="#onBackButtonClick"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="Timer" style="-fx-font-size: 18px;" wrapText="true"/>
+            <Region HBox.hgrow="ALWAYS"/>
+        </HBox>
+
+        <Rectangle fx:id="timerFace" fill="wheat"/>
+
+        <HBox alignment="CENTER" spacing="10">
+            <Button fx:id="PauseBtn"
+                    style="-fx-font-size: 24px; -fx-border-color: black; -fx-background-color: #43aed9;"
+                    text="Pause"
+                    maxWidth="Infinity"
+                    onAction="#onPauseButtonClick"
+                    HBox.hgrow="ALWAYS"
+                    prefWidth="100"
+                    visible="true"/>
+
+            <Button fx:id="ResumeBtn"
+                    style="-fx-font-size: 24px; -fx-border-color: black; -fx-background-color: #43aed9;"
+                    text="Resume"
+                    maxWidth="Infinity"
+                    onAction="#onResumeButtonClick"
+                    HBox.hgrow="ALWAYS"
+                    prefWidth="0"
+                    visible="false"
+                    managed="false"/>
+
+            <Button fx:id="StopBtn"
+                    text="Stop"
+                    style="-fx-font-size: 24px; -fx-border-color: black; -fx-background-color: #43aed9;"
+                    maxWidth="Infinity"
+                    onAction="#onStopButtonClick"
+                    HBox.hgrow="ALWAYS"/>
+
+        </HBox>
+
+    </VBox>
+</AnchorPane>
