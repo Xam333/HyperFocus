@@ -28,14 +28,20 @@ public class TimerController {
 
     public void initialize() {
         // Get offset and duration from main (Get offset and Get Duration)
-        timer = new Timer(0, 1, this);
+        timer = new Timer(0.5, 0.5, this);
         timer.Control(Command.Start);
+
+//        Timer T2 = new Timer(null, 10, this);
     }
 
     public void UpdateStopWatch(String TimeString){
         Platform.runLater(()->{
             StopWatch.setText(TimeString);
         });
+    }
+
+    public void UnlockPauseButton(){
+        PauseBtn.setDisable(false);
     }
 
 
