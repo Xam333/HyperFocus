@@ -1,13 +1,13 @@
 package com.example.cab302theleftovers;
 import Time.*;
 
-
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.scene.control.Label;
 
 
 
@@ -15,21 +15,29 @@ import java.awt.*;
 import java.io.IOException;
 
 public class TimerController {
-
+    private Timer timer;
     @FXML
     private Button BackBtn;
     @FXML
     private Button PauseBtn;
     @FXML
     private Button ResumeBtn;
+    @FXML
+    private Label StopWatch;
 
-    private Timer timer;
 
     public void initialize() {
         // Get offset and duration from main (Get offset and Get Duration)
-        timer = new Timer(0, 1);
+        timer = new Timer(0, 1, this);
         timer.Control(Command.Start);
     }
+
+    public void UpdateStopWatch(String TimeString){
+        Platform.runLater(()->{
+            StopWatch.setText(TimeString);
+        });
+    }
+
 
     @FXML
     protected void onPauseButtonClick(){
@@ -44,9 +52,6 @@ public class TimerController {
             ResumeBtn.setVisible(true);
             ResumeBtn.setPrefWidth(100);
             ResumeBtn.setManaged(true);
-        }
-        else {
-            // update errors at the bottom
         }
     }
 
@@ -64,14 +69,11 @@ public class TimerController {
             ResumeBtn.setPrefWidth(0);
             ResumeBtn.setManaged(false);
         }
-        else {
-            // update errors at the bottom
-        }
     }
-
 
     @FXML
     protected void onBackButtonClick() throws IOException {
+        timer.Control(Command.Stop); // kills the timer so no duplicates are running
         Stage stage = (Stage) BackBtn.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
