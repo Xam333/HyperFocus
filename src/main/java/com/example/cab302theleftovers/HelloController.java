@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class HelloController {
+    public Button helloButton;
     @FXML
     public Label toHomePage;
 
@@ -17,6 +18,7 @@ public class HelloController {
     private Label welcomeText;
 
     @FXML
+
     private Button homeButton;
 
     @FXML
@@ -38,8 +40,12 @@ public class HelloController {
     private Button timerButton;
 
     @FXML
-    protected void onHelloButtonClick() {
+    protected void onHelloButtonClick() throws IOException {
         welcomeText.setText("Welcome to JavaFX Application!");
+        Stage stage = (Stage) helloButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("register-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+        stage.setScene(scene);
     }
 
     @FXML
