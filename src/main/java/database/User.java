@@ -1,6 +1,5 @@
 package database;
 
-
 public class User {
     private int id;
     private String userName;
@@ -25,5 +24,9 @@ public class User {
 
     public void setParentalLock(boolean parentalLock) {
         this.parentalLock = parentalLock;
+    }
+
+    public String getUserName() {
+        return this.userName;
     }
 }
