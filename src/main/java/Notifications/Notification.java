@@ -1,12 +1,15 @@
 package Notifications;
 
 import javax.sound.sampled.*;
-
 import java.io.File;
 import java.io.IOException;
 
 
 public class Notification {
+    /**
+     * Plays a sound of the supported audio format (wav).
+     * @param Volume controls the volume of the sound.
+     */
     public static void PlaySound(float Volume){
         // This will read from the DB or from a DB information class.
         String SoundFilePath = "src/main/resources/Sounds/alarm1.wav";

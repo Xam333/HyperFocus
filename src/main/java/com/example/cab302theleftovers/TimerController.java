@@ -28,7 +28,7 @@ public class TimerController {
 
     public void initialize() {
         // Get offset and duration from main (Get offset and Get Duration)
-        timer = new Timer(0.5, 0.5, this);
+        timer = new Timer(null, 0.5, this);
         timer.Control(Command.Start);
 
 //        Timer T2 = new Timer(null, 10, this);
@@ -47,17 +47,12 @@ public class TimerController {
 
     @FXML
     protected void onPauseButtonClick(){
-        // Check timer status
+        // There should be no if statement here, either lock the button or hid it
         if (timer.isTimerRunning()){
+
             timer.Control(Command.Pause);
-
-            PauseBtn.setVisible(false);
-            PauseBtn.setPrefWidth(0);
-            PauseBtn.setManaged(false);
-
-            ResumeBtn.setVisible(true);
-            ResumeBtn.setPrefWidth(100);
-            ResumeBtn.setManaged(true);
+            HideButton(PauseBtn);
+            ShowButton(ResumeBtn);
         }
     }
 
@@ -65,16 +60,22 @@ public class TimerController {
     protected void onResumeButtonClick(){
         // Check timer status
         if (timer.isTimerPaused()){
+
             timer.Control(Command.Resume);
-
-            PauseBtn.setVisible(true);
-            PauseBtn.setPrefWidth(100);
-            PauseBtn.setManaged(true);
-
-            ResumeBtn.setVisible(false);
-            ResumeBtn.setPrefWidth(0);
-            ResumeBtn.setManaged(false);
+            HideButton(ResumeBtn);
+            ShowButton(PauseBtn);
         }
+    }
+
+    private void ShowButton(Button btnToShow){
+        btnToShow.setVisible(true);
+        btnToShow.setPrefWidth(100);
+        btnToShow.setManaged(true);
+    }
+    private void HideButton(Button btnToShow){
+        btnToShow.setVisible(false);
+        btnToShow.setPrefWidth(0);
+        btnToShow.setManaged(false);
     }
 
     @FXML

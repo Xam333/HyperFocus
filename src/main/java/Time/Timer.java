@@ -15,41 +15,61 @@ import java.util.concurrent.TimeUnit;
  */
 public class Timer {
     /**
-     * So for the alarm sound is a different class.
-     * \
-     * For presets all we need to remember is the Offset and Duration.
-     * \
-     * For Total time focused we would just have a part in the Account where
-     * after the timer ends we would just add the time to what is already there.
+     * Used for tracking the state of the timer.
      */
     private enum State {
         Running, NotRunning, Paused, PreRun
     }
+
     private State Timer_State;
+    public boolean isTimerPaused() { return Timer_State == State.Paused; }
+    public  boolean isTimerPreRun() { return Timer_State == State.PreRun; }
     public boolean isTimerRunning() { return Timer_State == State.Running; }
     public boolean isTimerNotRunning() { return Timer_State == State.NotRunning; }
-    public boolean isTimerPaused() { return Timer_State == State.Paused; }
 
 
     private LocalTime Timer_End;
     private final TimerController Timer_Controller;
 
-
+    /**
+     * Stores the value of the timer offset.
+     */
     private final double Timer_Preset_Offset;
+
+    /**
+     * Stores the value of the timer duration.
+     */
     private final double Timer_Preset_Duration;
+
+
+    /**
+     * Gets the timer offset to add to a preset.
+     * @return Timer offset.
+     */
     public double getTimer_Preset_Offset() { return Timer_Preset_Offset; }
+
+    /**
+     * Gets the timer duration to add to a preset.
+     * @return Timer duration.
+     */
     public double getTimer_Preset_Duration() { return Timer_Preset_Duration; }
 
-    
+    /**
+     * Global scheduler for the timer.
+     */
     private static ScheduledExecutorService TimeScheduler;
     private Duration PausedDuration;
     private Duration CountingDuration;
 
+
+    /**
+     * The format of time as 12 hour time(hh:mm:ss a).
+     */
     private final DateTimeFormatter Timer_12_Format = DateTimeFormatter.ofPattern("h:mm:ss a");
 
     /**
      * Basic constructor for the timer class.
-     *
+     * @param Timer_Controller The calling time controller.
      * @param TimerOffset   The offset of minutes before the timer starts.
      * @param TimerDuration The duration of the timer in minutes (0 to 1439).
      */
@@ -58,8 +78,8 @@ public class Timer {
         Timer_Preset_Duration = TimerDuration == null ? 0.0 : (TimerDuration * 60);
         Timer_State = State.NotRunning;
 
-        System.out.println("Timer_Preset_Offset: " + Timer_Preset_Offset);
-        System.out.println("Timer_Preset_Duration: " + Timer_Preset_Duration);
+        System.out.println("Timer_Preset_Offset: " + Timer_Preset_Offset + "sec");
+        System.out.println("Timer_Preset_Duration: " + Timer_Preset_Duration + "sec");
 
         LocalTime timer_Start = LocalTime.now().plusSeconds((long) Timer_Preset_Offset);
         this.Timer_End = timer_Start.plusSeconds((long)Timer_Preset_Duration);
@@ -94,6 +114,10 @@ public class Timer {
         }
     }
 
+    /**
+     * Formats the timer as (hh:mm:ss).
+     * @return Formatted time (hh:mm:ss)
+     */
     private String FormatTime(){
         long H = CountingDuration.toHours();
         long M = CountingDuration.minusHours(H).toMinutes();
@@ -102,42 +126,36 @@ public class Timer {
         return String.format("%02d:%02d:%02d", H, M, S);
     }
 
+    /**
+     * Enforces a state upon the timer.
+     * @param EnforceThis The state that the timer will enforce.
+     */
     private void EnforceState(State EnforceThis){
         Timer_State = EnforceThis;
     }
 
+    /**
+     * Controls the timer.
+     * @param command The command to run.
+     */
     public void Control(Command command){
-        try{
-            switch (command){
-                case Start:
-                    if (Timer_Preset_Offset == 0){
-                        Start();
-                    }
-                    else{
-                        PreStart();
-                    }
-
-                    break;
-
-                case Stop:
-                    Stop();
-                    break;
-
-                case Pause:
-                    Pause();
-                    break;
-
-                case Resume:
-                    Resume();
-                    break;
-            }
-        }catch (TimerStatusError E){
-            System.out.println(E.getMessage());
+        switch (command) {
+            case Start -> {if (Timer_Preset_Offset != 0){ PreStart();} else { Start(); }}
+            case Stop -> Stop();
+            case Pause -> Pause();
+            case Resume -> Resume();
+            default -> throw new IllegalArgumentException("Command: " + command + " is invalid.");
         }
     }
 
+    /**
+     * Begins the Pre-start period of the timer.
+     */
     private void PreStart(){
+        // Debug.
         System.out.println("Timer PreRun at: " + LocalTime.now().format(Timer_12_Format));
+        // End Debug.
+
         EnforceState(State.PreRun);
         Timer_Controller.UpdateStopWatch(FormatTime());
         TimeScheduler = Executors.newScheduledThreadPool(1);
@@ -145,8 +163,14 @@ public class Timer {
     }
 
 
+    /**
+     * Starts the timer.
+     */
     private void Start(){
+        // Debug.
         System.out.println("Timer Started at: " + LocalTime.now().format(Timer_12_Format));
+        // End Debug.
+
         if (Timer_Preset_Offset != 0){ TimeScheduler.shutdownNow(); }
 
         EnforceState(State.Running);
@@ -155,24 +179,61 @@ public class Timer {
         TimeScheduler = Executors.newScheduledThreadPool(1);
         TimeScheduler.scheduleAtFixedRate(this::RunningTimer, 0, 1, TimeUnit.SECONDS);
     }
+
+    /**
+     * Stops the timer.
+     */
     private void Stop(){
+        // Debug.
         System.out.println("Timer Stopped at: " + LocalTime.now().format(Timer_12_Format));
+        // End Debug.
+
         EnforceState(State.NotRunning);
         // Get total time here.
         TimeScheduler.shutdownNow();
     }
+
+    /**
+     * Resumes the timer.
+     */
     private void Resume(){
+        // Debug.
         System.out.println("Timer Resumed at: " + LocalTime.now().format(Timer_12_Format));
+        // End Debug.
+
         EnforceState(State.Running);
         Timer_End = LocalTime.now().plusSeconds(PausedDuration.toSeconds());
         CountingDuration = PausedDuration;
         TimeScheduler = Executors.newScheduledThreadPool(1);
         TimeScheduler.scheduleAtFixedRate(this::RunningTimer, 0, 1, TimeUnit.SECONDS);
     }
+
+    /**
+     * Pauses the timer.
+     */
     private void Pause(){
+        // Debug.
         System.out.println("Timer Paused at: " + LocalTime.now().format(Timer_12_Format));
+        // End Debug.
         EnforceState(State.Paused);
         PausedDuration = Duration.between(LocalTime.now(), Timer_End);
         TimeScheduler.shutdownNow();
+    }
+
+    /**
+     * Forces the timer to stop if the application is closed.
+     */
+    public static void ForceStopTimer(){
+        if(TimeScheduler != null && !TimeScheduler.isShutdown()){
+            TimeScheduler.shutdown();
+            try{
+                if(!TimeScheduler.awaitTermination(5, TimeUnit.SECONDS)){
+                    TimeScheduler.shutdownNow();
+                }
+            } catch (InterruptedException E){
+                TimeScheduler.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 }

@@ -4,8 +4,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
+import Time.Timer;
 
 public class HelloApplication extends Application {
 
@@ -21,6 +21,7 @@ public class HelloApplication extends Application {
         Scene scene = new Scene(fxmlLoader.load(), WIDTH, HEIGHT);
         stage.setTitle(TITLE);
         stage.setScene(scene);
+        stage.setOnCloseRequest(windowEvent -> Timer.ForceStopTimer());
         stage.show();
     }
 
