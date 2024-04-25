@@ -2,7 +2,7 @@ package database;
 
 public class User {
     private int id;
-    private String userName;
+    private final String userName;
     private boolean parentalLock;
 
     public User(String userName, boolean parentalLock) {
@@ -26,7 +26,4 @@ public class User {
         this.parentalLock = parentalLock;
     }
 
-    public String getUserName() {
-        return this.userName;
-    }
 }

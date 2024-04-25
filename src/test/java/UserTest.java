@@ -23,12 +23,6 @@ public class UserTest {
         assertEquals(1, user.getId());
     }
 
-    // Test getUserName
-    @Test
-    public void testGetUserName() {
-        assertEquals("John123", user.getUserName());
-    }
-
     // Test getParentalLock
     @Test
     public void testGetParentalLock() {
