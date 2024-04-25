@@ -47,6 +47,6 @@
     <Button fx:id="timerButton"
             text="Timer"
             onAction="#onTimerButtonClick"
-            disable="true"
+            disable="false"
     />
 </VBox>
