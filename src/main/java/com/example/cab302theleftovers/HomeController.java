@@ -50,7 +50,6 @@ public class HomeController {
         stage.setScene(scene);
     }
 
-
     public HomeController(){
     }
 
