@@ -1,7 +1,6 @@
-package Time;
+package focusApp.models;
 
-import Notifications.Notification;
-import com.example.cab302theleftovers.TimerController;
+import focusApp.controllers.TimerController;
 
 import java.time.Duration;
 import java.time.LocalTime;

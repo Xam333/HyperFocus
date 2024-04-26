@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.AnchorPane?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.cab302theleftovers.BlockedController" style="-fx-background-color: #d8f2eb;">
+            fx:controller="focusApp.controllers.BlockedController" style="-fx-background-color: #d8f2eb;">
 
 
     <children>

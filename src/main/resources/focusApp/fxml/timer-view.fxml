@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="644.0" prefWidth="390.0" style="-fx-background-color: #d8f2eb;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cab302theleftovers.TimerController">
+<AnchorPane prefHeight="644.0" prefWidth="390.0" style="-fx-background-color: #d8f2eb;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.TimerController">
 
     <VBox fx:id="vBoxContainer" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
 

@@ -1,5 +1,6 @@
-package com.example.cab302theleftovers;
+package focusApp.controllers;
 
+import focusApp.HelloApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -43,7 +44,7 @@ public class HelloController {
     protected void onHelloButtonClick() throws IOException {
         welcomeText.setText("Welcome to JavaFX Application!");
         Stage stage = (Stage) helloButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("register-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/register-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
         stage.setScene(scene);
     }
@@ -51,7 +52,7 @@ public class HelloController {
     @FXML
     protected void onHomeButtonClick() throws IOException {
         Stage stage = (Stage) homeButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("home-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/home-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
         stage.setScene(scene);
     }
@@ -59,7 +60,7 @@ public class HelloController {
     @FXML
     protected void onRegisterButtonClick() throws IOException {
         Stage stage = (Stage) registerButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("register-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/register-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
         stage.setScene(scene);
     }
@@ -67,7 +68,7 @@ public class HelloController {
     @FXML
     protected void onLoginButtonClick() throws IOException {
         Stage stage = (Stage) loginButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
         stage.setScene(scene);
     }
@@ -83,7 +84,7 @@ public class HelloController {
     @FXML
     protected void onMainButtonClick() throws IOException {
         Stage stage = (Stage) mainButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
         stage.setScene(scene);
     }
@@ -91,7 +92,7 @@ public class HelloController {
     @FXML
     protected void onBlockedButtonClick() throws IOException {
         Stage stage = (Stage) blockedButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("blocked-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/blocked-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
         stage.setScene(scene);
     }
@@ -99,7 +100,7 @@ public class HelloController {
     @FXML
     protected void onTimerButtonClick() throws IOException {
         Stage stage = (Stage) timerButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("timer-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/timer-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
         stage.setScene(scene);
     }

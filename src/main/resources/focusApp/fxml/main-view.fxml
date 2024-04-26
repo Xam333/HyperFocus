@@ -88,7 +88,7 @@
             </Pane>
             <HBox alignment="BOTTOM_LEFT" prefHeight="58.0" prefWidth="280.0" spacing="10.0">
                <children>
-                  <Label text="Start Time:">
+                  <Label text="Start timer:">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -103,7 +103,7 @@
             <Slider blockIncrement="15.0" majorTickUnit="60.0" max="180.0" showTickLabels="true" showTickMarks="true" />
             <HBox alignment="BOTTOM_LEFT" layoutX="10.0" layoutY="228.0" prefHeight="58.0" prefWidth="280.0" spacing="10.0">
                <children>
-                  <Label text="End Time:">
+                  <Label text="End timer:">
                      <font>
                         <Font size="16.0" />
                      </font>

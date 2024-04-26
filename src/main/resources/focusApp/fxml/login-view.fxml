@@ -9,7 +9,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.cab302theleftovers.LoginController">
+      fx:controller="focusApp.controllers.LoginController">
 
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
@@ -20,7 +20,7 @@
 
         <VBox alignment="TOP_CENTER">
             <ImageView styleClass="logo" preserveRatio="true">
-                <Image url="@logo.png"/>
+                <Image url="@../images/logo.png"/>
             </ImageView>
         </VBox>
 

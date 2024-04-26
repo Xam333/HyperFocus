@@ -1,5 +1,6 @@
-package com.example.cab302theleftovers;
+package focusApp.controllers;
 
+import focusApp.HelloApplication;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -35,7 +36,7 @@ public class LoginController {
     @FXML
     protected void onBackButtonClick() throws IOException {
         Stage stage = (Stage) backButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("home-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/home-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
         stage.setScene(scene);
     }
@@ -46,7 +47,7 @@ public class LoginController {
     protected void onLoginButtonClick() throws IOException {
         if(!(Objects.equals(userNameTextField.getText(), "") || Objects.equals(userNameTextField.getText(), "Username")) && !(Objects.equals(passwordTextField.getText(), "") || Objects.equals(passwordTextField.getText(), "Password"))){
             Stage stage = (Stage) loginButton.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
             stage.setScene(scene);
         } else {
@@ -58,7 +59,7 @@ public class LoginController {
     protected void onConfirmButtonClick() throws IOException {
         if(!(Objects.equals(regUserNameTextField.getText(), "") || Objects.equals(regUserNameTextField.getText(), "Username")) && !(Objects.equals(regPasswordTextField.getText(), "") || Objects.equals(regPasswordTextField.getText(), "Password")) && (Objects.equals(regPasswordTextField.getText(), confirmPasswordTextField.getText()))){
             Stage stage = (Stage) confirmButton.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/login-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
             stage.setScene(scene);
         } else {

@@ -1,5 +1,6 @@
-package com.example.cab302theleftovers;
+package focusApp.controllers;
 
+import focusApp.models.BlockedApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -46,7 +47,7 @@ public class BlockedController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         // Assuming image.png is directly in src/main/resources/
-        Image userImage = new Image(getClass().getResourceAsStream("/UserIcon.png"));
+        Image userImage = new Image(getClass().getResourceAsStream("/focusApp/images/UserIcon.png"));
         userIcon.setImage(userImage);
         userIcon.setFitWidth(20);  // Set the width of the ImageView
         //userIcon.setFitHeight(150); // Set the height of the ImageView
@@ -54,13 +55,13 @@ public class BlockedController implements Initializable {
 
 
 
-        Image youtubeImage = new Image(getClass().getResourceAsStream("/youtubeIcon.png"));
+        Image youtubeImage = new Image(getClass().getResourceAsStream("/focusApp/images/youtubeIcon.png"));
         youtubeIcon.setImage(youtubeImage);
         youtubeIcon.setFitWidth(20);  // Set the width of the ImageView
         //youtubeIcon.setFitHeight(150); // Set the height of the ImageView
         youtubeIcon.setPreserveRatio(true);
 
-        Image redditImage = new Image(getClass().getResourceAsStream("/redditIcon.png"));
+        Image redditImage = new Image(getClass().getResourceAsStream("/focusApp/images/redditIcon.png"));
         redditIcon.setImage(redditImage);
         redditIcon.setFitWidth(20);  // Set the width of the ImageView
         //redditIcon.setFitHeight(150); // Set the height of the ImageView

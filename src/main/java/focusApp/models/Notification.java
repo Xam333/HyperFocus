@@ -1,4 +1,4 @@
-package Notifications;
+package focusApp.models;
 
 import javax.sound.sampled.*;
 

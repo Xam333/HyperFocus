@@ -1,4 +1,4 @@
-package database;
+package focusApp.database;
 
 public class User {
     private int id;

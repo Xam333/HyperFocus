@@ -1,6 +1,5 @@
-package database;
+package focusApp.database;
 
-import javax.xml.transform.Result;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Connection;

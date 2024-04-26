@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.Region?>
 <VBox alignment="TOP_CENTER" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.cab302theleftovers.HomeController" style="-fx-background-color: #d8f2eb;">
+      fx:controller="focusApp.controllers.HomeController" style="-fx-background-color: #d8f2eb;">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
