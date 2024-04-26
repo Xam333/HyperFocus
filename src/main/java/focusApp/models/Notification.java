@@ -1,4 +1,4 @@
-package Notifications;
+package focusApp.models;
 
 import javax.sound.sampled.*;
 import java.io.File;
@@ -12,7 +12,7 @@ public class Notification {
      */
     public static void PlaySound(float Volume){
         // This will read from the DB or from a DB information class.
-        String SoundFilePath = "src/main/resources/Sounds/alarm1.wav";
+        String SoundFilePath = "src/main/resources/focusApp/Sounds/alarm1.wav";
 
         try{
             AudioInputStream AIS = AudioSystem.getAudioInputStream(new File(SoundFilePath));

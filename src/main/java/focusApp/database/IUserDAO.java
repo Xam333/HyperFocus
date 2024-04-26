@@ -1,6 +1,4 @@
-package database;
-
-import java.sql.Connection;
+package focusApp.database;
 
 public interface IUserDAO {
 

@@ -1,4 +1,4 @@
-package Time;
+package focusApp.models;
 
 public class TimerStatusError extends RuntimeException {
     public TimerStatusError(String Message){

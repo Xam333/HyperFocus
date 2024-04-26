@@ -1,0 +1,8 @@
+.label{
+    -fx-background-color: #00FFFF;
+}
+
+.logo{
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+}

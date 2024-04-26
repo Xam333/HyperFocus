@@ -1,4 +1,4 @@
-package com.example.cab302theleftovers;
+package focusApp.models;
 
 import javafx.scene.image.ImageView;
 

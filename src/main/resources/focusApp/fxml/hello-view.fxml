@@ -6,33 +6,26 @@
 
 <?import javafx.scene.control.Button?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.cab302theleftovers.HelloController">
+      fx:controller="focusApp.controllers.HelloController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-
     <Button fx:id="homeButton"
             text="Home"
             onAction="#onHomeButtonClick"
-            disable="false"
     />
     <Button fx:id="registerButton"
             text="Register"
             onAction="#onRegisterButtonClick"
-            disable="true"
     />
     <Button fx:id="loginButton"
             text="Login"
             onAction="#onLoginButtonClick"
-            disable="true"
     />
     <Button fx:id="mainButton"
             text="Main"
             onAction="#onMainButtonClick"
-            disable="true"
     />
     <Button fx:id="menuButton"
             text="Menu"
@@ -42,11 +35,9 @@
     <Button fx:id="blockedButton"
             text="Blocked"
             onAction="#onBlockedButtonClick"
-            disable="false"
     />
     <Button fx:id="timerButton"
             text="Timer"
             onAction="#onTimerButtonClick"
-            disable="false"
     />
 </VBox>

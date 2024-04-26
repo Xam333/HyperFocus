@@ -1,6 +1,8 @@
-package com.example.cab302theleftovers;
-import Time.*;
+package focusApp.controllers;
+import focusApp.models.Command;
+import focusApp.models.Timer;
 
+import focusApp.HelloApplication;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,8 +12,6 @@ import javafx.stage.Stage;
 import javafx.scene.control.Label;
 
 
-
-import java.awt.*;
 import java.io.IOException;
 
 public class TimerController {
@@ -82,7 +82,7 @@ public class TimerController {
     protected void onBackButtonClick() throws IOException {
         timer.Control(Command.Stop); // kills the timer so no duplicates are running
         Stage stage = (Stage) BackBtn.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
         stage.setScene(scene);
     }
@@ -91,7 +91,7 @@ public class TimerController {
     protected void onStopButtonClick() throws IOException {
         timer.Control(Command.Stop);
         Stage stage = (Stage) BackBtn.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
         stage.setScene(scene);
     }

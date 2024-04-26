@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.Region?>
 <VBox alignment="TOP_CENTER" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.cab302theleftovers.HomeController" style="-fx-background-color: #d8f2eb;">
+      fx:controller="focusApp.controllers.HomeController" style="-fx-background-color: #d8f2eb;">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
@@ -38,7 +38,7 @@ concentrate fully on your tasks and achieve your goals efficiently." style="-fx-
                 text="Get Started"
                 style="-fx-font-size: 24px; -fx-border-color: black; -fx-background-color: #43aed9;"
                 maxWidth="Infinity"
-                onAction="#onLoginButtonClick"
+                onAction="#onRegisterButtonClick"
                 disable="false"
         />
     </VBox>
@@ -51,8 +51,8 @@ concentrate fully on your tasks and achieve your goals efficiently." style="-fx-
                 text="Login"
                 style=" -fx-font-size: 24px; -fx-border-color: black; -fx-background-color: #43aed9;"
                 maxWidth="Infinity"
-                onAction="#onRegisterButtonClick"
-                disable="true"
+                onAction="#onLoginButtonClick"
+                disable="false"
         />
     </VBox>
 </VBox>
