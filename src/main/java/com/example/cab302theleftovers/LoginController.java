@@ -46,7 +46,7 @@ public class LoginController {
     protected void onLoginButtonClick() throws IOException {
         if(!(Objects.equals(userNameTextField.getText(), "") || Objects.equals(userNameTextField.getText(), "Username")) && !(Objects.equals(passwordTextField.getText(), "") || Objects.equals(passwordTextField.getText(), "Password"))){
             Stage stage = (Stage) loginButton.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("home-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
             stage.setScene(scene);
         } else {

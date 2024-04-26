@@ -39,7 +39,7 @@ concentrate fully on your tasks and achieve your goals efficiently." style="-fx-
                 style="-fx-font-size: 24px; -fx-border-color: black; -fx-background-color: #43aed9;"
                 maxWidth="Infinity"
                 onAction="#onRegisterButtonClick"
-                disable="true"
+                disable="false"
         />
     </VBox>
 
