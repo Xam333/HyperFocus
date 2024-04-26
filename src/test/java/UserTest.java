@@ -1,4 +1,4 @@
-import focusApp.database.User;
+import focusApp.models.User;
 
 // Import JUnit
 import org.junit.jupiter.api.BeforeEach;

@@ -1,5 +1,7 @@
 package focusApp.database;
 
+import focusApp.models.User;
+
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Connection;
