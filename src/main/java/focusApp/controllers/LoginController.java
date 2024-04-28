@@ -3,6 +3,7 @@ package focusApp.controllers;
 import focusApp.HelloApplication;
 import focusApp.database.UserDAO;
 import focusApp.models.User;
+import focusApp.models.UserHolder;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -34,6 +35,9 @@ public class LoginController {
     @FXML
     public Label denyRegisterLabel;
 
+    /* singleton used to hold user class for use in other controllers */
+    private UserHolder userHolder = UserHolder.getInstance();
+
 
     @FXML
     protected void onBackButtonClick() throws IOException {
@@ -48,13 +52,13 @@ public class LoginController {
      */
     @FXML
     protected void onLoginButtonClick() throws IOException {
-
         /* create userDAO and attempt to login */
         UserDAO userDAO = new UserDAO();
         User user = userDAO.login(userNameTextField.getText(), passwordTextField.getText());
 
         /* if user != null then login successful and user class returned */
         if (user != null){
+            userHolder.setUser(user);
             Stage stage = (Stage) loginButton.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
@@ -68,7 +72,6 @@ public class LoginController {
      */
     @FXML
     protected void onConfirmButtonClick() throws IOException {
-
         /* check two inputted passwords are same */
         if (!Objects.equals(regPasswordTextField.getText(), confirmPasswordTextField.getText())) {
             denyRegisterLabel.setText("Passwords don't match.");
@@ -80,6 +83,8 @@ public class LoginController {
         User user = userDAO.addUser(regUserNameTextField.getText(), regPasswordTextField.getText());
 
         if (user != null) {
+            userHolder.setUser(user);
+
             Stage stage = (Stage) confirmButton.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/login-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
