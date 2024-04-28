@@ -3,6 +3,7 @@ module focusApp {
     requires javafx.fxml;
     requires java.sql;
     requires java.desktop;
+    requires jdk.dynalink;
 
 
     opens focusApp to javafx.fxml;

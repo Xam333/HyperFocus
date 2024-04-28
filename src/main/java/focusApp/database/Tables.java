@@ -37,7 +37,7 @@ public class Tables {
                         websiteID INTEGER PRIMARY KEY,
                         websiteName TEXT NOT NULL,
                         url TEXT NOT NULL,
-                        icon TEXT NOT NULL
+                        icon TEXT
                     )
                     """;
             statement.execute(query);
@@ -48,7 +48,7 @@ public class Tables {
                         applicationID INTEGER PRIMARY KEY,
                         applicationName TEXT NOT NULL,
                         url TEXT NOT NULL,
-                        icon TEXT NOT NULL
+                        icon TEXT
                     )
                     """;
             statement.execute(query);
