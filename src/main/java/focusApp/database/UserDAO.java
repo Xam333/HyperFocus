@@ -12,7 +12,8 @@ public class UserDAO implements IUserDAO {
 
     public UserDAO() {
         this.connection = DatabaseConnection.getInstance();
-        createTable();
+        /* method to make all required tables */
+        Tables.createTables();
     }
 
     @Override
@@ -114,22 +115,5 @@ public class UserDAO implements IUserDAO {
             e.printStackTrace();
         }
         return null;
-    }
-
-    private void createTable() {
-        try {
-            Statement statement = connection.createStatement();
-            String query = """
-                    CREATE TABLE IF NOT EXISTS user(
-                        id INTEGER PRIMARY KEY,
-                        userName TEXT NOT NULL UNIQUE,
-                        password TEXT NOT NULL,
-                        parentalLock INTEGER NOT NULL CHECK(parentalLock in (0,1))
-                    )
-                    """;
-            statement.execute(query);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
