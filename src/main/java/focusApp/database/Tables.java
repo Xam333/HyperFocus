@@ -26,7 +26,8 @@ public class Tables {
                         presetID INTEGER PRIMARY KEY,
                         userID INTEGER,
                         presetName TEXT NOT NULL,
-                        FOREIGN KEY(userID) REFERENCES user(id)
+                        FOREIGN KEY(userID) REFERENCES user(id),
+                        UNIQUE(userID, presetName)
                     )
                     """;
             statement.execute(query);
@@ -35,8 +36,8 @@ public class Tables {
             query = """
                     CREATE TABLE IF NOT EXISTS websites(
                         websiteID INTEGER PRIMARY KEY,
-                        websiteName TEXT NOT NULL,
-                        url TEXT NOT NULL,
+                        websiteName TEXT NOT NULL UNIQUE,
+                        url TEXT NOT NULL UNIQUE,
                         icon TEXT
                     )
                     """;
@@ -46,8 +47,8 @@ public class Tables {
             query = """
                     CREATE TABLE IF NOT EXISTS applications(
                         applicationID INTEGER PRIMARY KEY,
-                        applicationName TEXT NOT NULL,
-                        url TEXT NOT NULL,
+                        applicationName TEXT NOT NULL UNIQUE,
+                        url TEXT NOT NULL UNIQUE,
                         icon TEXT
                     )
                     """;

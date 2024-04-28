@@ -4,6 +4,8 @@ module focusApp {
     requires java.sql;
     requires java.desktop;
     requires jdk.dynalink;
+    requires jdk.jshell;
+    requires org.xerial.sqlitejdbc;
 
 
     opens focusApp to javafx.fxml;
