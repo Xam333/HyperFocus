@@ -29,6 +29,7 @@ public class Timer {
 
 
     private LocalTime Timer_End;
+    private final LocalTime Timer_Start;
     private final TimerController Timer_Controller;
 
     /**
@@ -60,6 +61,14 @@ public class Timer {
     private static ScheduledExecutorService TimeScheduler;
     private Duration PausedDuration;
     private Duration CountingDuration;
+    private final Duration TotalDuration;
+
+    public double getCountingSeconds(){
+        return CountingDuration.toSeconds();
+    }
+    public double getTotalSeconds(){
+        return TotalDuration.toSeconds();
+    }
 
 
     /**
@@ -78,19 +87,20 @@ public class Timer {
         Timer_Preset_Duration = TimerDuration == null ? 0.0 : (TimerDuration * 60);
         Timer_State = State.NotRunning;
 
-        LocalTime timer_Start = LocalTime.now().plusSeconds((long) Timer_Preset_Offset);
-        this.Timer_End = timer_Start.plusSeconds((long)Timer_Preset_Duration);
+        this.Timer_Start = LocalTime.now().plusSeconds((long) Timer_Preset_Offset);
+        this.Timer_End = Timer_Start.plusSeconds((long)Timer_Preset_Duration);
         this.Timer_Controller = Timer_Controller;
 
-        boolean TimeCheck = Timer_End.isBefore(timer_Start);
-        CountingDuration = Duration.between(timer_Start, Timer_End).plusHours(TimeCheck ? 24 : 0);
+        boolean TimeCheck = Timer_End.isBefore(Timer_Start);
+        CountingDuration = Duration.between(Timer_Start, Timer_End).plusHours(TimeCheck ? 24 : 0);
+        TotalDuration = CountingDuration;
 
         if (DebugMode){
             System.out.println("Timer_Preset_Offset: " + Timer_Preset_Offset + "sec");
             System.out.println("Timer_Preset_Duration: " + Timer_Preset_Duration + "sec");
-            System.out.println("Timer Start: " + timer_Start.format(Timer_12_Format));
+            System.out.println("Timer Start: " + Timer_Start.format(Timer_12_Format));
             System.out.println("Timer End: " + Timer_End.format(Timer_12_Format));
-            System.out.println("Counting Duration: " + CountingDuration);
+            System.out.println("Counting Duration: " + FormatTime());
         }
     }
 
@@ -145,6 +155,7 @@ public class Timer {
             case Stop -> Stop();
             case Pause -> Pause();
             case Resume -> Resume();
+            case Restart -> Control(Command.Start);
             default -> throw new IllegalArgumentException("Command: " + command + " is invalid.");
         }
     }
@@ -155,6 +166,9 @@ public class Timer {
     private void PreStart(){
         EnforceState(State.PreRun);
         Timer_Controller.UpdateStopWatch(FormatTime());
+
+        Timer_Controller.UpdateTimerStatusLabel("Timer will start at: " + Timer_Start.format(Timer_12_Format));
+
         TimeScheduler = Executors.newScheduledThreadPool(1);
         TimeScheduler.scheduleAtFixedRate(this::Start, (long)Timer_Preset_Offset, 1, TimeUnit.SECONDS);
 
@@ -175,6 +189,8 @@ public class Timer {
         TimeScheduler = Executors.newScheduledThreadPool(1);
         TimeScheduler.scheduleAtFixedRate(this::RunningTimer, 0, 1, TimeUnit.SECONDS);
 
+        Timer_Controller.UpdateTimerStatusLabel("Timer is running.");
+
         if(DebugMode){
             System.out.println("Timer Started at: " + LocalTime.now().format(Timer_12_Format));
         }
@@ -187,6 +203,7 @@ public class Timer {
         EnforceState(State.NotRunning);
         // Get total time here.
         TimeScheduler.shutdownNow();
+        Timer_Controller.UpdateTimerStatusLabel("Timer has stopped.");
 
         if(DebugMode){
             System.out.println("Timer Stopped at: " + LocalTime.now().format(Timer_12_Format));
@@ -203,6 +220,8 @@ public class Timer {
         TimeScheduler = Executors.newScheduledThreadPool(1);
         TimeScheduler.scheduleAtFixedRate(this::RunningTimer, 0, 1, TimeUnit.SECONDS);
 
+        Timer_Controller.UpdateTimerStatusLabel("Timer is running.");
+
         if(DebugMode){
             System.out.println("Timer Resumed at: " + LocalTime.now().format(Timer_12_Format));
         }
@@ -215,6 +234,8 @@ public class Timer {
         EnforceState(State.Paused);
         PausedDuration = Duration.between(LocalTime.now(), Timer_End);
         TimeScheduler.shutdownNow();
+
+        Timer_Controller.UpdateTimerStatusLabel("Timer is paused.");
 
         if(DebugMode){
             System.out.println("Timer Paused at: " + LocalTime.now().format(Timer_12_Format));
