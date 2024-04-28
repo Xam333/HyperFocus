@@ -38,13 +38,18 @@
         </HBox>
       <StackPane fx:id="StackPane" prefHeight="150.0" prefWidth="200.0">
          <children>
+            <Circle fill="#333333" radius="175.0" stroke="TRANSPARENT" strokeType="INSIDE" />
 
-               <Label fx:id="StopWatch" text="00:00:00">
+               <Label fx:id="StopWatch" alignment="CENTER" text="00:00:00" textFill="WHITE">
                <font>
                   <Font size="71.0" />
                </font>
                </Label>
-            <Arc fx:id="TimeArc" fill="TRANSPARENT" length="360.0" radiusX="170.0" radiusY="170.0" startAngle="90.0" stroke="#00ff26" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="10.0" />
+            <Pane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Arc fx:id="arc" centerX="175.0" centerY="100.0" fill="TRANSPARENT" layoutX="10.0" layoutY="75.0" length="360.0" radiusX="160.0" radiusY="160.0" startAngle="90.0" stroke="#00ff22" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="10.0" />
+               </children>
+            </Pane>
          </children>
       </StackPane>
 

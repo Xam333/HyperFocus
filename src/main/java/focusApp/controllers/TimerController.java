@@ -37,7 +37,7 @@ public class TimerController {
     private Label TimerStatus;
 
     @FXML
-    private Arc TimeArc;
+    private Arc arc;
     @FXML
     private StackPane StackPane;
 
@@ -47,12 +47,12 @@ public class TimerController {
         // Get offset and duration from main (Get offset and Get Duration)
         timer = new Timer(null, 0.5, this);
         timer.Control(Command.Start);
-            }
+    }
 
     public void UpdateStopWatch(String TimeString){
         Platform.runLater(()-> {
             StopWatch.setText(TimeString);
-            TimeArc.setLength((timer.getCountingSeconds() / timer.getTotalSeconds()) * 360);
+            arc.setLength(((timer.getCountingSeconds() + 1) / timer.getTotalSeconds()) * 360);
         });
     }
 
