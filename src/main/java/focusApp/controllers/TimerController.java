@@ -1,4 +1,5 @@
 package focusApp.controllers;
+
 import focusApp.models.Command;
 import focusApp.models.Timer;
 
@@ -8,12 +9,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Arc;
-
-
 import java.io.IOException;
 
 public class TimerController {
@@ -24,12 +22,15 @@ public class TimerController {
 
     @FXML
     private Button BackBtn;
+
     @FXML
     private Button PauseBtn;
     @FXML
     private Button ResumeBtn;
     @FXML
     private Button StopBtn;
+    @FXML
+    private Button RestartBtn;
 
     @FXML
     private Label StopWatch;
@@ -38,22 +39,39 @@ public class TimerController {
 
     @FXML
     private Arc arc;
-    @FXML
-    private StackPane StackPane;
-
 
 
     public void initialize() {
         // Get offset and duration from main (Get offset and Get Duration)
-        timer = new Timer(null, 0.5, this);
+        timer = new Timer(null, 0.25, this);
         timer.Control(Command.Start);
     }
 
     public void UpdateStopWatch(String TimeString){
         Platform.runLater(()-> {
             StopWatch.setText(TimeString);
-            arc.setLength(((timer.getCountingSeconds() + 1) / timer.getTotalSeconds()) * 360);
+            //UpdateTimerControlButtons();
+            arc.setLength(((timer.getCountingMilliSeconds() + 1) / timer.getTotalMilliSeconds()) * 360);
         });
+
+    }
+
+    private void UpdateTimerControlButtons(){
+        if (timer.isTimerNotRunning() || timer.isTimerPreRun()){
+            UpdateButton(StopBtn, ButtonControl.Show);
+            UpdateButton(PauseBtn, ButtonControl.Hide);
+            UpdateButton(ResumeBtn, ButtonControl.Hide);
+            UpdateButton(RestartBtn, ButtonControl.Hide);
+        } else if (timer.isTimerRunning()){
+            UpdateButton(PauseBtn, ButtonControl.Show);
+        } else if (timer.isTimerPaused()) {
+            UpdateButton(PauseBtn, ButtonControl.Hide);
+            UpdateButton(ResumeBtn, ButtonControl.Show);
+        } else {
+            UpdateButton(PauseBtn, ButtonControl.Hide);
+            UpdateButton(StopBtn, ButtonControl.Hide);
+            UpdateButton(RestartBtn, ButtonControl.Show);
+        }
     }
 
     public void UpdateTimerStatusLabel(String Status){

@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class Timer {
 
-    private final boolean DebugMode = true;
+    private final boolean DebugMode = false;
     /**
      * Used for tracking the state of the timer.
      */
@@ -63,11 +63,11 @@ public class Timer {
     private Duration CountingDuration;
     private final Duration TotalDuration;
 
-    public double getCountingSeconds(){
-        return CountingDuration.toSeconds();
+    public double getCountingMilliSeconds(){
+        return CountingDuration.toMillis();
     }
-    public double getTotalSeconds(){
-        return TotalDuration.toSeconds();
+    public double getTotalMilliSeconds(){
+        return TotalDuration.toMillis();
     }
 
 
@@ -112,7 +112,7 @@ public class Timer {
 
         // Update GUI stuff here.
         Timer_Controller.UpdateStopWatch(FormatTime());
-        CountingDuration = CountingDuration.minusSeconds(1);
+        CountingDuration = CountingDuration.minusMillis(1);
 
         // Check if the timer has ended.
         if(CountingDuration.getSeconds() < 0 && Timer_State == State.Running){
@@ -121,7 +121,6 @@ public class Timer {
             // Play alert sound here.
             Notification.PlaySound(-10);
             // Stop blocking stuff here, and return to the main page(GUI).
-
         }
     }
 
@@ -151,7 +150,7 @@ public class Timer {
      */
     public void Control(Command command){
         switch (command) {
-            case Start -> {if(Timer_Preset_Offset != 0){ PreStart();} else { Start(); }}
+            case Start -> {if(Timer_Preset_Offset != 0){ PreStart(); } else { Start(); }}
             case Stop -> Stop();
             case Pause -> Pause();
             case Resume -> Resume();
@@ -170,7 +169,7 @@ public class Timer {
         Timer_Controller.UpdateTimerStatusLabel("Timer will start at: " + Timer_Start.format(Timer_12_Format));
 
         TimeScheduler = Executors.newScheduledThreadPool(1);
-        TimeScheduler.scheduleAtFixedRate(this::Start, (long)Timer_Preset_Offset, 1, TimeUnit.SECONDS);
+        TimeScheduler.scheduleAtFixedRate(this::Start, (long)(Timer_Preset_Offset * 1000), 1, TimeUnit.MILLISECONDS);
 
         if (DebugMode){
             System.out.println("Timer PreRun at: " + LocalTime.now().format(Timer_12_Format));
@@ -187,7 +186,7 @@ public class Timer {
         EnforceState(State.Running);
         Timer_Controller.UnlockPauseButton();
         TimeScheduler = Executors.newScheduledThreadPool(1);
-        TimeScheduler.scheduleAtFixedRate(this::RunningTimer, 0, 1, TimeUnit.SECONDS);
+        TimeScheduler.scheduleAtFixedRate(this::RunningTimer, 0, 1, TimeUnit.MILLISECONDS);
 
         Timer_Controller.UpdateTimerStatusLabel("Timer is running.");
 
@@ -218,7 +217,7 @@ public class Timer {
         Timer_End = LocalTime.now().plusSeconds(PausedDuration.toSeconds());
         CountingDuration = PausedDuration;
         TimeScheduler = Executors.newScheduledThreadPool(1);
-        TimeScheduler.scheduleAtFixedRate(this::RunningTimer, 0, 1, TimeUnit.SECONDS);
+        TimeScheduler.scheduleAtFixedRate(this::RunningTimer, 0, 1, TimeUnit.MILLISECONDS);
 
         Timer_Controller.UpdateTimerStatusLabel("Timer is running.");
 
