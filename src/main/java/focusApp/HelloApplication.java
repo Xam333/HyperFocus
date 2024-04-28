@@ -5,6 +5,7 @@ import java.util.Objects;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 
@@ -21,6 +22,8 @@ public class HelloApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/hello-view.fxml"));
 //        String stylesheet = Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm();
         Scene scene = new Scene(fxmlLoader.load(), WIDTH, HEIGHT);
+//        Image logo = new Image(HelloApplication.class.getResource("images/logo.png"));
+        stage.getIcons().add(new Image(Objects.requireNonNull(HelloApplication.class.getResourceAsStream("images/FocusApp_LogoT.png"))));
 //        scene.getStylesheets().add(stylesheet);
         stage.setTitle(TITLE);
         stage.setScene(scene);
