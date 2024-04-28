@@ -12,12 +12,12 @@ public class DatabaseConnection {
     /**
      * creates a connection to the database
      */
-    private DatabaseConnection() {
+    public DatabaseConnection() {
         String url = "jdbc:sqlite:database.db";
         try {
             instance = DriverManager.getConnection(url);
         } catch (SQLException sqlEx) {
-            System.err.println();
+            sqlEx.printStackTrace();
         }
     }
 
