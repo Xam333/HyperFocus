@@ -1,5 +1,7 @@
 package focusApp.database;
 
+import focusApp.models.User;
+
 public interface IUserDAO {
 
     /**

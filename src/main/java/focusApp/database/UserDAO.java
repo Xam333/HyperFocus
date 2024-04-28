@@ -1,5 +1,7 @@
 package focusApp.database;
 
+import focusApp.models.User;
+
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Connection;
@@ -16,10 +18,14 @@ public class UserDAO implements IUserDAO {
     @Override
     public User addUser(String userName, String password) {
         try {
+            if (GetUserId(userName) != -1) {
+                return null;
+            }
+
             /* insert user into database */
             String query =
                     """
-                    INSERT INTO TABLE user(userName, password, parentalLock) VALUES(?,?,0)
+                    INSERT INTO user(userName, password, parentalLock) VALUES(?,?,0)
                     """;
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, userName);
@@ -57,6 +63,29 @@ public class UserDAO implements IUserDAO {
            e.printStackTrace();
        }
        return false;
+    }
+
+    /**
+     * return return user id if exists or -1 if doesnt exits
+     * @param userName
+     * @return
+     */
+    public int GetUserId(String userName) {
+        try {
+            String query = "SELECT id FROM user WHERE userName = ?";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, userName);
+
+            ResultSet result = statement.executeQuery();
+
+            if (result != null) {
+                return result.getInt("id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     @Override
@@ -97,12 +126,12 @@ public class UserDAO implements IUserDAO {
             String query = """
                     CREATE TABLE IF NOT EXISTS user(
                         id INTEGER PRIMARY KEY,
-                        userName TEXT NOT NULL,
+                        userName TEXT NOT NULL UNIQUE,
                         password TEXT NOT NULL,
-                        parentalLock INTEGER NOT NULL CHECK(parentalLock in (0,1)
+                        parentalLock INTEGER NOT NULL CHECK(parentalLock in (0,1))
                     )
                     """;
-            statement.executeQuery(query);
+            statement.execute(query);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -28,6 +28,7 @@ public class Timer {
     public boolean isTimerRunning() { return Timer_State == State.Running; }
     public boolean isTimerNotRunning() { return Timer_State == State.NotRunning; }
     public boolean isTimerPaused() { return Timer_State == State.Paused; }
+    public boolean isTimerPreRunning() { return Timer_State == State.PreRun; }
 
 
     private LocalTime Timer_End;
@@ -89,7 +90,6 @@ public class Timer {
             // Play alert sound here.
             Notification.PlaySound(-10);
             // Stop blocking stuff here, and return to the main page(GUI).
-
         }
     }
 
@@ -130,7 +130,7 @@ public class Timer {
                     Resume();
                     break;
             }
-        }catch (TimerStatusError E){
+        } catch (TimerStatusError E){
             System.out.println(E.getMessage());
         }
     }
@@ -142,8 +142,6 @@ public class Timer {
         TimeScheduler = Executors.newScheduledThreadPool(1);
         TimeScheduler.scheduleAtFixedRate(this::Start, (long)Timer_Preset_Offset, 1, TimeUnit.SECONDS);
     }
-
-
     private void Start(){
         System.out.println("Timer Started at: " + LocalTime.now().format(Timer_12_Format));
         if (Timer_Preset_Offset != 0){ TimeScheduler.shutdownNow(); }
