@@ -9,6 +9,8 @@ import java.util.Objects;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 public class LoginController {
     @FXML
@@ -31,8 +33,19 @@ public class LoginController {
     public Label denyLoginLabel;
     @FXML
     public Label denyRegisterLabel;
+    public ImageView focusAppLogo;
 
 
+
+    @FXML
+    private void initialize(){
+        // Assuming image.png is directly in src/main/resources/
+        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/focusApp/images/FocusApp_LogoT.png")));
+        focusAppLogo.setImage(image);
+        focusAppLogo.setFitWidth(190);  // Set the width of the ImageView
+        //imageView.setFitHeight(150); // Set the height of the ImageView
+        focusAppLogo.setPreserveRatio(true);
+    }
     @FXML
     protected void onBackButtonClick() throws IOException {
         Stage stage = (Stage) backButton.getScene().getWindow();
