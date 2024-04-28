@@ -22,6 +22,64 @@ public class Tables {
                     )
                     """;
             statement.execute(query);
+
+            statement = connection.createStatement();
+            query = """
+                    CREATE TABLE IF NOT EXISTS presets(
+                        presetID INTEGER PRIMARY KEY,
+                        userID INTEGER,
+                        presetName TEXT NOT NULL,
+                        FOREIGN KEY(userID) REFERENCES user(id)
+                    )
+                    """;
+            statement.execute(query);
+
+            statement = connection.createStatement();
+            query = """
+                    CREATE TABLE IF NOT EXISTS websites(
+                        websiteID INTEGER PRIMARY KEY,
+                        websiteName TEXT NOT NULL,
+                        url TEXT NOT NULL,
+                        icon TEXT NOT NULL
+                    )
+                    """;
+            statement.execute(query);
+
+            statement = connection.createStatement();
+            query = """
+                    CREATE TABLE IF NOT EXISTS applications(
+                        applicationID INTEGER PRIMARY KEY,
+                        applicationName TEXT NOT NULL,
+                        url TEXT NOT NULL,
+                        icon TEXT NOT NULL
+                    )
+                    """;
+            statement.execute(query);
+
+            statement = connection.createStatement();
+            query = """
+                    CREATE TABLE IF NOT EXISTS presetsToWebsite(
+                    presetID INTEGER NOT NULL,
+                    websiteID INTEGER NOT NULL,
+                    PRIMARY KEY(presetID, websiteID),
+                    FOREIGN KEY(presetID) REFERENCES presets(presetID),
+                    FOREIGN KEY(websiteID) REFERENCES websites(websiteID)
+                    )
+                    """;
+            statement.execute(query);
+
+            statement = connection.createStatement();
+            query = """
+                    CREATE TABLE IF NOT EXISTS presetsToApplication(
+                    presetID INTEGER NOT NULL,
+                    applicationID INTEGER NOT NULL,
+                    PRIMARY KEY(presetID, applicationID),
+                    FOREIGN KEY(presetID) REFERENCES presets(presetID),
+                    FOREIGN KEY(applicationID) REFERENCES applications(applicationID)
+                    )
+                    """;
+            statement.execute(query);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
