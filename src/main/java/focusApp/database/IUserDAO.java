@@ -20,6 +20,13 @@ public interface IUserDAO {
     public boolean getParentalLock(int id);
 
     /**
+     * return checks if the user id if exists and returns id or -1 if doesnt exits
+     * @param userName
+     * @return
+     */
+    public int getUserId(String userName);
+
+    /**
      * checks the username and password and returns the id
      * @param userName userName of the user
      * @param password password of the user

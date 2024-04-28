@@ -18,7 +18,7 @@ public class UserDAO implements IUserDAO {
     @Override
     public User addUser(String userName, String password) {
         try {
-            if (GetUserId(userName) != -1) {
+            if (getUserId(userName) != -1) {
                 return null;
             }
 
@@ -65,12 +65,8 @@ public class UserDAO implements IUserDAO {
        return false;
     }
 
-    /**
-     * return return user id if exists or -1 if doesnt exits
-     * @param userName
-     * @return
-     */
-    public int GetUserId(String userName) {
+
+    public int getUserId(String userName) {
         try {
             String query = "SELECT id FROM user WHERE userName = ?";
 
