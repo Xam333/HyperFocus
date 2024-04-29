@@ -9,26 +9,6 @@ public class BlockedApplication {
     private String nameColumn;
     private String locationColumn;
 
-    /*
-    public BlockedApplication(String iconColumn, String nameColumn, String locationColumn) {
-        this.iconColumn = iconColumn;
-        this.nameColumn = nameColumn;
-        this.locationColumn = locationColumn;
-    }
-
-    public String getIconColumn() {
-        return iconColumn;
-    }
-
-    public String getNameColumn() {
-        return nameColumn;
-    }
-
-    public String getLocationColumn() {
-        return locationColumn;
-    }
-
-     */
 
     public BlockedApplication(ImageView iconColumn, String nameColumn, String locationColumn) {
         this.iconColumn = iconColumn;

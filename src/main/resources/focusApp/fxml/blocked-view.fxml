@@ -28,7 +28,7 @@
             <children>
                 <HBox fx:id="hBoxHeader" spacing="5.0" alignment="CENTER_LEFT">
                     <children>
-                        <Button text="&#x3C;" />
+                        <Button fx:id="backButton" text="&#x3C;" onAction="#onBackButtonClick"/>
                         <Region HBox.hgrow="ALWAYS" />
                         <Label text="Blocked List" style="-fx-font-size: 18px;" wrapText="true"/>
                         <Region HBox.hgrow="ALWAYS" />

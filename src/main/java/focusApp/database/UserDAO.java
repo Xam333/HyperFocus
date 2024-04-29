@@ -1,6 +1,8 @@
 package focusApp.database;
 
 import focusApp.models.User;
+import org.sqlite.SQLiteErrorCode;
+import org.sqlite.SQLiteException;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -12,16 +14,13 @@ public class UserDAO implements IUserDAO {
 
     public UserDAO() {
         this.connection = DatabaseConnection.getInstance();
-        createTable();
+        /* method to make all required tables */
+        Tables.createTables();
     }
 
     @Override
     public User addUser(String userName, String password) {
         try {
-            if (GetUserId(userName) != -1) {
-                return null;
-            }
-
             /* insert user into database */
             String query =
                     """
@@ -36,6 +35,11 @@ public class UserDAO implements IUserDAO {
             /* attempt to log user in and return user class */
             return login(userName, password);
 
+        } catch (SQLiteException sqlex) {
+            if (sqlex.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE) {
+                return null;
+            }
+            sqlex.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -65,12 +69,8 @@ public class UserDAO implements IUserDAO {
        return false;
     }
 
-    /**
-     * return return user id if exists or -1 if doesnt exits
-     * @param userName
-     * @return
-     */
-    public int GetUserId(String userName) {
+
+    public int getUserId(String userName) {
         try {
             String query = "SELECT id FROM user WHERE userName = ?";
 
@@ -93,7 +93,7 @@ public class UserDAO implements IUserDAO {
         try {
             /* get user from database */
 
-            String query = "SELECT id FROM user WHERE userName = ? AND password = ?";
+            String query = "SELECT id, parentalLock FROM user WHERE userName = ? AND password = ?";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, userName);
@@ -101,12 +101,11 @@ public class UserDAO implements IUserDAO {
 
             ResultSet result = statement.executeQuery();
 
-            if (result != null) {
+            if (!result.isClosed()) {
                 /* if results is not null then user provided correct password and useranme */
                 /* so create and return User class */
                 int id = result.getInt("id");
-
-                boolean parentalLock = getParentalLock(id);
+                boolean parentalLock = result.getBoolean("parentalLock");
 
                 User user = new User(userName, parentalLock);
                 user.setId(id);
@@ -118,22 +117,5 @@ public class UserDAO implements IUserDAO {
             e.printStackTrace();
         }
         return null;
-    }
-
-    private void createTable() {
-        try {
-            Statement statement = connection.createStatement();
-            String query = """
-                    CREATE TABLE IF NOT EXISTS user(
-                        id INTEGER PRIMARY KEY,
-                        userName TEXT NOT NULL UNIQUE,
-                        password TEXT NOT NULL,
-                        parentalLock INTEGER NOT NULL CHECK(parentalLock in (0,1))
-                    )
-                    """;
-            statement.execute(query);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
