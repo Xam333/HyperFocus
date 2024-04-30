@@ -3,8 +3,15 @@
     -secondaryColor: #4382BF;
     -backgroundColor: #E6F9FF;
 
+    /* Temp */
+    -textBoxColor: #D6D6D6;
+
+
     -fx-background-color: -backgroundColor;
 }
+
+
+/* Labels */
 
 .label {
     -fx-font-family: INTER;
@@ -23,6 +30,35 @@
 .bodyLabel {
     -fx-font-size: 14px;
 }
+
+.warningLabel{
+    -fx-font-size: 14px;
+    -fx-text-fill: #FF0000;
+}
+
+/* Hyper Link Label */
+.linkLabel{
+    -fx-font-size: 14px;
+    -fx-underline: false;
+    -fx-text-fill: #000000;
+}
+
+.linkLabel:hover{
+    -fx-underline: true;
+}
+
+
+/* Text Fields */
+
+.textBox {
+    -fx-font-size: 14px;
+    -fx-background-color: -textBoxColor;
+    -fx-prompt-text-fill: #000000;
+}
+
+
+/* Buttons */
+/* Large Buttons*/
 
 .largePrimaryButton {
     -fx-pref-width: 256px;
@@ -61,3 +97,49 @@
     -fx-border-color: -secondaryColor;
     -fx-text-fill: -secondaryColor;
 }
+
+
+
+/* Small Buttons*/
+
+.smallPrimaryButton {
+    -fx-pref-width: 140px;
+    -fx-pref-height: 40px;
+    -fx-background-color: -primaryColor;
+    -fx-background-radius: 8px;
+
+    -fx-text-fill: #FFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+
+    -fx-cursor: hand;
+}
+
+.smallPrimaryButton:hover {
+    -fx-background-color: -secondaryColor;
+}
+
+.smallSecondaryButton {
+    -fx-pref-width: 140px;
+    -fx-pref-height: 40px;
+    -fx-background-color: #FFF;
+
+    -fx-border-radius: 8px;
+    -fx-border-width: 3px;
+    -fx-border-color: -primaryColor;
+
+    -fx-text-fill: -primaryColor;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+
+    -fx-cursor: hand;
+}
+
+.smallSecondaryButton:hover {
+    -fx-border-color: -secondaryColor;
+    -fx-text-fill: -secondaryColor;
+}
+
+
+
+

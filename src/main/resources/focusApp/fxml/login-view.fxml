@@ -10,51 +10,101 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.Region?>
-<VBox alignment="TOP_CENTER" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="focusApp.controllers.LoginController" style="-fx-background-color: #d8f2eb;">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Hyperlink?>
+<AnchorPane maxHeight="-Infinity"
+            maxWidth="-Infinity"
+            minHeight="-Infinity"
+            minWidth="-Infinity"
+            prefHeight="600.0"
+            prefWidth="390.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="focusApp.controllers.LoginController">
 
-    <!-- LOGIN -->
-    <ImageView fx:id="focusAppLogo"/>
-    <Region minHeight="25"/>
+    <VBox alignment="TOP_CENTER"
+          layoutX="53.0"
+          prefHeight="600.0"
+          prefWidth="284.0">
 
-    <VBox>
-        <Label text="We are glad to have you back!" style="-fx-text-alignment: center; -fx-font-size: 18px;" wrapText="true"/>
-        <Region minHeight="5"/>
-        <Label text="Please login:" style="-fx-text-alignment: center; -fx-font-size: 15px;" wrapText="true" />
+        <!-- LOGIN LOGO -->
+        <ImageView id="logoLarge"
+                   fitHeight="200.0"
+                   fitWidth="200.0"
+                   pickOnBounds="true"
+                   preserveRatio="true"
+                   VBox.vgrow="ALWAYS">
+            <VBox.margin>
+                <Insets top="10.0"/>
+            </VBox.margin>
+            <Image url="@../images/logoLarge.png"/>
+        </ImageView>
+
+        <!-- LOGIN HEADINGS -->
+        <Label styleClass="headLabel"
+               text="Login to your account:"
+               textAlignment="CENTER"
+               wrapText="true"/>
+
+        <Label styleClass="subheadLabel"
+               text="Enter your details below to log back into your account."
+               textAlignment="CENTER"
+               wrapText="true">
+            <padding>
+                <Insets bottom="30.0"/>
+            </padding>
+        </Label>
+
+
+        <!-- LOGIN FIELDS -->
+        <VBox spacing="10.0" alignment="CENTER">
+            <TextField fx:id="userNameTextField"
+                       styleClass="textBox"
+                       promptText="Username"
+            />
+
+            <PasswordField fx:id="passwordTextField"
+                           styleClass="textBox"
+                           promptText="Password"
+            />
+
+            <Label fx:id="denyLoginLabel"
+                   styleClass="warningLabel"
+                   textAlignment="RIGHT"
+                   wrapText="true"/>
+
+            <!-- LOGIN BUTTONS -->
+            <HBox spacing="10.0" alignment="BOTTOM_CENTER">
+                <Button fx:id="backButton"
+                        mnemonicParsing="false"
+                        onAction="#onBackButtonClick"
+                        styleClass="smallSecondaryButton"
+                        text="BACK"
+                        textAlignment="CENTER"
+                />
+                <Button fx:id="loginButton"
+                        mnemonicParsing="false"
+                        onAction="#onLoginButtonClick"
+                        styleClass="smallPrimaryButton"
+                        text="CONFIRM"
+                        textAlignment="CENTER"
+                />
+            </HBox>
+
+            <!-- LINK TO REGISTER -->
+            <Hyperlink fx:id="regLink"
+                       onAction="#onRegisterLinkClick"
+                       styleClass="linkLabel"
+                       text="Don't have an account? Click here to signup."
+                       textAlignment="CENTER"
+                       wrapText="true">
+
+                <padding>
+                    <Insets top="30.0"/>
+                </padding>
+            </Hyperlink>
+
+        </VBox>
     </VBox>
 
-    <Region minHeight="25"/>
-
-    <VBox spacing="10.0" alignment="CENTER">
-        <TextField fx:id="userNameTextField"
-                   style="-fx-font-size: 15px; -fx-background-color: #EFF8FB; -fx-effect: innershadow(one-pass-box, #43AED9, 10, 0.5, 0, 0); -fx-border-color: #000000;"
-                   promptText="Username"
-        />
-        <Region minHeight="3"/>
-        <PasswordField fx:id="passwordTextField"
-                       style="-fx-font-size: 15px; -fx-background-color: #EFF8FB; -fx-effect: innershadow(one-pass-box, #43AED9, 10, 0.5, 0, 0); -fx-border-color: #000000;"
-                       promptText="Password"
-        />
-        <Region minHeight="50"/>
-        <HBox spacing="10.0" alignment="BOTTOM_CENTER">
-            <Button fx:id="backButton"
-                    text="Back"
-                    style="-fx-font-size: 24px; -fx-border-color: black; -fx-background-color: #43aed9;"
-                    minWidth="100"
-                    onAction="#onBackButtonClick"
-
-            />
-            <Button fx:id="loginButton"
-                    text="Login"
-                    style="-fx-font-size: 24px; -fx-border-color: black; -fx-background-color: #43aed9;"
-                    minWidth="100"
-                    onAction="#onLoginButtonClick"
-            />
-        </HBox>
-        <Label fx:id="denyLoginLabel" style="-fx-text-alignment: center; -fx-font-size: 18px;" wrapText="true"/>
-    </VBox>
-</VBox>
+</AnchorPane>

@@ -36,7 +36,10 @@ public class LoginController {
     public Label denyLoginLabel;
     @FXML
     public Label denyRegisterLabel;
+    @FXML
     public ImageView focusAppLogo;
+    @FXML
+    public Hyperlink regLink;
 
     /* singleton used to hold user class for use in other controllers */
     private UserHolder userHolder = UserHolder.getInstance();
@@ -47,14 +50,18 @@ public class LoginController {
     private void initialize(){
 
     }
+
+//    Return to home page
+
     @FXML
     protected void onBackButtonClick() throws IOException {
         Stage stage = (Stage) backButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/home-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
-        stage.setScene(scene);
+
         // Set scene stylesheet
         scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        stage.setScene(scene);
     }
 
 
@@ -74,7 +81,7 @@ public class LoginController {
             Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
             stage.setScene(scene);
         } else {
-            denyLoginLabel.setText("Username or password incorrect. Please try again.");
+            denyLoginLabel.setText("* Incorrect username or password. *");
         }
     }
 
@@ -102,5 +109,18 @@ public class LoginController {
         } else {
             denyRegisterLabel.setText("This username is already taken/Passwords don't match.");
         }
+    }
+
+
+//    Takes user from login page to register page
+    @FXML
+    protected void onRegisterLinkClick() throws IOException{
+        Stage stage = (Stage) regLink.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/register-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+        // Set scene stylesheet
+        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        stage.setScene(scene);
     }
 }
