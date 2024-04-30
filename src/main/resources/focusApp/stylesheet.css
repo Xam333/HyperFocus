@@ -4,7 +4,7 @@
     -backgroundColor: #E6F9FF;
 
     /* Temp */
-    -textBoxColor: #D6D6D6;
+    -textBoxColor: #FFF;
 
 
     -fx-background-color: -backgroundColor;
@@ -63,7 +63,7 @@
 .textBox {
     -fx-font-size: 14px;
     -fx-background-color: -textBoxColor;
-    -fx-prompt-text-fill: #000000;
+    -fx-prompt-text-fill: #414141;
 }
 
 
@@ -135,7 +135,7 @@
     -fx-background-color: #FFF;
 
     -fx-border-radius: 8px;
-    -fx-border-width: 3px;
+    -fx-border-width: 2px;
     -fx-border-color: -primaryColor;
 
     -fx-text-fill: -primaryColor;
