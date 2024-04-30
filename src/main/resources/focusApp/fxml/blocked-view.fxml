@@ -8,15 +8,16 @@
 
 
     <children>
-        <VBox fx:id="vBoxContainer" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+        <VBox fx:id="vBoxContainer" layoutX="-1.0" prefHeight="534.0" prefWidth="424.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
             <children>
-                <HBox fx:id="hBoxHeader" alignment="CENTER_LEFT" minHeight="50.0" spacing="10.0" style="-fx-background-color: #59ADFF;">
+                <HBox fx:id="hBoxHeader" alignment="CENTER_LEFT" minHeight="50.0" prefHeight="50.0" spacing="10.0" style="-fx-background-color: #59ADFF;" styleClass="headLabel" stylesheets="@../stylesheet.css">
                     <children>
-                        <Button fx:id="backButton" onAction="#onBackButtonClick" text="&lt;" />
+                  <Region prefHeight="50.0" prefWidth="0.0" />
+                        <Button fx:id="backButton" onAction="#onBackButtonClick" prefHeight="37.0" prefWidth="37.0" text="&lt;" />
                         <Region HBox.hgrow="ALWAYS" />
-                        <Label style="-fx-font-size: 18px;" text="Blocked List" textFill="WHITE" wrapText="true" />
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Button>
+                        <Label style="-fx-font-size: 18px;" text="Blocked Apps" textFill="WHITE" wrapText="true" />
+                        <Region style="-fx-background-color: -backgroundColor;" HBox.hgrow="ALWAYS" />
+                        <Button prefHeight="33.0" prefWidth="39.0">
                             <graphic>
                                 <ImageView fx:id="youtubeIcon" />
                                 <ImageView fx:id="redditIcon" />
@@ -24,11 +25,12 @@
 
                             </graphic>
                         </Button>
+                  <Region layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="0.0" />
                     </children>
                 </HBox>
                 <HBox fx:id="hBoxTabs" alignment="CENTER" spacing="10.0">
                     <children>
-                        <Button style="-fx-background-color: white; -fx-border-color: black;" stylesheets="@../stylesheet.css" text="Website +" />
+                        <Button style="-fx-border-color: black; -fx-text-fill: black;" styleClass="smallPrimaryButton" stylesheets="@../stylesheet.css" text="Website +" />
                         <Button text="Application +" />
                     </children>
                 </HBox>
