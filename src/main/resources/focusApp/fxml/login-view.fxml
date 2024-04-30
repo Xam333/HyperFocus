@@ -27,7 +27,7 @@
           prefHeight="600.0"
           prefWidth="284.0">
 
-        <!-- LOGIN LOGO -->
+        <!-- LOGO -->
         <ImageView id="logoLarge"
                    fitHeight="200.0"
                    fitWidth="200.0"
@@ -98,7 +98,6 @@
                        text="Don't have an account? Click here to signup."
                        textAlignment="CENTER"
                        wrapText="true">
-
                 <padding>
                     <Insets top="30.0"/>
                 </padding>

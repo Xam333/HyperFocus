@@ -40,6 +40,8 @@ public class LoginController {
     public ImageView focusAppLogo;
     @FXML
     public Hyperlink regLink;
+    @FXML
+    public Hyperlink loginLink;
 
     /* singleton used to hold user class for use in other controllers */
     private UserHolder userHolder = UserHolder.getInstance();
@@ -117,6 +119,19 @@ public class LoginController {
     protected void onRegisterLinkClick() throws IOException{
         Stage stage = (Stage) regLink.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/register-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+        // Set scene stylesheet
+        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        stage.setScene(scene);
+    }
+
+
+    //    Takes user from register page to login page
+    @FXML
+    protected void onLoginLinkClick() throws IOException{
+        Stage stage = (Stage) loginLink.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
 
         // Set scene stylesheet
