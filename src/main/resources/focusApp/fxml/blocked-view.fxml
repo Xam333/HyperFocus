@@ -38,33 +38,41 @@
           spacing="80.0">
 
         <!-- HAMBURGER?? -->
+<!--        add functionality, open side menu -->
         <ImageView fitHeight="40.0"
                    fitWidth="40.0"
                    pickOnBounds="true"
                    preserveRatio="true">
 <!--            <Image url="@../images/Hamburger.png"/>-->
         </ImageView>
+
         <Label styleClass="navLabel"
-               text="Focus Period"
+               text="Blocked Apps"
                textAlignment="JUSTIFY"/>
-        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-                <Image url="@../../../UserIcon.png"/>
-            </image>
+
+<!--        add functionality, go to account page-->
+        <ImageView fitHeight="40.0"
+                   fitWidth="40.0"
+                   pickOnBounds="true"
+                   preserveRatio="true">
+            <Image url="@../images/UserIcon.png"/>
         </ImageView>
     </HBox>
 
-    <VBox alignment="TOP_CENTER"
+    <VBox alignment="CENTER"
           layoutX="53.0"
           prefHeight="600.0"
           prefWidth="284.0">
 
+<!--        move up to nav bar -->
         <HBox fx:id="hBoxHeader" spacing="5.0" alignment="CENTER_LEFT">
             <Button fx:id="backButton" text="&#x3C;" onAction="#onBackButtonClick"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label text="Blocked List" style="-fx-font-size: 18px;" wrapText="true"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Button>
+
+
                 <graphic>
                     <ImageView fx:id="youtubeIcon"/>
                     <ImageView fx:id="redditIcon"/>
