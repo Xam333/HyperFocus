@@ -1,8 +1,63 @@
-.label{
-    -fx-background-color: #00FFFF;
+.root {
+    -primaryColor: #59ADFF;
+    -secondaryColor: #4382BF;
+    -backgroundColor: #E6F9FF;
+
+    -fx-background-color: -backgroundColor;
 }
 
-.logo{
-    -fx-scale-x: 1;
-    -fx-scale-y: 1;
+.label {
+    -fx-font-family: INTER;
+}
+
+.headLabel {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-line-spacing: -5px;
+}
+
+.subheadLabel {
+    -fx-font-size: 12px;
+}
+
+.bodyLabel {
+    -fx-font-size: 14px;
+}
+
+.largePrimaryButton {
+    -fx-pref-width: 256px;
+    -fx-pref-height: 50px;
+    -fx-background-color: -primaryColor;
+    -fx-background-radius: 8px;
+
+    -fx-text-fill: #FFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+
+    -fx-cursor: hand;
+}
+
+.largePrimaryButton:hover {
+    -fx-background-color: -secondaryColor;
+}
+
+.largeSecondaryButton {
+    -fx-pref-width: 256px;
+    -fx-pref-height: 50px;
+    -fx-background-color: #FFF;
+
+    -fx-border-radius: 8px;
+    -fx-border-width: 3px;
+    -fx-border-color: -primaryColor;
+
+    -fx-text-fill: -primaryColor;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+
+    -fx-cursor: hand;
+}
+
+.largeSecondaryButton:hover {
+    -fx-border-color: -secondaryColor;
+    -fx-text-fill: -secondaryColor;
 }

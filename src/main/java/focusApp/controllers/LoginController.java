@@ -45,12 +45,7 @@ public class LoginController {
 
     @FXML
     private void initialize(){
-        // Assuming image.png is directly in src/main/resources/
-        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/focusApp/images/FocusApp_LogoT.png")));
-        focusAppLogo.setImage(image);
-        focusAppLogo.setFitWidth(190);  // Set the width of the ImageView
-        //imageView.setFitHeight(150); // Set the height of the ImageView
-        focusAppLogo.setPreserveRatio(true);
+
     }
     @FXML
     protected void onBackButtonClick() throws IOException {
@@ -58,6 +53,8 @@ public class LoginController {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/home-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
         stage.setScene(scene);
+        // Set scene stylesheet
+        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
     }
 
 

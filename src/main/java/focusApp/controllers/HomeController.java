@@ -23,12 +23,7 @@ public class HomeController {
 
     @FXML
     private void initialize() {
-        // Assuming image.png is directly in src/main/resources/
-        Image image = new Image(getClass().getResourceAsStream("/focusApp/images/FocusApp_LogoT.png"));
-        focusAppLogo.setImage(image);
-        focusAppLogo.setFitWidth(190);  // Set the width of the ImageView
-        //imageView.setFitHeight(150); // Set the height of the ImageView
-        focusAppLogo.setPreserveRatio(true);
+
     }
 
     @FXML
