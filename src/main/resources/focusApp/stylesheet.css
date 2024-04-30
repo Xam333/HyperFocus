@@ -10,6 +10,9 @@
     -fx-background-color: -backgroundColor;
 }
 
+.navBox{
+    -fx-background-color: -primaryColor;
+}
 
 /* Labels */
 
@@ -34,6 +37,13 @@
 .warningLabel{
     -fx-font-size: 14px;
     -fx-text-fill: #FF0000;
+}
+
+.navLabel {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-line-spacing: -5px;
+    -fx-text-fill: #FFFFFF;
 }
 
 /* Hyper Link Label */
