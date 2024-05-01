@@ -1,5 +1,5 @@
 package focusApp.models;
 
 public enum Command {
-    Start, Stop, Pause, Resume, Restart
+    Start, Stop, Pause, Resume, Restart, Delay
 }

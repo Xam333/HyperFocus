@@ -1,6 +1,7 @@
 package focusApp.controllers;
 
 import focusApp.models.Command;
+import focusApp.models.State;
 import focusApp.models.Timer;
 
 import focusApp.HelloApplication;
@@ -33,9 +34,9 @@ public class TimerController {
 
 
     @FXML
-    private Group PauseButton;
+    private Button PauseButton;
     @FXML
-    private Group ResumeButton;
+    private Button ResumeButton;
 
 
     @FXML
@@ -54,41 +55,60 @@ public class TimerController {
 
     public void initialize() {
         // Get offset and duration from main (Get offset and Get Duration)
-        timer = new Timer(null, 1.25, this);
+
+        Double TO = 0.05;
+        Double TD =  0.05;
+        timer = new Timer(TO, TD, this);
         timer.Control(Command.Start);
+
+
     }
 
-    public void UpdateStopWatch(String TimeString){
-        Platform.runLater(()-> {
 
-            if (timer.isTimerFinished()){
-                arc.setVisible(false);
-            } else {
-                StopWatch.setText(TimeString);
-                arc.setLength(((timer.getRunning_CD_MS() + 1) / timer.getRunning_TD_MS()) * 360);
-            }
+    public void UpdateTimerStatus(){ Platform.runLater(() -> TimerStatus.setText(timer.getStatus())); }
+    public void UpdateStopWatch(){ Platform.runLater(() -> StopWatch.setText(timer.FormatTime())); }
+    private void UpdateArc(){Platform.runLater(() -> arc.setLength(((timer.getRunning_CD_MS() + 1) / timer.getRunning_TD_MS()) * 360));}
+
+    public void UpdatePaReButtons(boolean Lock) {
+        Platform.runLater(() -> {
+            PauseButton.setDisable(Lock);
+            ResumeButton.setDisable(Lock);
+        });
+    }
+
+    public void DelayedStopWatch(){
+        Platform.runLater(()-> {
+            MiniArc.setLength(((timer.getDelayed_CD_MS() + 1) / timer.getDelayed_TD_MS()) * 360);
+
+            UpdateStopWatch();
+            UpdateTimerStatus();
+        });
+    }
+    public void RunningStopWatch(){
+        Platform.runLater(()-> {
+            MiniArc.setVisible(false);
+
+
+//            arc.setLength(((timer.getRunning_CD_MS() + 1) / timer.getRunning_TD_MS()) * 360);
+            UpdateArc();
+            UpdateStopWatch();
+            UpdateTimerStatus();
+        });
+    }
+    public void FinishedStopWatch(){
+        Platform.runLater(()-> {
+            arc.setVisible(false);
+
+            UpdateStopWatch();
+            UpdateTimerStatus();
         });
 
     }
+
+
 
     @FXML
     private Arc MiniArc;
-    public void UpdateMiniTimer(){
-        Platform.runLater(() -> {
-
-            if(timer.isTimerRunning()){
-                MiniArc.setVisible(false);
-            } else{
-                MiniArc.setLength(((timer.getDelayed_CD_MS() + 1) / timer.getDelayed_TD_MS()) * 360);
-
-            }
-        });
-    }
-
-
-    public void UpdateTimerStatusLabel(String Status){
-        Platform.runLater(() -> TimerStatus.setText(Status));
-    }
 
 
     @FXML

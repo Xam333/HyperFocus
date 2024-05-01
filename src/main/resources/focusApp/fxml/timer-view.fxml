@@ -57,10 +57,21 @@
                   <Group layoutX="-130.0" layoutY="190.0">
                      <children>
                         <Circle fill="#333333" layoutX="5.0" layoutY="-4.0" radius="50.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-                        <Group fx:id="PauseButton" layoutX="5.0" layoutY="-4.0" onMouseClicked="#onPauseButtonClick">
-                           <children>
-                              <Circle fill="TRANSPARENT" radius="50.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-                              <Path fx:id="PauseButtonIcon" fill="DODGERBLUE" layoutX="-27.0" layoutY="-30.0" stroke="BLACK" strokeType="INSIDE">
+                        <Button fx:id="ResumeButton" disable="true" layoutX="-45.0" layoutY="-54.0" mnemonicParsing="false" onAction="#onResumeButtonClick" prefHeight="100.0" prefWidth="100.0" style="-fx-background-radius: 50; -fx-background-color: #333333; -fx-border-width: 0;" textOverrun="CLIP" visible="false">
+                           <graphic>
+                              <Path fx:id="ResumeButtonIcon" fill="#00f2ff" stroke="TRANSPARENT" strokeType="INSIDE">
+                                  <elements>
+                                      <MoveTo />
+                                      <LineTo x="55.0" y="30.0" />
+                                    <LineTo y="60.0" />
+                                      <ClosePath />
+                                  </elements>
+                              </Path>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="PauseButton" disable="true" layoutX="-45.0" layoutY="-54.0" mnemonicParsing="false" onAction="#onPauseButtonClick" prefHeight="100.0" prefWidth="100.0" style="-fx-background-radius: 50; -fx-background-color: #333333; -fx-border-width: 0;">
+                           <graphic>
+                              <Path fx:id="PauseButtonIcon" fill="DODGERBLUE" stroke="BLACK" strokeType="INSIDE">
                                   <elements>
                                       <MoveTo />
                                       <LineTo x="20.0" />
@@ -73,21 +84,8 @@
                                       <ClosePath />
                                   </elements>
                               </Path>
-                           </children>
-                        </Group>
-                        <Group fx:id="ResumeButton" layoutX="5.0" layoutY="-4.0" onMouseClicked="#onResumeButtonClick" visible="false">
-                           <children>
-                              <Circle fill="TRANSPARENT" radius="50.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-                              <Path fx:id="ResumeButtonIcon" fill="#4b00b0" layoutX="-27.0" layoutY="-30.0" stroke="TRANSPARENT" strokeType="INSIDE">
-                                  <elements>
-                                      <MoveTo />
-                                      <LineTo x="55.0" y="30.0" />
-                                    <LineTo y="60.0" />
-                                      <ClosePath />
-                                  </elements>
-                              </Path>
-                           </children>
-                        </Group>
+                           </graphic>
+                        </Button>
                         <Arc fx:id="MiniArc" fill="#b9b9b9e3" layoutX="5.0" layoutY="-4.0" length="360.0" radiusX="50.0" radiusY="50.0" startAngle="90.0" stroke="#a1a1a1fe" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeType="INSIDE" strokeWidth="3.0" type="ROUND" />
                      </children>
                   </Group>
