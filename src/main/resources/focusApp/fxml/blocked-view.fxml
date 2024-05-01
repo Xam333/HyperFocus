@@ -46,7 +46,7 @@
                            fitWidth="40.0"
                            pickOnBounds="true"
                            preserveRatio="true">
-                    <Image url="@../images/Hamburger.png"/>
+                    <Image url="@../images/menuIcon.png"/>
                 </ImageView>
             </graphic>
         </Button>
@@ -68,7 +68,7 @@
                            fitWidth="40.0"
                            pickOnBounds="true"
                            preserveRatio="true">
-                    <Image url="@../images/UserIcon.png"/>
+                    <Image url="@../images/userIcon.png"/>
                 </ImageView>
             </graphic>
         </Button>
