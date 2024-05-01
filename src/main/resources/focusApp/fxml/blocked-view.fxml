@@ -1,74 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.StackPane?>
-
-
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity"
-            maxWidth="-Infinity"
-            minHeight="-Infinity"
-            minWidth="-Infinity"
-            prefHeight="600.0"
-            prefWidth="390.0"
-            xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="focusApp.controllers.BlockedController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="390.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.BlockedController">
 
     <!-- NAV BAR -->
-    <HBox styleClass="navBox"
-          alignment="CENTER"
-          prefHeight="75.0"
-          prefWidth="390.0"
-          spacing="5.0">
+    <HBox alignment="CENTER" prefHeight="75.0" prefWidth="390.0" spacing="5.0" styleClass="navBox">
 
         <!-- To Previous Page -->
-        <Button fx:id="backButton"
-                onAction="#onBackButtonClick"
-                styleClass="navButton">
+        <Button fx:id="backButton" onAction="#onBackButtonClick" styleClass="navButton">
             <graphic>
-                <ImageView fitHeight="40.0"
-                           fitWidth="40.0"
-                           pickOnBounds="true"
-                           preserveRatio="true">
-                    <Image url="@../images/menuIcon.png"/>
+                <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                    <Image url="@../images/menuIcon.png" />
                 </ImageView>
             </graphic>
         </Button>
 
-        <Region HBox.hgrow="ALWAYS"/>
+        <Region HBox.hgrow="ALWAYS" />
 
         <!-- Page Title -->
-        <Label styleClass="navLabel"
-               text="Blocked Apps"
-               textAlignment="CENTER"/>
+        <Label styleClass="navLabel" text="Blocked Apps" textAlignment="CENTER" />
 
-        <Region HBox.hgrow="ALWAYS"/>
+        <Region HBox.hgrow="ALWAYS" />
 
         <!--        add functionality, go to account page-->
         <!-- To Account Page -->
         <Button styleClass="navButton">
             <graphic>
-                <ImageView fitHeight="40.0"
-                           fitWidth="40.0"
-                           pickOnBounds="true"
-                           preserveRatio="true">
-                    <Image url="@../images/userIcon.png"/>
+                <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                    <Image url="@../images/userIcon.png" />
                 </ImageView>
             </graphic>
         </Button>
@@ -76,66 +46,36 @@
 
 
     <!-- ADD WEBSITE, APPLICATION BUTTONS -->
-    <VBox layoutX="55.0"
-          layoutY="113.0"
-          prefHeight="450.0"
-          prefWidth="280.0"
-          spacing="20.0">
+    <VBox layoutX="55.0" layoutY="96.0" prefHeight="467.0" prefWidth="280.0" spacing="20.0">
 
-        <HBox spacing="10.0"
-              alignment="CENTER">
-            <Button styleClass="smallBlankButton"
-                    text="Website +"/>
-            <Button styleClass="smallBlankButton"
-                    text="Application +"/>
+        <HBox alignment="CENTER" prefHeight="40.0" prefWidth="280.0" spacing="10.0">
+            <Button styleClass="smallBlankButton" text="Website +" />
+            <Button styleClass="smallBlankButton" text="Application +" />
         </HBox>
 
 
         <!-- TABLE LAYOUT -->
-        <VBox>
-            <Label styleClass="bodyLabel"
-                   text="Blocked Applications:"/>
+        <VBox prefHeight="300.0" prefWidth="280.0">
+            <Label styleClass="bodyLabel" text="Blocked Applications:" />
 
-            <TableView fx:id="tableView"
-                       styleClass="blockedTableView">
+            <TableView fx:id="tableView" styleClass="blockedTableView">
                 <columns>
-                    <TableColumn fx:id="iconColumn"
-                                 maxWidth="50"
-                                 minWidth="50"
-                                 prefWidth="50"
-                                 text=" "
-                                 styleClass="blockedTableColumn"/>
-                    <TableColumn fx:id="nameColumn"
-                                 maxWidth="100"
-                                 minWidth="70"
-                                 prefWidth="81"
-                                 text="Name"
-                                 styleClass="blockedTableColumn"/>
-                    <TableColumn fx:id="locationColumn"
-                                 maxWidth="150"
-                                 minWidth="120"
-                                 prefWidth="144"
-                                 text="Web/File Link"
-                                 styleClass="blockedTableColumn"/>
+                    <TableColumn fx:id="iconColumn" maxWidth="50" minWidth="50" prefWidth="50" styleClass="blockedTableColumn" text=" " />
+                    <TableColumn fx:id="nameColumn" maxWidth="100" minWidth="70" prefWidth="81" styleClass="blockedTableColumn" text="Name" />
+                    <TableColumn fx:id="locationColumn" maxWidth="150" minWidth="120" prefWidth="144" styleClass="blockedTableColumn" text="Web/File Link" />
                 </columns>
             </TableView>
 
             <VBox.margin>
-                <Insets bottom="20.0"/>
+                <Insets bottom="20.0" />
             </VBox.margin>
         </VBox>
 
         <!-- CANCEL, SAVE BUTTONS -->
-        <HBox spacing="10.0" alignment="BOTTOM_CENTER">
-            <Button fx:id="cancelButton"
-                    mnemonicParsing="false"
-                    styleClass="smallSecondaryButton"
-                    text="CANCEL"/>
+        <HBox alignment="BOTTOM_CENTER" prefHeight="40.0" prefWidth="280.0" spacing="10.0">
+            <Button fx:id="cancelButton" mnemonicParsing="false" styleClass="smallSecondaryButton" text="CANCEL" />
 
-            <Button fx:id="saveButton"
-                    mnemonicParsing="false"
-                    styleClass="smallPrimaryButton"
-                    text="SAVE"/>
+            <Button fx:id="saveButton" mnemonicParsing="false" styleClass="smallPrimaryButton" text="SAVE" />
         </HBox>
     </VBox>
 </AnchorPane>
