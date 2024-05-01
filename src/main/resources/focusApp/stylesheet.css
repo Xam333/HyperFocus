@@ -6,13 +6,31 @@
     /* Temp */
     -textBoxColor: #FFF;
 
-
     -fx-background-color: -backgroundColor;
 }
 
+/* Layout */
 .navBox{
     -fx-background-color: -primaryColor;
 }
+
+
+/* Blocked Table */
+.blockedTableColumn{
+    -fx-alignment: center;
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: transparent -secondaryColor transparent -secondaryColor;
+}
+
+.blockedTableView{
+    -fx-border-color: transparent transparent -secondaryColor transparent;
+    -fx-background-color: transparent;
+}
+
+.blockedTableView .column-header {
+    -fx-border-color: -secondaryColor;
+}
+
 
 /* Labels */
 
@@ -68,6 +86,11 @@
 
 
 /* Buttons */
+
+.navButton{
+    -fx-background-color: transparent;
+}
+
 /* Large Buttons*/
 
 .largePrimaryButton {
@@ -148,6 +171,27 @@
 .smallSecondaryButton:hover {
     -fx-border-color: -secondaryColor;
     -fx-text-fill: -secondaryColor;
+}
+
+
+
+.smallBlankButton {
+    -fx-pref-width: 140px;
+    -fx-pref-height: 40px;
+    -fx-background-color: #FFF;
+
+    -fx-border-radius: 8px;
+    -fx-border-color: #000000;
+
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+
+    -fx-cursor: hand;
+}
+
+.smallBlankButton:hover {
+    -fx-background-color: #F5F5F5;
+
 }
 
 

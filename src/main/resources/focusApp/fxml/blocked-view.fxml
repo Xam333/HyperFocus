@@ -35,67 +35,107 @@
           alignment="CENTER"
           prefHeight="75.0"
           prefWidth="390.0"
-          spacing="80.0">
+          spacing="5.0">
 
-        <!-- HAMBURGER?? -->
-<!--        add functionality, open side menu -->
-        <ImageView fitHeight="40.0"
-                   fitWidth="40.0"
-                   pickOnBounds="true"
-                   preserveRatio="true">
-<!--            <Image url="@../images/Hamburger.png"/>-->
-        </ImageView>
+        <!-- To Previous Page -->
+        <Button fx:id="backButton"
+                onAction="#onBackButtonClick"
+                styleClass="navButton">
+            <graphic>
+                <ImageView fitHeight="40.0"
+                           fitWidth="40.0"
+                           pickOnBounds="true"
+                           preserveRatio="true">
+                    <Image url="@../images/Hamburger.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
 
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <!-- Page Title -->
         <Label styleClass="navLabel"
                text="Blocked Apps"
-               textAlignment="JUSTIFY"/>
+               textAlignment="CENTER"/>
 
-<!--        add functionality, go to account page-->
-        <ImageView fitHeight="40.0"
-                   fitWidth="40.0"
-                   pickOnBounds="true"
-                   preserveRatio="true">
-            <Image url="@../images/UserIcon.png"/>
-        </ImageView>
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <!--        add functionality, go to account page-->
+        <!-- To Account Page -->
+        <Button styleClass="navButton">
+            <graphic>
+                <ImageView fitHeight="40.0"
+                           fitWidth="40.0"
+                           pickOnBounds="true"
+                           preserveRatio="true">
+                    <Image url="@../images/UserIcon.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
     </HBox>
 
-    <VBox alignment="CENTER"
-          layoutX="53.0"
-          prefHeight="600.0"
-          prefWidth="284.0">
 
-<!--        move up to nav bar -->
-        <HBox fx:id="hBoxHeader" spacing="5.0" alignment="CENTER_LEFT">
-            <Button fx:id="backButton" text="&#x3C;" onAction="#onBackButtonClick"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Label text="Blocked List" style="-fx-font-size: 18px;" wrapText="true"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Button>
+    <!-- ADD WEBSITE, APPLICATION BUTTONS -->
+    <VBox layoutX="55.0"
+          layoutY="113.0"
+          prefHeight="450.0"
+          prefWidth="280.0"
+          spacing="20.0">
 
-
-                <graphic>
-                    <ImageView fx:id="youtubeIcon"/>
-                    <ImageView fx:id="redditIcon"/>
-                    <ImageView fx:id="userIcon"/>
-
-                </graphic>
-            </Button>
+        <HBox spacing="10.0"
+              alignment="CENTER">
+            <Button styleClass="smallBlankButton"
+                    text="Website +"/>
+            <Button styleClass="smallBlankButton"
+                    text="Application +"/>
         </HBox>
-        <TextField fx:id="searchField" promptText="Search"/>
-        <HBox fx:id="hBoxTabs" spacing="10.0" alignment="CENTER">
-            <Button text="Website +"/>
-            <Button text="Application +"/>
+
+
+        <!-- TABLE LAYOUT -->
+        <VBox>
+            <Label styleClass="bodyLabel"
+                   text="Blocked Applications:"/>
+
+            <TableView fx:id="tableView"
+                       styleClass="blockedTableView">
+                <columns>
+                    <TableColumn fx:id="iconColumn"
+                                 maxWidth="50"
+                                 minWidth="50"
+                                 prefWidth="50"
+                                 text=" "
+                                 styleClass="blockedTableColumn"/>
+                    <TableColumn fx:id="nameColumn"
+                                 maxWidth="100"
+                                 minWidth="70"
+                                 prefWidth="81"
+                                 text="Name"
+                                 styleClass="blockedTableColumn"/>
+                    <TableColumn fx:id="locationColumn"
+                                 maxWidth="150"
+                                 minWidth="120"
+                                 prefWidth="144"
+                                 text="Web/File Link"
+                                 styleClass="blockedTableColumn"/>
+                </columns>
+            </TableView>
+
+            <VBox.margin>
+                <Insets bottom="20.0"/>
+            </VBox.margin>
+        </VBox>
+
+        <!-- CANCEL, SAVE BUTTONS -->
+        <HBox spacing="10.0" alignment="BOTTOM_CENTER">
+            <Button fx:id="cancelButton"
+                    mnemonicParsing="false"
+                    styleClass="smallSecondaryButton"
+                    text="CANCEL"/>
+
+            <Button fx:id="saveButton"
+                    mnemonicParsing="false"
+                    styleClass="smallPrimaryButton"
+                    text="SAVE"/>
         </HBox>
-        <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
-            <columns>
-                <TableColumn fx:id="iconColumn" text="" minWidth="50" prefWidth="50" maxWidth="50"
-                             style="-fx-alignment: center;"/>
-                <TableColumn fx:id="nameColumn" text="Name" minWidth="100" prefWidth="100" maxWidth="100"
-                             style="-fx-alignment: center;"/>
-                <TableColumn fx:id="locationColumn" text="Web/File Link" minWidth="200" prefWidth="250"
-                             maxWidth="300" style="-fx-alignment: center;"/>
-            </columns>
-        </TableView>
-        <Button fx:id="saveButton" text="Save" maxWidth="Infinity" VBox.vgrow="NEVER"/>
     </VBox>
 </AnchorPane>

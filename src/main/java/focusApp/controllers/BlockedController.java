@@ -24,6 +24,8 @@ import java.util.ResourceBundle;
 public class BlockedController implements Initializable {
 
     public Button backButton;
+    public Button saveButton;
+    public Button cancelButton;
     @FXML
     private ImageView userIcon;
     @FXML
@@ -62,25 +64,25 @@ public class BlockedController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         // Assuming image.png is directly in src/main/resources/
-        Image userImage = new Image(getClass().getResourceAsStream("/focusApp/images/UserIcon.png"));
-        userIcon.setImage(userImage);
-        userIcon.setFitWidth(20);  // Set the width of the ImageView
-        //userIcon.setFitHeight(150); // Set the height of the ImageView
-        userIcon.setPreserveRatio(true);
+//        Image userImage = new Image(getClass().getResourceAsStream("/focusApp/images/UserIcon.png"));
+//        userIcon.setImage(userImage);
+//        userIcon.setFitWidth(20);  // Set the width of the ImageView
+//        //userIcon.setFitHeight(150); // Set the height of the ImageView
+//        userIcon.setPreserveRatio(true);
 
 
 
-        Image youtubeImage = new Image(getClass().getResourceAsStream("/focusApp/images/youtubeIcon.png"));
-        youtubeIcon.setImage(youtubeImage);
-        youtubeIcon.setFitWidth(20);  // Set the width of the ImageView
-        //youtubeIcon.setFitHeight(150); // Set the height of the ImageView
-        youtubeIcon.setPreserveRatio(true);
-
-        Image redditImage = new Image(getClass().getResourceAsStream("/focusApp/images/redditIcon.png"));
-        redditIcon.setImage(redditImage);
-        redditIcon.setFitWidth(20);  // Set the width of the ImageView
-        //redditIcon.setFitHeight(150); // Set the height of the ImageView
-        redditIcon.setPreserveRatio(true);
+//        Image youtubeImage = new Image(getClass().getResourceAsStream("/focusApp/images/youtubeIcon.png"));
+//        youtubeIcon.setImage(youtubeImage);
+//        youtubeIcon.setFitWidth(20);  // Set the width of the ImageView
+//        //youtubeIcon.setFitHeight(150); // Set the height of the ImageView
+//        youtubeIcon.setPreserveRatio(true);
+//
+//        Image redditImage = new Image(getClass().getResourceAsStream("/focusApp/images/redditIcon.png"));
+//        redditIcon.setImage(redditImage);
+//        redditIcon.setFitWidth(20);  // Set the width of the ImageView
+//        //redditIcon.setFitHeight(150); // Set the height of the ImageView
+//        redditIcon.setPreserveRatio(true);
 
 
 

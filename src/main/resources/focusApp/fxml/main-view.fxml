@@ -17,6 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.layout.AnchorPane?>
 
+<?import javafx.scene.layout.Region?>
 <AnchorPane maxHeight="-Infinity"
             maxWidth="-Infinity"
             minHeight="-Infinity"
@@ -32,26 +33,42 @@
          alignment="CENTER"
          prefHeight="75.0"
          prefWidth="390.0"
-         spacing="80.0">
+         spacing="5.0">
 
-      <!-- HAMBURGER?? -->
-      <ImageView fitHeight="40.0"
-                 fitWidth="40.0"
-                 pickOnBounds="true"
-                 preserveRatio="true">
-         <!--            <Image url="@../images/Hamburger.png"/>-->
-      </ImageView>
+      <!-- To Previous Page -->
+      <Button fx:id="menuButton"
+              styleClass="navButton">
+         <graphic>
+            <ImageView fitHeight="40.0"
+                       fitWidth="40.0"
+                       pickOnBounds="true"
+                       preserveRatio="true">
+               <Image url="@../images/Hamburger.png"/>
+            </ImageView>
+         </graphic>
+      </Button>
 
+      <Region HBox.hgrow="ALWAYS"/>
+
+      <!-- Page Title -->
       <Label styleClass="navLabel"
              text="Focus Period"
              textAlignment="JUSTIFY"/>
 
-      <ImageView fitHeight="40.0"
-                 fitWidth="40.0"
-                 pickOnBounds="true"
-                 preserveRatio="true">
-         <Image url="@../images/UserIcon.png"/>
-      </ImageView>
+      <Region HBox.hgrow="ALWAYS"/>
+
+      <!--        add functionality, go to account page-->
+      <!-- To Account Page -->
+      <Button styleClass="navButton">
+         <graphic>
+            <ImageView fitHeight="40.0"
+                       fitWidth="40.0"
+                       pickOnBounds="true"
+                       preserveRatio="true">
+               <Image url="@../images/UserIcon.png"/>
+            </ImageView>
+         </graphic>
+      </Button>
    </HBox>
 
 
@@ -60,8 +77,12 @@
          prefHeight="477.0"
          prefWidth="280.0">
 
-      <HBox alignment="CENTER" prefHeight="58.0" prefWidth="280.0" spacing="50.0">
-         <MenuButton mnemonicParsing="false" text="Select Preset">
+      <HBox alignment="CENTER"
+            prefHeight="58.0"
+            prefWidth="280.0"
+            spacing="50.0">
+         <MenuButton mnemonicParsing="false"
+                     text="Select Preset">
             <items>
                <MenuItem mnemonicParsing="false" text="Action 1"/>
                <MenuItem mnemonicParsing="false" text="Action 2"/>
