@@ -13,33 +13,30 @@ import java.util.concurrent.TimeUnit;
  */
 public class Timer {
 
-    private final boolean DebugMode = false;
+    private final boolean DebugMode = true;
     /**
      * Used for tracking the state of the timer.
      */
     private enum State {
-        Running, NotRunning, Paused, PreRun
+        Running, Delayed, Paused, Finished, Stopped
     }
 
+    // Get the Timer State.
     private State Timer_State;
     public boolean isTimerPaused() { return Timer_State == State.Paused; }
-    public  boolean isTimerPreRun() { return Timer_State == State.PreRun; }
+    public boolean isTimerDelayed() { return Timer_State == State.Delayed; }
     public boolean isTimerRunning() { return Timer_State == State.Running; }
-    public boolean isTimerNotRunning() { return Timer_State == State.NotRunning; }
+    public boolean isTimerFinished() { return Timer_State == State.Finished; }
 
-
+    // Main information needed for the timer.
     private LocalTime Timer_End;
     private final LocalTime Timer_Start;
     private final TimerController Timer_Controller;
 
     /**
-     * Stores the value of the timer offset.
+     * Stores the value of the timer offset and the timer duration.
      */
     private final double Timer_Preset_Offset;
-
-    /**
-     * Stores the value of the timer duration.
-     */
     private final double Timer_Preset_Duration;
 
 
@@ -59,15 +56,28 @@ public class Timer {
      * Global scheduler for the timer.
      */
     private static ScheduledExecutorService TimeScheduler;
-    private Duration PausedDuration;
-    private Duration CountingDuration;
-    private final Duration TotalDuration;
+    private Duration Paused_C_Duration;
 
-    public double getCountingMilliSeconds(){
-        return CountingDuration.toMillis();
+
+    private Duration Delayed_C_Duration;
+    private Duration Delayed_T_Duration;
+
+    public double getDelayed_CD_MS(){
+        return Delayed_C_Duration.toMillis();
     }
-    public double getTotalMilliSeconds(){
-        return TotalDuration.toMillis();
+    public double getDelayed_TD_MS(){
+        return Delayed_T_Duration.toMillis();
+    }
+
+
+    private Duration Running_C_Duration;
+    private final Duration Running_T_Duration;
+
+    public double getRunning_CD_MS(){
+        return Running_C_Duration.toMillis();
+    }
+    public double getRunning_TD_MS(){
+        return Running_T_Duration.toMillis();
     }
 
 
@@ -85,15 +95,20 @@ public class Timer {
     public Timer (Double TimerOffset, Double TimerDuration, TimerController Timer_Controller){
         Timer_Preset_Offset = TimerOffset == null ? 0.0 : (TimerOffset * 60);
         Timer_Preset_Duration = TimerDuration == null ? 0.0 : (TimerDuration * 60);
-        Timer_State = State.NotRunning;
+        Timer_State = (Timer_Preset_Offset != 0.0) ? State.Delayed : State.Running;
 
         this.Timer_Start = LocalTime.now().plusSeconds((long) Timer_Preset_Offset);
         this.Timer_End = Timer_Start.plusSeconds((long)Timer_Preset_Duration);
         this.Timer_Controller = Timer_Controller;
 
         boolean TimeCheck = Timer_End.isBefore(Timer_Start);
-        CountingDuration = Duration.between(Timer_Start, Timer_End).plusHours(TimeCheck ? 24 : 0);
-        TotalDuration = CountingDuration;
+        Running_C_Duration = Duration.between(Timer_Start, Timer_End).plusHours(TimeCheck ? 24 : 0);
+        Running_T_Duration = Running_C_Duration;
+
+        if(Timer_State == State.Delayed){
+            Delayed_C_Duration = Duration.between(LocalTime.now(),Timer_Start).plusHours(TimeCheck ? 24 : 0);
+            Delayed_T_Duration = Delayed_C_Duration;
+        }
 
         if (DebugMode){
             System.out.println("Timer_Preset_Offset: " + Timer_Preset_Offset + "sec");
@@ -101,6 +116,7 @@ public class Timer {
             System.out.println("Timer Start: " + Timer_Start.format(Timer_12_Format));
             System.out.println("Timer End: " + Timer_End.format(Timer_12_Format));
             System.out.println("Counting Duration: " + FormatTime());
+            System.out.println("Timer State: " + Timer_State);
         }
     }
 
@@ -108,19 +124,27 @@ public class Timer {
      * This method is used to execute commands during the timer.
      */
     private void RunningTimer(){
-        // Do the blocking stuff here.
 
-        // Update GUI stuff here.
         Timer_Controller.UpdateStopWatch(FormatTime());
-        CountingDuration = CountingDuration.minusMillis(1);
+        Running_C_Duration = Running_C_Duration.minusMillis(1);
 
-        // Check if the timer has ended.
-        if(CountingDuration.getSeconds() < 0 && Timer_State == State.Running){
+        if(Running_C_Duration.getSeconds() < 0){
             Control(Command.Stop);
-
-            // Play alert sound here.
             Notification.PlaySound(-10);
+            TimeScheduler.shutdownNow();
             // Stop blocking stuff here, and return to the main page(GUI).
+        }
+    }
+
+    private void PreRunningTimer(){
+
+        Timer_Controller.UpdateMiniTimer();
+        Delayed_C_Duration = Delayed_C_Duration.minusMillis(1);
+
+        if(Delayed_C_Duration.getSeconds() < 0){
+
+            Start();
+            TimeScheduler.shutdownNow();
         }
     }
 
@@ -129,11 +153,24 @@ public class Timer {
      * @return Formatted time (hh:mm:ss)
      */
     private String FormatTime(){
-        long H = CountingDuration.toHours();
-        long M = CountingDuration.minusHours(H).toMinutes();
-        long S = CountingDuration.minusHours(H).minusMinutes(M).toSeconds();
+        String F;
+        if (Running_C_Duration.toHours() != 0){
+            long H = Running_C_Duration.toHours();
+            long M = Running_C_Duration.minusHours(H).toMinutes();
+            long S = Running_C_Duration.minusHours(H).minusMinutes(M).toSeconds();
 
-        return String.format("%02d:%02d:%02d", H, M, S);
+            F = String.format("%02d:%02d:%02d", H, M, S);
+        } else if (Running_C_Duration.toMinutes() != 0) {
+            long M = Running_C_Duration.toMinutes();
+            long S = Running_C_Duration.minusMinutes(M).toSeconds();
+
+            F =  String.format("%02d:%02d", M, S);
+        } else {
+
+            long S = Running_C_Duration.toSeconds();
+            F =  String.format("%02d", S);
+        }
+        return F;
     }
 
     /**
@@ -150,7 +187,7 @@ public class Timer {
      */
     public void Control(Command command){
         switch (command) {
-            case Start -> {if(Timer_Preset_Offset != 0){ PreStart(); } else { Start(); }}
+            case Start -> {if(Timer_State == State.Delayed){ DelayedStart(); } else { Start(); }}
             case Stop -> Stop();
             case Pause -> Pause();
             case Resume -> Resume();
@@ -162,14 +199,12 @@ public class Timer {
     /**
      * Begins the Pre-start period of the timer.
      */
-    private void PreStart(){
-        EnforceState(State.PreRun);
+    private void DelayedStart(){
         Timer_Controller.UpdateStopWatch(FormatTime());
-
         Timer_Controller.UpdateTimerStatusLabel("Timer will start at: " + Timer_Start.format(Timer_12_Format));
 
         TimeScheduler = Executors.newScheduledThreadPool(1);
-        TimeScheduler.scheduleAtFixedRate(this::Start, (long)(Timer_Preset_Offset * 1000), 1, TimeUnit.MILLISECONDS);
+        TimeScheduler.scheduleAtFixedRate(this::PreRunningTimer, 0, 1, TimeUnit.MILLISECONDS);
 
         if (DebugMode){
             System.out.println("Timer PreRun at: " + LocalTime.now().format(Timer_12_Format));
@@ -181,10 +216,8 @@ public class Timer {
      * Starts the timer.
      */
     private void Start(){
-        if (Timer_Preset_Offset != 0){ TimeScheduler.shutdownNow(); }
+        Timer_Controller.UpdateMiniTimer();
 
-        EnforceState(State.Running);
-        Timer_Controller.UnlockPauseButton();
         TimeScheduler = Executors.newScheduledThreadPool(1);
         TimeScheduler.scheduleAtFixedRate(this::RunningTimer, 0, 1, TimeUnit.MILLISECONDS);
 
@@ -199,9 +232,9 @@ public class Timer {
      * Stops the timer.
      */
     private void Stop(){
-        EnforceState(State.NotRunning);
+        EnforceState(State.Stopped);
         // Get total time here.
-        TimeScheduler.shutdownNow();
+
         Timer_Controller.UpdateTimerStatusLabel("Timer has stopped.");
 
         if(DebugMode){
@@ -213,9 +246,10 @@ public class Timer {
      * Resumes the timer.
      */
     private void Resume(){
+        Timer_End = LocalTime.now().plusSeconds(Paused_C_Duration.toSeconds());
+        Running_C_Duration = Paused_C_Duration;
         EnforceState(State.Running);
-        Timer_End = LocalTime.now().plusSeconds(PausedDuration.toSeconds());
-        CountingDuration = PausedDuration;
+
         TimeScheduler = Executors.newScheduledThreadPool(1);
         TimeScheduler.scheduleAtFixedRate(this::RunningTimer, 0, 1, TimeUnit.MILLISECONDS);
 
@@ -230,9 +264,9 @@ public class Timer {
      * Pauses the timer.
      */
     private void Pause(){
-        EnforceState(State.Paused);
-        PausedDuration = Duration.between(LocalTime.now(), Timer_End);
+        Paused_C_Duration = Duration.between(LocalTime.now(), Timer_End);
         TimeScheduler.shutdownNow();
+        EnforceState(State.Paused);
 
         Timer_Controller.UpdateTimerStatusLabel("Timer is paused.");
 

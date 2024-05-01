@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="644.0" prefWidth="390.0" style="-fx-background-color: #d8f2eb;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.TimerController">
+<AnchorPane prefHeight="644.0" prefWidth="390.0" style="-fx-background-color: #E6F9FF;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.TimerController">
 
     <VBox fx:id="vBoxContainer" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
 
@@ -36,36 +37,64 @@
             </font></Label>
             <Region HBox.hgrow="ALWAYS" />
         </HBox>
-      <StackPane fx:id="StackPane" prefHeight="150.0" prefWidth="200.0">
+      <StackPane prefHeight="150.0" prefWidth="200.0">
          <children>
-            <Circle fill="#333333" radius="175.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-            <Arc fill="TRANSPARENT" length="360.0" radiusX="160.0" radiusY="160.0" stroke="#868686" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="15.0" />
-
-               <Label fx:id="StopWatch" alignment="CENTER" text="00:00:00" textFill="WHITE">
-               <font>
-                  <Font size="71.0" />
-               </font>
-               </Label>
-            <Pane prefHeight="200.0" prefWidth="200.0">
+            <Group>
                <children>
-                  <Arc fx:id="arc" centerX="175.0" centerY="100.0" fill="TRANSPARENT" layoutX="10.0" layoutY="75.0" length="360.0" radiusX="160.0" radiusY="160.0" startAngle="90.0" stroke="#1b81e0" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="10.0" />
+                  <Circle fill="#333333" radius="175.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+                  <Arc fill="TRANSPARENT" length="360.0" radiusX="160.0" radiusY="160.0" stroke="#868686" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="15.0" />
+                  <Arc fx:id="arc" centerX="175.0" centerY="100.0" fill="TRANSPARENT" layoutX="-175.0" layoutY="-100.0" length="360.0" radiusX="160.0" radiusY="160.0" startAngle="90.0" stroke="#1b81e0" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="10.0" />
+                  <HBox layoutX="-132.0" layoutY="-52.0" prefHeight="104.0" prefWidth="265.0">
+                     <children>
+            
+                                 <Label fx:id="StopWatch" alignment="CENTER" contentDisplay="CENTER" prefHeight="104.0" prefWidth="276.0" text="00:00:00" textAlignment="CENTER" textFill="WHITE">
+                           <font>
+                              <Font size="71.0" />
+                           </font>
+                           </Label>
+                     </children>
+                  </HBox>
+                  <Group layoutX="-130.0" layoutY="190.0">
+                     <children>
+                        <Circle fill="#333333" layoutX="5.0" layoutY="-4.0" radius="50.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+                        <Group fx:id="PauseButton" layoutX="5.0" layoutY="-4.0" onMouseClicked="#onPauseButtonClick">
+                           <children>
+                              <Circle fill="TRANSPARENT" radius="50.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+                              <Path fx:id="PauseButtonIcon" fill="DODGERBLUE" layoutX="-27.0" layoutY="-30.0" stroke="BLACK" strokeType="INSIDE">
+                                  <elements>
+                                      <MoveTo />
+                                      <LineTo x="20.0" />
+                                    <LineTo x="20.0" y="60.0" />
+                                    <LineTo y="60.0" />
+                                    <MoveTo x="35.0" />
+                                    <LineTo x="55.0" />
+                                    <LineTo x="55.0" y="60.0" />
+                                    <LineTo x="35.0" y="60.0" />
+                                      <ClosePath />
+                                  </elements>
+                              </Path>
+                           </children>
+                        </Group>
+                        <Group fx:id="ResumeButton" layoutX="5.0" layoutY="-4.0" onMouseClicked="#onResumeButtonClick" visible="false">
+                           <children>
+                              <Circle fill="TRANSPARENT" radius="50.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+                              <Path fx:id="ResumeButtonIcon" fill="#4b00b0" layoutX="-27.0" layoutY="-30.0" stroke="TRANSPARENT" strokeType="INSIDE">
+                                  <elements>
+                                      <MoveTo />
+                                      <LineTo x="55.0" y="30.0" />
+                                    <LineTo y="60.0" />
+                                      <ClosePath />
+                                  </elements>
+                              </Path>
+                           </children>
+                        </Group>
+                        <Arc fx:id="MiniArc" fill="#b9b9b9e3" layoutX="5.0" layoutY="-4.0" length="360.0" radiusX="50.0" radiusY="50.0" startAngle="90.0" stroke="#a1a1a1fe" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeType="INSIDE" strokeWidth="3.0" type="ROUND" />
+                     </children>
+                  </Group>
                </children>
-            </Pane>
+            </Group>
          </children>
       </StackPane>
-
-        <HBox alignment="CENTER" spacing="10">
-
-            <Button fx:id="PauseBtn" disable="true" maxWidth="Infinity" onAction="#onPauseButtonClick" prefWidth="100" style="-fx-font-size: 24px; -fx-border-color: black; -fx-background-color: #43aed9;" text="Pause" HBox.hgrow="ALWAYS" />
-
-            <Button fx:id="ResumeBtn" managed="false" maxWidth="Infinity" onAction="#onResumeButtonClick" prefWidth="0" style="-fx-font-size: 24px; -fx-border-color: black; -fx-background-color: #43aed9;" text="Resume" visible="false" HBox.hgrow="ALWAYS" />
-        </HBox>
-
-         <Button fx:id="StopBtn" maxWidth="Infinity" onAction="#onStopButtonClick" style="-fx-font-size: 24px; -fx-border-color: black; -fx-background-color: #43aed9; -fx-background-radius: 20; -fx-border-radius: 20;" text="Stop">
-         <VBox.margin>
-            <Insets left="5.0" right="5.0" top="10.0" />
-         </VBox.margin>
-      </Button>
 
     </VBox>
 </AnchorPane>

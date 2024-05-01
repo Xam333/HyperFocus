@@ -7,6 +7,7 @@ import focusApp.HelloApplication;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -15,22 +16,11 @@ import javafx.scene.shape.Arc;
 import java.io.IOException;
 
 public class TimerController {
-    public enum ButtonControl {
-        Show, Hide, Lock, Unlock
-    }
+
     private Timer timer;
 
     @FXML
     private Button BackBtn;
-
-    @FXML
-    private Button PauseBtn;
-    @FXML
-    private Button ResumeBtn;
-    @FXML
-    private Button StopBtn;
-    @FXML
-    private Button RestartBtn;
 
     @FXML
     private Label StopWatch;
@@ -41,93 +31,63 @@ public class TimerController {
     private Arc arc;
 
 
+
+    @FXML
+    private Group PauseButton;
+    @FXML
+    private Group ResumeButton;
+
+
+    @FXML
+    protected void onPauseButtonClick(){
+        timer.Control(Command.Pause);
+        PauseButton.setVisible(false);
+        ResumeButton.setVisible(true);
+    }
+    @FXML
+    protected void onResumeButtonClick(){
+        timer.Control(Command.Resume);
+        PauseButton.setVisible(true);
+        ResumeButton.setVisible(false);
+    }
+
+
     public void initialize() {
         // Get offset and duration from main (Get offset and Get Duration)
-        timer = new Timer(null, 0.25, this);
+        timer = new Timer(null, 1.25, this);
         timer.Control(Command.Start);
     }
 
     public void UpdateStopWatch(String TimeString){
         Platform.runLater(()-> {
-            StopWatch.setText(TimeString);
-            //UpdateTimerControlButtons();
-            arc.setLength(((timer.getCountingMilliSeconds() + 1) / timer.getTotalMilliSeconds()) * 360);
+
+            if (timer.isTimerFinished()){
+                arc.setVisible(false);
+            } else {
+                StopWatch.setText(TimeString);
+                arc.setLength(((timer.getRunning_CD_MS() + 1) / timer.getRunning_TD_MS()) * 360);
+            }
         });
 
     }
 
-    private void UpdateTimerControlButtons(){
-        if (timer.isTimerNotRunning() || timer.isTimerPreRun()){
-            UpdateButton(StopBtn, ButtonControl.Show);
-            UpdateButton(PauseBtn, ButtonControl.Hide);
-            UpdateButton(ResumeBtn, ButtonControl.Hide);
-            UpdateButton(RestartBtn, ButtonControl.Hide);
-        } else if (timer.isTimerRunning()){
-            UpdateButton(PauseBtn, ButtonControl.Show);
-        } else if (timer.isTimerPaused()) {
-            UpdateButton(PauseBtn, ButtonControl.Hide);
-            UpdateButton(ResumeBtn, ButtonControl.Show);
-        } else {
-            UpdateButton(PauseBtn, ButtonControl.Hide);
-            UpdateButton(StopBtn, ButtonControl.Hide);
-            UpdateButton(RestartBtn, ButtonControl.Show);
-        }
+    @FXML
+    private Arc MiniArc;
+    public void UpdateMiniTimer(){
+        Platform.runLater(() -> {
+
+            if(timer.isTimerRunning()){
+                MiniArc.setVisible(false);
+            } else{
+                MiniArc.setLength(((timer.getDelayed_CD_MS() + 1) / timer.getDelayed_TD_MS()) * 360);
+
+            }
+        });
     }
+
 
     public void UpdateTimerStatusLabel(String Status){
         Platform.runLater(() -> TimerStatus.setText(Status));
-    }
-
-    public void UnlockPauseButton(){
-        UpdateButton(PauseBtn, ButtonControl.Unlock);
-    }
-
-    @FXML
-    protected void onPauseButtonClick(){
-        // There should be no if statement here, either lock the button or hid it
-        if (timer.isTimerRunning()){
-
-            timer.Control(Command.Pause);
-            UpdateButton(PauseBtn, ButtonControl.Hide);
-            UpdateButton(ResumeBtn, ButtonControl.Show);
-        }
-    }
-
-    @FXML
-    protected void onResumeButtonClick(){
-        // Check timer status
-        if (timer.isTimerPaused()){
-
-            timer.Control(Command.Resume);
-            UpdateButton(ResumeBtn, ButtonControl.Hide);
-            UpdateButton(PauseBtn, ButtonControl.Show);
-        }
-    }
-
-
-    public void UpdateButton(Button btnToUpdate, ButtonControl Command){
-        switch(Command){
-            case Hide -> HideButton(btnToUpdate);
-            case Show -> ShowButton(btnToUpdate);
-            case Lock -> LockButton(btnToUpdate);
-            case Unlock -> UnlockButton(btnToUpdate);
-        }
-    }
-    private void ShowButton(Button btnToShow){
-        btnToShow.setVisible(true);
-        btnToShow.setPrefWidth(100);
-        btnToShow.setManaged(true);
-    }
-    private void HideButton(Button btnToShow){
-        btnToShow.setVisible(false);
-        btnToShow.setPrefWidth(0);
-        btnToShow.setManaged(false);
-    }
-    private void LockButton(Button btnToLock){
-        btnToLock.setDisable(true);
-    }
-    private void UnlockButton(Button btnToUnlock){
-        btnToUnlock.setDisable(false);
     }
 
 
@@ -140,13 +100,6 @@ public class TimerController {
         stage.setScene(scene);
     }
 
-    @FXML
-    protected void onStopButtonClick() throws IOException {
-        timer.Control(Command.Stop);
-        Stage stage = (Stage) BackBtn.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
-        stage.setScene(scene);
-    }
+
 
 }
