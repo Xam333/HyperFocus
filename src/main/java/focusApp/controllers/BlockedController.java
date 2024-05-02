@@ -11,7 +11,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -26,7 +25,7 @@ import java.util.ResourceBundle;
 
 public class BlockedController implements Initializable {
 
-    public Button backButton;
+
     public Button saveButton;
     public Button cancelButton;
     public StackPane menuStackPane;
@@ -90,8 +89,6 @@ public class BlockedController implements Initializable {
 //        redditIcon.setPreserveRatio(true);
 
 
-
-
         iconColumn.setCellValueFactory(new PropertyValueFactory<BlockedApplication, ImageView>("iconColumn"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<BlockedApplication, String>("nameColumn"));
         locationColumn.setCellValueFactory(new PropertyValueFactory<BlockedApplication, String>("locationColumn"));
@@ -100,9 +97,12 @@ public class BlockedController implements Initializable {
 
     }
 
+    public void onMenuStackPaneEnter(MouseEvent actionEvent) {
 
-    public void onMenuStackPaneClick(ActionEvent actionEvent) {
         menuStackPane.setVisible(true);
+    }
+    public void onMenuStackPaneExit(MouseEvent mouseEvent) {
+        menuStackPane.setVisible(false);
     }
 
 
@@ -118,6 +118,17 @@ public class BlockedController implements Initializable {
     }
 
 //    Navigate to account page
+//    #onAccountButtonClick is shared by the nav bar account button,
+//    and the side menu account button.
     public void onAccountButtonClick(ActionEvent actionEvent) {
+    }
+
+    public void onSoundSettingsButtonClick(ActionEvent actionEvent) {
+    }
+
+    public void onColourSettingsButtonClick(ActionEvent actionEvent) {
+    }
+
+    public void onParentalControlsButtonClick(ActionEvent actionEvent) {
     }
 }

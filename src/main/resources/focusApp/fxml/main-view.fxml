@@ -18,6 +18,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <AnchorPane maxHeight="-Infinity"
             maxWidth="-Infinity"
             minHeight="-Infinity"
@@ -36,18 +37,22 @@
          styleClass="navBox">
 
       <!-- Should open side menu -->
-      <Button fx:id="menuButton"
-              onAction="#onMenuButtonClick"
-              styleClass="navButton">
-         <graphic>
-            <ImageView fitHeight="40.0"
-                       fitWidth="40.0"
-                       pickOnBounds="true"
-                       preserveRatio="true">
-               <Image url="@../images/menuIcon.png"/>
-            </ImageView>
-         </graphic>
-      </Button>
+       <Pane minHeight="75.0"
+             onMouseEntered="#onMenuStackPaneEnter"
+             onMouseExited="#onMenuStackPaneExit">
+           <VBox layoutY="17">
+               <Button styleClass="navButton">
+                   <graphic>
+                       <ImageView fitHeight="40.0"
+                                  fitWidth="40.0"
+                                  pickOnBounds="true"
+                                  preserveRatio="true">
+                           <Image url="@../images/menuIcon.png"/>
+                       </ImageView>
+                   </graphic>
+               </Button>
+           </VBox>
+       </Pane>
 
       <Region HBox.hgrow="ALWAYS"/>
 
@@ -60,7 +65,9 @@
 
       <!--        add functionality, go to account page-->
       <!-- To Account Page -->
-      <Button styleClass="navButton">
+      <Button fx:id="accountButton"
+              onAction="#onAccountButtonClick"
+              styleClass="navButton">
          <graphic>
             <ImageView fitHeight="40.0"
                        fitWidth="40.0"
@@ -214,5 +221,90 @@
                  textAlignment="CENTER"/>
       </HBox>
    </VBox>
+
+
+    <!-- SIDE MENU -->
+    <StackPane fx:id="menuStackPane"
+               onMouseExited="#onMenuStackPaneExit"
+               onMouseEntered="#onMenuStackPaneEnter"
+               layoutY="74.9"
+               visible="false"
+               prefHeight="525.0"
+               prefWidth="280.0"
+               styleClass="menuPane">
+        <VBox>
+            <!--Account Information-->
+            <Button onAction="#onAccountButtonClick"
+                    styleClass="menuButton">
+                <graphic>
+                    <HBox alignment="CENTER_LEFT">
+                        <Region prefWidth="15.0" />
+                        <Label styleClass="navLabel"
+                               prefWidth="30.0"
+                               text="👤"
+                               textAlignment="CENTER"/>
+                        <Region prefWidth="10.0" />
+                        <Label styleClass="navLabel"
+                               text="Account Information"
+                               textAlignment="CENTER"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <!--Parental Controls-->
+            <Button onAction="#onParentalControlsButtonClick"
+                    styleClass="menuButton">
+                <graphic>
+                    <HBox alignment="CENTER_LEFT">
+                        <Region prefWidth="15.0" />
+                        <Label styleClass="navLabel"
+                               prefWidth="30.0"
+                               text="👨‍👩‍👦"
+                               textAlignment="CENTER"/>
+                        <Region prefWidth="10.0" />
+                        <Label styleClass="navLabel"
+                               text="Parental Controls"
+                               textAlignment="CENTER"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <!--Colour Settings-->
+            <Button onAction="#onColourSettingsButtonClick"
+                    styleClass="menuButton">
+                <graphic>
+                    <HBox alignment="CENTER_LEFT">
+                        <Region prefWidth="15.0" />
+                        <Label styleClass="navLabel"
+                               prefWidth="30.0"
+                               text="🎨"
+                               textAlignment="CENTER"/>
+                        <Region prefWidth="10.0" />
+                        <Label styleClass="navLabel"
+                               text="Colour Settings"
+                               textAlignment="CENTER"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <!--Sound Settings-->
+            <Button onAction="#onSoundSettingsButtonClick"
+                    styleClass="menuButton">
+                <graphic>
+                    <HBox alignment="CENTER_LEFT">
+                        <Region prefWidth="15.0" />
+                        <Label styleClass="navLabel"
+                               prefWidth="30.0"
+                               text="🔊"
+                               textAlignment="CENTER"/>
+                        <Region prefWidth="10.0" />
+                        <Label styleClass="navLabel"
+                               text="Sound Settings"
+                               textAlignment="CENTER"/>
+                    </HBox>
+                </graphic>
+            </Button>
+        </VBox>
+    </StackPane>
 </AnchorPane>
 

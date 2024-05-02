@@ -8,17 +8,21 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Objects;
 
 public class MainController {
-    public Button menuButton;
     public Label startTimeLabel;
     public Label endTimeLabel;
     public Button startButton;
     public Pane blockedApplicationPane;
+    public StackPane menuStackPane;
+    public Button accountButton;
+
+
 
     public void onBlockedApplicationsPaneClick(MouseEvent mouseEvent) throws IOException {
         Stage stage = (Stage) blockedApplicationPane.getScene().getWindow();
@@ -40,6 +44,26 @@ public class MainController {
         stage.setScene(scene);
     }
 
-    public void onMenuButtonClick(ActionEvent actionEvent) {
+    public void onMenuStackPaneEnter(MouseEvent actionEvent) {
+        menuStackPane.setVisible(!menuStackPane.isVisible());
     }
+
+
+    public void onMenuStackPaneExit(MouseEvent mouseEvent) {
+        menuStackPane.setVisible(false);
+    }
+
+    public void onAccountButtonClick(ActionEvent actionEvent) {
+    }
+
+    public void onParentalControlsButtonClick(ActionEvent actionEvent) {
+    }
+
+    public void onColourSettingsButtonClick(ActionEvent actionEvent) {
+    }
+
+    public void onSoundSettingsButtonClick(ActionEvent actionEvent) {
+    }
+
+
 }
