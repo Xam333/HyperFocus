@@ -96,7 +96,7 @@ public class LoginController {
     protected void onConfirmButtonClick() throws IOException {
         /* check two inputted passwords are same */
         if (!Objects.equals(regPasswordTextField.getText(), confirmPasswordTextField.getText())) {
-            denyRegisterLabel.setText("Passwords don't match.");
+            denyRegisterLabel.setText("* Passwords don't match. *");
             return;
         }
 
