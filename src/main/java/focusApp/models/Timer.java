@@ -5,7 +5,6 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -18,8 +17,12 @@ public class Timer {
     private final boolean DebugMode = false;
 
 
-    private State Timer_State;
-    public State getTimerState(){ return Timer_State; }
+    public TimerState getTimerState() {
+        return Timer_State;
+    }
+
+    private TimerState Timer_State;
+
 
 
     // Main information needed for the timer.
@@ -89,7 +92,7 @@ public class Timer {
     public Timer (Double TimerOffset, Double TimerDuration, TimerController Timer_Controller){
         Timer_Preset_Offset = TimerOffset == null ? 0.0 : (TimerOffset * 60);
         Timer_Preset_Duration = TimerDuration == null ? 0.0 : (TimerDuration * 60);
-        Timer_State = (Timer_Preset_Offset != 0.0) ? State.Delayed : State.Running;
+        Timer_State = (Timer_Preset_Offset != 0.0) ? TimerState.Delayed : TimerState.Running;
 
         this.Timer_Start = LocalTime.now().plusSeconds((long) Timer_Preset_Offset);
         this.Timer_End = Timer_Start.plusSeconds((long)Timer_Preset_Duration);
@@ -99,7 +102,7 @@ public class Timer {
         Running_C_Duration = Duration.between(Timer_Start, Timer_End).plusHours(TimeCheck ? 24 : 0);
         Running_T_Duration = Running_C_Duration;
 
-        if(Timer_State == State.Delayed){
+        if(Timer_State == TimerState.Delayed){
             Delayed_C_Duration = Duration.between(LocalTime.now(),Timer_Start).plusHours(TimeCheck ? 24 : 0);
             Delayed_T_Duration = Delayed_C_Duration;
         }
@@ -110,7 +113,7 @@ public class Timer {
             System.out.println("Timer Start: " + Timer_Start.format(Timer_12_Format));
             System.out.println("Timer End: " + Timer_End.format(Timer_12_Format));
             System.out.println("Counting Duration: " + FormatTime());
-            System.out.println("Timer State: " + Timer_State);
+            System.out.println("Timer TimerState: " + Timer_State);
         }
     }
 
@@ -119,35 +122,20 @@ public class Timer {
      */
 
 
-    private void AllTime(){
-        if (Timer_State == State.Delayed) {
+    private void DelayedTime(){
+        Delayed_C_Duration = Delayed_C_Duration.minusMillis(1);
 
-            Timer_Controller.DelayedStopWatch();
-            Delayed_C_Duration = Delayed_C_Duration.minusMillis(1);
+        if(Delayed_C_Duration.getSeconds() < 0){ Start(); }
 
-            if(Delayed_C_Duration.getSeconds() < 0){
-                EnforceState(State.Running);
-                Timer_Controller.UpdatePaReButtons(false);
-            }
-        }
+        Timer_Controller.UpdateMiniArc();
+    }
+    private void RunningTime(){
+        Running_C_Duration = Running_C_Duration.minusMillis(1);
 
-        if(Timer_State == State.Running){
+        if(Running_C_Duration.getSeconds() < 0){ Stop(); }
 
-            Timer_Controller.RunningStopWatch();
-            Running_C_Duration = Running_C_Duration.minusMillis(1);
-
-            if(Running_C_Duration.getSeconds() < 0){
-                EnforceState(State.Finished);
-                Timer_Controller.UpdatePaReButtons(true);
-            }
-        }
-
-        if(Timer_State == State.Finished){
-            // Stop blocking stuff here, and return to the main page(GUI).
-            Notification.PlaySound(-10);
-            Timer_Controller.FinishedStopWatch();
-            Control(Command.Stop);
-        }
+        Timer_Controller.UpdateArc();
+        Timer_Controller.UpdateStopWatch();
     }
 
     /**
@@ -155,34 +143,25 @@ public class Timer {
      * @return Formatted time (hh:mm:ss)
      */
     public String FormatTime(){
-        String F;
-        if (Running_C_Duration.toHours() >= 1){
-            long H = Running_C_Duration.toHours();
-            long M = Running_C_Duration.minusHours(H).toMinutes();
-            long S = Running_C_Duration.minusHours(H).minusMinutes(M).toSeconds();
+        Duration T = Running_C_Duration;
+        long H = T.toHours();
+        long M = T.minusHours(H).toMinutes();
+        long S = T.minusHours(H).minusMinutes(M).toSeconds();
 
-            F = String.format("%02d:%02d:%02d", H, M, S);
-        } else if (Running_C_Duration.toMinutes() >= 1) {
-            long M = Running_C_Duration.toMinutes();
-            long S = Running_C_Duration.minusMinutes(M).toSeconds();
-
-            F =  String.format("%02d:%02d", M, S);
-        } else if (Running_C_Duration.toSeconds() >= 0) {
-
-            long S = Running_C_Duration.toSeconds();
-            F =  String.format("%02d", S);
-
-        }else {
-            F = "--";
-        }
-        return F;
+        if (H >= 1){ return String.format("%02d:%02d:%02d", H, M, S ); }
+        else if (M >= 1) { return String.format("%02d:%02d", M, S); }
+        else if (S >= 0) { return String.format("%02d", S); }
+        else { return "--:--"; }
     }
 
     /**
      * Enforces a state upon the timer.
      * @param EnforceThis The state that the timer will enforce.
      */
-    private void EnforceState(State EnforceThis){
+    private void EnforceState(TimerState EnforceThis){
+        if (DebugMode){
+            System.out.println("Updating State: " + Timer_State + " --> " + EnforceThis);
+        }
         Timer_State = EnforceThis;
     }
     public String getStatus(){
@@ -190,8 +169,8 @@ public class Timer {
             case Running -> { return "Timer is Running."; }
             case Paused -> { return "Timer is Paused."; }
             case Finished -> { return "Timer is Finished"; }
-            case Delayed -> { return "Timer Started at: " + Timer_Start.format(Timer_12_Format); }
-            default -> throw new IllegalArgumentException("Invalid Time State: " + Timer_State);
+            case Delayed -> { return "Timer Starting at: " + Timer_Start.format(Timer_12_Format); }
+            default -> throw new IllegalArgumentException("Invalid Time TimerState: " + Timer_State);
         }
     }
     /**
@@ -200,7 +179,7 @@ public class Timer {
      */
     public void Control(Command command){
         switch (command) {
-            case Start -> Start();
+            case Start -> { if(Timer_State == TimerState.Delayed) DelayedStart(); else Start(); }
             case Stop -> Stop();
             case Pause -> Pause();
             case Resume -> Resume();
@@ -208,41 +187,90 @@ public class Timer {
         }
     }
 
+    private void DelayedStart(){
+        // State is enforced in the constructor.
+
+        // Update GUI elements to their Pre-State for the current state.
+        Timer_Controller.UpdateTimerStatus();
+        Timer_Controller.UpdateStopWatch();
+
+        // Start the Scheduler.
+        TimeScheduler = Executors.newScheduledThreadPool(1);
+        TimeScheduler.scheduleAtFixedRate(this::DelayedTime, 0, 1, TimeUnit.MILLISECONDS);
+    }
+
     /**
      * Starts the timer.
      */
     private void Start(){
+        // If timer is in a state of Delayed shutdown the existing scheduler and enforce Running state,
+        // otherwise state is enforced in the constructor.
+        if(TimeScheduler != null && !TimeScheduler.isShutdown() && Timer_State == TimerState.Delayed){
+            EnforceState(TimerState.Running);
+            TimeScheduler.shutdownNow();
+        }
+
+        // Update GUI elements to their Pre-State for the current state.
+        Timer_Controller.UpdateMiniArc();
+        Timer_Controller.UpdatePaReButtons(false);
+        Timer_Controller.UpdateTimerStatus();
+
+        // Start the Scheduler.
         TimeScheduler = Executors.newScheduledThreadPool(1);
-        TimeScheduler.scheduleAtFixedRate(this::AllTime, 0, 1, TimeUnit.MILLISECONDS);
+        TimeScheduler.scheduleAtFixedRate(this::RunningTime, 0, 1, TimeUnit.MILLISECONDS);
     }
 
     /**
      * Stops the timer.
      */
     private void Stop(){
-        TimeScheduler.shutdownNow();
-        ForceStopTimer();
+        // If timer is in a state of Running shutdown the existing scheduler and enforce Finished state.
+        if(TimeScheduler != null && !TimeScheduler.isShutdown() && Timer_State == TimerState.Running){
+            EnforceState(TimerState.Finished);
+            TimeScheduler.shutdownNow();
+        }
+
+        // Update GUI elements to their Pre-State for the current state.
+        Timer_Controller.UpdateArc();
+        Timer_Controller.UpdateStopWatch();
+        Timer_Controller.UpdateTimerStatus();
+        Timer_Controller.UpdatePaReButtons(true);
+        Notification.PlaySound(-10);
+
+        // Timer is finished.
     }
 
     /**
      * Resumes the timer.
      */
     private void Resume(){
-        Timer_End = LocalTime.now().plus(Paused_C_Duration.toMillis(), ChronoUnit.MILLIS); // here is where the Pause/Resume bug is.
+        // State Enforcement and Pre-State tasks.
+        Timer_End = LocalTime.now().plus(Paused_C_Duration.toMillis(), ChronoUnit.MILLIS);
         Running_C_Duration = Paused_C_Duration;
-        EnforceState(State.Running);
+        EnforceState(TimerState.Running);
 
+        // Update GUI elements to their Pre-State for the current state.
+        Timer_Controller.UpdateTimerStatus();
+        Timer_Controller.UpdateStopWatch();
+
+        // Start the Scheduler.
         TimeScheduler = Executors.newScheduledThreadPool(1);
-        TimeScheduler.scheduleAtFixedRate(this::AllTime, 0, 1, TimeUnit.MILLISECONDS);
+        TimeScheduler.scheduleAtFixedRate(this::RunningTime, 0, 1, TimeUnit.MILLISECONDS);
     }
 
     /**
      * Pauses the timer.
      */
     private void Pause(){
-        Paused_C_Duration = Duration.between(LocalTime.now(), Timer_End);
-        EnforceState(State.Paused);
-        TimeScheduler.shutdownNow();
+        // State Enforcement and Pre-State tasks.
+        if(TimeScheduler != null && !TimeScheduler.isShutdown() && Timer_State == TimerState.Running){
+            Paused_C_Duration = Duration.between(LocalTime.now(), Timer_End);
+            EnforceState(TimerState.Paused);
+            TimeScheduler.shutdownNow();
+        }
+        // Update GUI elements to their Pre-State for the current state.
+        Timer_Controller.UpdateTimerStatus();
+        Timer_Controller.UpdateStopWatch();
     }
 
     /**
