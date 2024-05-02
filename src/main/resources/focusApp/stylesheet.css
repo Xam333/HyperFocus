@@ -19,6 +19,30 @@
     -fx-background-color: -secondaryColor;
 }
 
+/* Confirmation */
+
+.blackOutPane{
+    -fx-background-color: #000000;
+    -fx-opacity: 0.5;
+}
+
+
+.confirmPane{
+    -fx-pref-width: 280px;
+    -fx-pref-height: 150px;
+    -fx-background-color: #FFFFFF;
+
+    -fx-border-radius: 8px;
+    -fx-border-width: 5px;
+    -fx-border-color: -primaryColor;
+
+    -fx-text-fill: -primaryColor;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+
+
 
 /* Blocked Pane */
 .blockedPane{
@@ -253,7 +277,6 @@
 /* Tiny Buttons */
 .tinyPrimaryButton{
     -fx-pref-width: 60px;
-    -fx-font-size: 14px;
     -fx-background-color: -primaryColor;
     -fx-background-radius: 8px;
 
@@ -266,6 +289,28 @@
 
 .tinyPrimaryButton:hover {
     -fx-background-color: -secondaryColor;
+}
+
+
+.tinySecondaryButton {
+    -fx-pref-width: 60px;
+    -fx-background-color: #FFF;
+
+    -fx-border-radius: 8px;
+    -fx-border-width: 2px;
+    -fx-border-color: -primaryColor;
+
+    -fx-text-fill: -primaryColor;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+
+
+    -fx-cursor: hand;
+}
+
+.tinySecondaryButton:hover {
+    -fx-border-color: -secondaryColor;
+    -fx-text-fill: -secondaryColor;
 }
 
 
