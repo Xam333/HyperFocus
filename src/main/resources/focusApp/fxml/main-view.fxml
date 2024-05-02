@@ -115,7 +115,7 @@
        </VBox>
 
       <Pane fx:id="blockedApplicationPane"
-              prefHeight="114.0"
+            prefHeight="114.0"
             prefWidth="280.0"
             styleClass="blockedPane"
             onMouseClicked="#onBlockedApplicationsPaneClick">

@@ -4,6 +4,7 @@ import focusApp.HelloApplication;
 import focusApp.models.BlockedApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -13,6 +14,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -26,6 +29,8 @@ public class BlockedController implements Initializable {
     public Button backButton;
     public Button saveButton;
     public Button cancelButton;
+    public StackPane menuStackPane;
+    public Button accountButton;
     @FXML
     private ImageView userIcon;
     @FXML
@@ -52,8 +57,8 @@ public class BlockedController implements Initializable {
         return FXCollections.observableArrayList(a1,a2);
     }
     @FXML
-    protected void onBackButtonClick() throws IOException {
-        Stage stage = (Stage) backButton.getScene().getWindow();
+    protected void onCancelButtonClick() throws IOException {
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
         scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
@@ -93,5 +98,26 @@ public class BlockedController implements Initializable {
 
         tableView.setItems(testData());
 
+    }
+
+
+    public void onMenuStackPaneClick(ActionEvent actionEvent) {
+        menuStackPane.setVisible(true);
+    }
+
+
+//    Add new websites and applications to database
+    public void onSaveButtonClick(ActionEvent actionEvent) {
+    }
+
+//    Navigate to form page or, open stack pane
+    public void onWebsiteButtonClick(ActionEvent actionEvent) {
+    }
+
+    public void onApplicationButtonClick(ActionEvent actionEvent) {
+    }
+
+//    Navigate to account page
+    public void onAccountButtonClick(ActionEvent actionEvent) {
     }
 }

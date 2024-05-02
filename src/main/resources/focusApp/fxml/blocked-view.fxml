@@ -12,7 +12,17 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="390.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.BlockedController">
+<?import javafx.scene.layout.StackPane?>
+<?import com.sun.javafx.charts.Legend?>
+<AnchorPane maxHeight="-Infinity"
+            maxWidth="-Infinity"
+            minHeight="-Infinity"
+            minWidth="-Infinity"
+            prefHeight="600.0"
+            prefWidth="390.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="focusApp.controllers.BlockedController">
 
     <!-- NAV BAR -->
     <HBox alignment="CENTER"
@@ -24,7 +34,7 @@
         <!-- To Previous Page -->
         <!-- This should call a side menu -->
         <Button fx:id="backButton"
-                onAction="#onBackButtonClick"
+                onAction="#onMenuStackPaneClick"
                 styleClass="navButton">
             <graphic>
                 <ImageView fitHeight="40.0"
@@ -47,7 +57,9 @@
 
         <!--        add functionality, go to account page-->
         <!-- To Account Page -->
-        <Button styleClass="navButton">
+        <Button fx:id="accountButton"
+                onAction="#onAccountButtonClick"
+                styleClass="navButton">
             <graphic>
                 <ImageView fitHeight="40.0"
                            fitWidth="40.0"
@@ -68,8 +80,12 @@
           spacing="20.0">
 
         <HBox alignment="CENTER" prefHeight="40.0" prefWidth="280.0" spacing="10.0">
-            <Button styleClass="defaultButton" text="Website +" />
-            <Button styleClass="defaultButton" text="Application +" />
+            <Button styleClass="defaultButton"
+                    onAction="#onWebsiteButtonClick"
+                    text="Website +" />
+            <Button styleClass="defaultButton"
+                    onAction="#onApplicationButtonClick"
+                    text="Application +" />
         </HBox>
 
 
@@ -91,11 +107,118 @@
         </VBox>
 
         <!-- CANCEL, SAVE BUTTONS -->
-        <HBox alignment="BOTTOM_CENTER" prefHeight="40.0" prefWidth="280.0" spacing="10.0">
+        <HBox alignment="BOTTOM_CENTER"
+              prefHeight="40.0"
+              prefWidth="280.0"
+              spacing="10.0">
             <!-- Cancel button should act as back button -->
-            <Button fx:id="cancelButton" mnemonicParsing="false" styleClass="smallSecondaryButton" text="CANCEL" />
+            <Button fx:id="cancelButton"
+                    mnemonicParsing="false"
+                    onAction="#onCancelButtonClick"
+                    styleClass="smallSecondaryButton"
+                    text="CANCEL"/>
 
-            <Button fx:id="saveButton" mnemonicParsing="false" styleClass="smallPrimaryButton" text="SAVE" />
+            <Button fx:id="saveButton"
+                    mnemonicParsing="false"
+                    onAction="#onSaveButtonClick"
+                    styleClass="smallPrimaryButton"
+                    text="SAVE" />
         </HBox>
     </VBox>
+
+
+
+    <!--  Menu -->
+    <StackPane fx:id="menuStackPane"
+               layoutY="74.9"
+               visible="false"
+               prefHeight="525.0"
+               prefWidth="280.0"
+               styleClass="menuPane">
+        <VBox>
+            <!--Account Information-->
+            <Button styleClass="menuButton"
+                    prefWidth="280.0"
+                    prefHeight="50.0">
+                <graphic>
+                    <HBox alignment="CENTER_LEFT">
+                        <Region prefWidth="15.0" />
+                        <ImageView fitHeight="30.0"
+                                     fitWidth="30.0"
+                                     pickOnBounds="true"
+                                     preserveRatio="true">
+                        <Image url="@../images/userIcon.png" />
+                    </ImageView>
+                        <Region prefWidth="10.0" />
+                        <Label styleClass="navLabel"
+                               text="Account Information"
+                               textAlignment="CENTER"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <!--Parental Controls-->
+            <Button styleClass="menuButton"
+                    prefWidth="280.0"
+                    prefHeight="50.0">
+                <graphic>
+                    <HBox alignment="CENTER_LEFT">
+                        <Region prefWidth="15.0" />
+                        <ImageView fitHeight="30.0"
+                                   fitWidth="30.0"
+                                   pickOnBounds="true"
+                                   preserveRatio="true">
+                            <Image url="@../images/userIcon.png" />
+                        </ImageView>
+                        <Region prefWidth="10.0" />
+                        <Label styleClass="navLabel"
+                               text="Parental Controls"
+                               textAlignment="CENTER"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <!--Colour Settings-->
+            <Button styleClass="menuButton"
+                    prefWidth="280.0"
+                    prefHeight="50.0">
+                <graphic>
+                    <HBox alignment="CENTER_LEFT">
+                        <Region prefWidth="15.0" />
+                        <ImageView fitHeight="30.0"
+                                   fitWidth="30.0"
+                                   pickOnBounds="true"
+                                   preserveRatio="true">
+                            <Image url="@../images/userIcon.png" />
+                        </ImageView>
+                        <Region prefWidth="10.0" />
+                        <Label styleClass="navLabel"
+                               text="Colour Settings"
+                               textAlignment="CENTER"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <!--Sound Settings-->
+            <Button styleClass="menuButton"
+                    prefWidth="280.0"
+                    prefHeight="50.0">
+                <graphic>
+                    <HBox alignment="CENTER_LEFT">
+                        <Region prefWidth="15.0" />
+                        <ImageView fitHeight="30.0"
+                                   fitWidth="30.0"
+                                   pickOnBounds="true"
+                                   preserveRatio="true">
+                            <Image url="@../images/userIcon.png" />
+                        </ImageView>
+                        <Region prefWidth="10.0" />
+                        <Label styleClass="navLabel"
+                               text="Sound Settings"
+                               textAlignment="CENTER"/>
+                    </HBox>
+                </graphic>
+            </Button>
+        </VBox>
+    </StackPane>
 </AnchorPane>
