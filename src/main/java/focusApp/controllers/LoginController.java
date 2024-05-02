@@ -81,6 +81,9 @@ public class LoginController {
             Stage stage = (Stage) loginButton.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+            // Set scene stylesheet
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
             stage.setScene(scene);
         } else {
             denyLoginLabel.setText("* Incorrect username or password. *");
@@ -107,6 +110,9 @@ public class LoginController {
             Stage stage = (Stage) confirmButton.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/login-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+            // Set scene stylesheet
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
             stage.setScene(scene);
         } else {
             denyRegisterLabel.setText("This username is already taken/Passwords don't match.");

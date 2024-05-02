@@ -14,11 +14,17 @@
     -fx-background-color: -primaryColor;
 }
 
+/* Blocked Pane */
+.blockedPane{
+    -fx-border-color: #000000;
+    -fx-background-color: -textBoxColor;
+}
+
 
 /* Blocked Table */
 .blockedTableColumn{
     -fx-alignment: center;
-    -fx-background-color: #FFFFFF;
+    -fx-background-color: -textBoxColor;
     -fx-border-color: transparent -secondaryColor transparent -secondaryColor;
 }
 
@@ -32,8 +38,8 @@
 }
 
 
-/* Labels */
 
+/* Labels */
 .label {
     -fx-font-family: INTER;
 }
@@ -76,8 +82,8 @@
 }
 
 
-/* Text Fields */
 
+/* Text Fields */
 .textBox {
     -fx-font-size: 14px;
     -fx-background-color: -textBoxColor;
@@ -85,14 +91,47 @@
 }
 
 
-/* Buttons */
+/* Sliders */
+.timerSlider .track{
+    -fx-background-color: linear-gradient(to right, -primaryColor 40%, -textBoxColor 40%);
+}
 
+.timerSlider .thumb{
+    -fx-border-radius: 1.0em;
+    -fx-border-width: 3px;
+    -fx-border-color: -textBoxColor;
+    -fx-body-color: -primaryColor;
+
+
+}
+
+
+/* Buttons */
 .navButton{
     -fx-background-color: transparent;
 }
 
-/* Large Buttons*/
+.defaultButton {
+    -fx-pref-width: 140px;
+    -fx-pref-height: 40px;
+    -fx-background-color: #FFF;
 
+    -fx-border-radius: 8px;
+    -fx-border-color: #000000;
+
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+
+    -fx-cursor: hand;
+}
+
+.defaultButton:hover {
+    -fx-background-color: #F5F5F5;
+
+}
+
+
+/* Large Buttons*/
 .largePrimaryButton {
     -fx-pref-width: 256px;
     -fx-pref-height: 50px;
@@ -133,7 +172,26 @@
 
 
 
+
 /* Small Buttons*/
+.smallDefaultButton {
+    -fx-pref-width: 100px;
+    -fx-pref-height: 40px;
+    -fx-background-color: #FFF;
+
+    -fx-border-radius: 8px;
+    -fx-border-color: #000000;
+
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+
+    -fx-cursor: hand;
+}
+
+.smallDefaultButton:hover {
+    -fx-background-color: #F5F5F5;
+
+}
 
 .smallPrimaryButton {
     -fx-pref-width: 140px;
@@ -173,26 +231,6 @@
     -fx-text-fill: -secondaryColor;
 }
 
-
-
-.smallBlankButton {
-    -fx-pref-width: 140px;
-    -fx-pref-height: 40px;
-    -fx-background-color: #FFF;
-
-    -fx-border-radius: 8px;
-    -fx-border-color: #000000;
-
-    -fx-font-weight: bold;
-    -fx-font-size: 14px;
-
-    -fx-cursor: hand;
-}
-
-.smallBlankButton:hover {
-    -fx-background-color: #F5F5F5;
-
-}
 
 
 

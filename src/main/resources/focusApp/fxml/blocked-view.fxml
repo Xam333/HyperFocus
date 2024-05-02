@@ -15,12 +15,22 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="390.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.BlockedController">
 
     <!-- NAV BAR -->
-    <HBox alignment="CENTER" prefHeight="75.0" prefWidth="390.0" spacing="5.0" styleClass="navBox">
+    <HBox alignment="CENTER"
+          prefHeight="75.0"
+          prefWidth="390.0"
+          spacing="5.0"
+          styleClass="navBox">
 
         <!-- To Previous Page -->
-        <Button fx:id="backButton" onAction="#onBackButtonClick" styleClass="navButton">
+        <!-- This should call a side menu -->
+        <Button fx:id="backButton"
+                onAction="#onBackButtonClick"
+                styleClass="navButton">
             <graphic>
-                <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="40.0"
+                           fitWidth="40.0"
+                           pickOnBounds="true"
+                           preserveRatio="true">
                     <Image url="@../images/menuIcon.png" />
                 </ImageView>
             </graphic>
@@ -29,7 +39,9 @@
         <Region HBox.hgrow="ALWAYS" />
 
         <!-- Page Title -->
-        <Label styleClass="navLabel" text="Blocked Apps" textAlignment="CENTER" />
+        <Label styleClass="navLabel"
+               text="Blocked Apps"
+               textAlignment="CENTER" />
 
         <Region HBox.hgrow="ALWAYS" />
 
@@ -37,7 +49,10 @@
         <!-- To Account Page -->
         <Button styleClass="navButton">
             <graphic>
-                <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="40.0"
+                           fitWidth="40.0"
+                           pickOnBounds="true"
+                           preserveRatio="true">
                     <Image url="@../images/userIcon.png" />
                 </ImageView>
             </graphic>
@@ -46,11 +61,15 @@
 
 
     <!-- ADD WEBSITE, APPLICATION BUTTONS -->
-    <VBox layoutX="55.0" layoutY="96.0" prefHeight="467.0" prefWidth="280.0" spacing="20.0">
+    <VBox layoutX="55.0"
+          layoutY="113.0"
+          prefHeight="467.0"
+          prefWidth="280.0"
+          spacing="20.0">
 
         <HBox alignment="CENTER" prefHeight="40.0" prefWidth="280.0" spacing="10.0">
-            <Button styleClass="smallBlankButton" text="Website +" />
-            <Button styleClass="smallBlankButton" text="Application +" />
+            <Button styleClass="defaultButton" text="Website +" />
+            <Button styleClass="defaultButton" text="Application +" />
         </HBox>
 
 
@@ -73,6 +92,7 @@
 
         <!-- CANCEL, SAVE BUTTONS -->
         <HBox alignment="BOTTOM_CENTER" prefHeight="40.0" prefWidth="280.0" spacing="10.0">
+            <!-- Cancel button should act as back button -->
             <Button fx:id="cancelButton" mnemonicParsing="false" styleClass="smallSecondaryButton" text="CANCEL" />
 
             <Button fx:id="saveButton" mnemonicParsing="false" styleClass="smallPrimaryButton" text="SAVE" />
