@@ -1,8 +1,10 @@
-package focusApp.database;
+package focusApp.models;
+
+import javax.print.attribute.standard.RequestingUserName;
 
 public class User {
     private int id;
-    private final String userName;
+    private String userName;
     private boolean parentalLock;
 
     public User(String userName, boolean parentalLock) {
@@ -16,6 +18,14 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getUserName() {
+        return this.userName;
+    }
+
+    public void setUserName(String name) {
+        this.userName = name;
     }
 
     public boolean getParentalLock() {

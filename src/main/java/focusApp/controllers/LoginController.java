@@ -1,6 +1,9 @@
 package focusApp.controllers;
 
 import focusApp.HelloApplication;
+import focusApp.database.UserDAO;
+import focusApp.models.User;
+import focusApp.models.UserHolder;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -9,6 +12,8 @@ import java.util.Objects;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 public class LoginController {
     @FXML
@@ -31,8 +36,22 @@ public class LoginController {
     public Label denyLoginLabel;
     @FXML
     public Label denyRegisterLabel;
+    public ImageView focusAppLogo;
+
+    /* singleton used to hold user class for use in other controllers */
+    private UserHolder userHolder = UserHolder.getInstance();
 
 
+
+    @FXML
+    private void initialize(){
+        // Assuming image.png is directly in src/main/resources/
+        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/focusApp/images/FocusApp_LogoT.png")));
+        focusAppLogo.setImage(image);
+        focusAppLogo.setFitWidth(190);  // Set the width of the ImageView
+        //imageView.setFitHeight(150); // Set the height of the ImageView
+        focusAppLogo.setPreserveRatio(true);
+    }
     @FXML
     protected void onBackButtonClick() throws IOException {
         Stage stage = (Stage) backButton.getScene().getWindow();
@@ -42,10 +61,17 @@ public class LoginController {
     }
 
 
-
+    /* login button in login-view.fxml
+     */
     @FXML
     protected void onLoginButtonClick() throws IOException {
-        if(!(Objects.equals(userNameTextField.getText(), "") || Objects.equals(userNameTextField.getText(), "Username")) && !(Objects.equals(passwordTextField.getText(), "") || Objects.equals(passwordTextField.getText(), "Password"))){
+        /* create userDAO and attempt to login */
+        UserDAO userDAO = new UserDAO();
+        User user = userDAO.login(userNameTextField.getText(), passwordTextField.getText());
+
+        /* if user != null then login successful and user class returned */
+        if (user != null){
+            userHolder.setUser(user);
             Stage stage = (Stage) loginButton.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
@@ -55,9 +81,23 @@ public class LoginController {
         }
     }
 
+    /* confirm button on register-view.fxml
+     */
     @FXML
     protected void onConfirmButtonClick() throws IOException {
-        if(!(Objects.equals(regUserNameTextField.getText(), "") || Objects.equals(regUserNameTextField.getText(), "Username")) && !(Objects.equals(regPasswordTextField.getText(), "") || Objects.equals(regPasswordTextField.getText(), "Password")) && (Objects.equals(regPasswordTextField.getText(), confirmPasswordTextField.getText()))){
+        /* check two inputted passwords are same */
+        if (!Objects.equals(regPasswordTextField.getText(), confirmPasswordTextField.getText())) {
+            denyRegisterLabel.setText("Passwords don't match.");
+            return;
+        }
+
+        /* create userDAO and attempt to create account */
+        UserDAO userDAO = new UserDAO();
+        User user = userDAO.addUser(regUserNameTextField.getText(), regPasswordTextField.getText());
+
+        if (user != null) {
+            userHolder.setUser(user);
+
             Stage stage = (Stage) confirmButton.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/login-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);

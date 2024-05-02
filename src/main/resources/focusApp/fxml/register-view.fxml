@@ -10,8 +10,9 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.control.PasswordField?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="focusApp.controllers.LoginController">
+<?import javafx.scene.layout.Region?>
+<VBox alignment="TOP_CENTER" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="focusApp.controllers.LoginController" style="-fx-background-color: #d8f2eb;">
 
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
@@ -20,22 +21,46 @@
 
 
     <!-- REGISTER -->
-    <VBox spacing="10.0">
+    <ImageView fx:id="focusAppLogo"/>
+    <Region minHeight="25"/>
 
-        <VBox alignment="TOP_CENTER">
-            <ImageView styleClass="logo" preserveRatio="true">
-                <Image url="@../images/logo.png"/>
-            </ImageView>
-        </VBox>
+    <VBox>
+        <Label text="Start your focus journey!" style="-fx-text-alignment: center; -fx-font-size: 18px;" wrapText="true"/>
+        <Region minHeight="5"/>
+        <Label text="Create new account:" style="-fx-text-alignment: center; -fx-font-size: 15px;" wrapText="true" />
+    </VBox>
 
-        <Label text="Create new account:" />
-        <TextField fx:id="regUserNameTextField" promptText="Username"/>
-        <PasswordField fx:id="regPasswordTextField" promptText="Password"/>
-        <PasswordField fx:id="confirmPasswordTextField" promptText="Confirm Password"/>
+    <Region minHeight="25"/>
+
+    <VBox spacing="10.0" alignment="CENTER">
+        <TextField fx:id="regUserNameTextField"
+                   style="-fx-font-size: 15px; -fx-background-color: #EFF8FB; -fx-effect: innershadow(one-pass-box, #43AED9, 10, 0.5, 0, 0); -fx-border-color: #000000;"
+                   promptText="Username"
+        />
+        <Region minHeight="3"/>
+        <PasswordField fx:id="regPasswordTextField"
+                       style="-fx-font-size: 15px; -fx-background-color: #EFF8FB; -fx-effect: innershadow(one-pass-box, #43AED9, 10, 0.5, 0, 0); -fx-border-color: #000000;"
+                       promptText="Password"
+        />
+        <Region minHeight="3"/>
+        <PasswordField fx:id="confirmPasswordTextField"
+                       style="-fx-font-size: 15px; -fx-background-color: #EFF8FB; -fx-effect: innershadow(one-pass-box, #43AED9, 10, 0.5, 0, 0); -fx-border-color: #000000;"
+                       promptText="Confirm Password"
+        />
+        <Region minHeight="20"/>
         <HBox spacing="10.0" alignment="BOTTOM_CENTER">
-            <Button fx:id="backButton" text="Back" onAction="#onBackButtonClick" />
-            <Button fx:id="confirmButton" text="Confirm" onAction="#onConfirmButtonClick" />
+            <Button fx:id="backButton"
+                    text="Back"
+                    style="-fx-font-size: 24px; -fx-border-color: black; -fx-background-color: #43aed9;"
+                    minWidth="100"
+                    onAction="#onBackButtonClick" />
+            <Button fx:id="confirmButton"
+                    text="Confirm"
+                    style="-fx-font-size: 24px; -fx-border-color: black; -fx-background-color: #43aed9;"
+                    minWidth="100"
+                    onAction="#onConfirmButtonClick"
+            />
         </HBox>
-        <Label fx:id="denyRegisterLabel"/>
+        <Label fx:id="denyRegisterLabel" style="-fx-text-alignment: center; -fx-font-size: 18px;" wrapText="true"/>
     </VBox>
 </VBox>

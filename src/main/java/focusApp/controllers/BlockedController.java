@@ -1,22 +1,28 @@
 package focusApp.controllers;
 
+import focusApp.HelloApplication;
 import focusApp.models.BlockedApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 
 public class BlockedController implements Initializable {
 
+    public Button backButton;
     @FXML
     private ImageView userIcon;
     @FXML
@@ -41,6 +47,13 @@ public class BlockedController implements Initializable {
         BlockedApplication a1 = new BlockedApplication(youtubeIcon, "Youtube", "www.youtube.com");
         BlockedApplication a2 = new BlockedApplication(redditIcon, "Reddit", "www.reddit.com");
         return FXCollections.observableArrayList(a1,a2);
+    }
+    @FXML
+    protected void onBackButtonClick() throws IOException {
+        Stage stage = (Stage) backButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+        stage.setScene(scene);
     }
 
     @Override
