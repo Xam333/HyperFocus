@@ -190,7 +190,7 @@
 
 
 
-/* Small Buttons*/
+/* Small Buttons */
 .smallDefaultButton {
     -fx-pref-width: 100px;
     -fx-pref-height: 40px;
@@ -246,6 +246,26 @@
 .smallSecondaryButton:hover {
     -fx-border-color: -secondaryColor;
     -fx-text-fill: -secondaryColor;
+}
+
+
+
+/* Tiny Buttons */
+.tinyPrimaryButton{
+    -fx-pref-width: 60px;
+    -fx-font-size: 14px;
+    -fx-background-color: -primaryColor;
+    -fx-background-radius: 8px;
+
+    -fx-text-fill: #FFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+
+    -fx-cursor: hand;
+}
+
+.tinyPrimaryButton:hover {
+    -fx-background-color: -secondaryColor;
 }
 
 

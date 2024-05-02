@@ -37,8 +37,6 @@ public class LoginController {
     @FXML
     public Label denyRegisterLabel;
     @FXML
-    public ImageView focusAppLogo;
-    @FXML
     public Hyperlink regLink;
     @FXML
     public Hyperlink loginLink;

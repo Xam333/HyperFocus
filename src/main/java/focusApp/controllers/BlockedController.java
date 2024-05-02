@@ -120,7 +120,13 @@ public class BlockedController implements Initializable {
 //    Navigate to account page
 //    #onAccountButtonClick is shared by the nav bar account button,
 //    and the side menu account button.
-    public void onAccountButtonClick(ActionEvent actionEvent) {
+    public void onAccountButtonClick(ActionEvent actionEvent) throws IOException {
+        Stage stage = (Stage) accountButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/account-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        stage.setScene(scene);
     }
 
     public void onSoundSettingsButtonClick(ActionEvent actionEvent) {
