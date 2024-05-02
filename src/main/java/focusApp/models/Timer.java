@@ -125,14 +125,15 @@ public class Timer {
     private void DelayedTime(){
         Delayed_C_Duration = Delayed_C_Duration.minusMillis(1);
 
-        if(Delayed_C_Duration.getSeconds() < 0){ Start(); }
+        if(Delayed_C_Duration.getSeconds() < 0) Start();
 
         Timer_Controller.UpdateMiniArc();
     }
+
     private void RunningTime(){
         Running_C_Duration = Running_C_Duration.minusMillis(1);
 
-        if(Running_C_Duration.getSeconds() < 0){ Stop(); }
+        if(Running_C_Duration.getSeconds() < 0) Finish();
 
         Timer_Controller.UpdateArc();
         Timer_Controller.UpdateStopWatch();
@@ -144,14 +145,23 @@ public class Timer {
      */
     public String FormatTime(){
         Duration T = Running_C_Duration;
-        long H = T.toHours();
-        long M = T.minusHours(H).toMinutes();
-        long S = T.minusHours(H).minusMinutes(M).toSeconds();
 
-        if (H >= 1){ return String.format("%02d:%02d:%02d", H, M, S ); }
-        else if (M >= 1) { return String.format("%02d:%02d", M, S); }
-        else if (S >= 0) { return String.format("%02d", S); }
-        else { return "--:--"; }
+        long Hours = T.toHours();
+        long Minutes = T.minusHours(Hours).toMinutes();
+        long Seconds = T.minusHours(Hours).minusMinutes(Minutes).toSeconds();
+
+        switch (Hours >= 1 ? 0 : Minutes >= 1 ? 1 : Seconds >= 0 ? 2 : -1){
+            // Case 0: If Hours is >= 1, returns a time format like this (hh:mm:ss)
+            case 0 -> { return String.format("%02d:%02d:%02d", Hours, Minutes, Seconds ); }
+
+            // Case 1: if Minutes is >= 1, returns a time format like this (mm:ss)
+            case 1 -> { return String.format("%02d:%02d", Minutes, Seconds); }
+
+            // Case 2: if Seconds is >= 0, returns a time format like this (ss)
+            case 2 -> { return String.format("%02d", Seconds); }
+
+            default -> { return "--:--"; }
+        }
     }
 
     /**
@@ -181,6 +191,7 @@ public class Timer {
         switch (command) {
             case Start -> { if(Timer_State == TimerState.Delayed) DelayedStart(); else Start(); }
             case Stop -> Stop();
+            case Finish -> Finish();
             case Pause -> Pause();
             case Resume -> Resume();
             default -> throw new IllegalArgumentException("Command: " + command + " is invalid.");
@@ -223,7 +234,7 @@ public class Timer {
     /**
      * Stops the timer.
      */
-    private void Stop(){
+    private void Finish(){
         // If timer is in a state of Running shutdown the existing scheduler and enforce Finished state.
         if(TimeScheduler != null && !TimeScheduler.isShutdown() && Timer_State == TimerState.Running){
             EnforceState(TimerState.Finished);
@@ -238,6 +249,10 @@ public class Timer {
         Notification.PlaySound(-10);
 
         // Timer is finished.
+    }
+
+    private void Stop(){
+        TimeScheduler.shutdownNow();
     }
 
     /**
