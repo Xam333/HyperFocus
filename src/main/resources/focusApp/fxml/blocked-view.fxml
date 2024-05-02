@@ -19,46 +19,83 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="focusApp.controllers.BlockedController" style="-fx-background-color: #d8f2eb;">
+
+<AnchorPane maxHeight="-Infinity"
+            maxWidth="-Infinity"
+            minHeight="-Infinity"
+            minWidth="-Infinity"
+            prefHeight="600.0"
+            prefWidth="390.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="focusApp.controllers.BlockedController">
+
+    <!-- NAV BAR -->
+    <HBox styleClass="navBox"
+          alignment="CENTER"
+          prefHeight="75.0"
+          prefWidth="390.0"
+          spacing="80.0">
+
+        <!-- HAMBURGER?? -->
+<!--        add functionality, open side menu -->
+        <ImageView fitHeight="40.0"
+                   fitWidth="40.0"
+                   pickOnBounds="true"
+                   preserveRatio="true">
+<!--            <Image url="@../images/Hamburger.png"/>-->
+        </ImageView>
+
+        <Label styleClass="navLabel"
+               text="Blocked Apps"
+               textAlignment="JUSTIFY"/>
+
+<!--        add functionality, go to account page-->
+        <ImageView fitHeight="40.0"
+                   fitWidth="40.0"
+                   pickOnBounds="true"
+                   preserveRatio="true">
+            <Image url="@../images/UserIcon.png"/>
+        </ImageView>
+    </HBox>
+
+    <VBox alignment="CENTER"
+          layoutX="53.0"
+          prefHeight="600.0"
+          prefWidth="284.0">
+
+<!--        move up to nav bar -->
+        <HBox fx:id="hBoxHeader" spacing="5.0" alignment="CENTER_LEFT">
+            <Button fx:id="backButton" text="&#x3C;" onAction="#onBackButtonClick"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="Blocked List" style="-fx-font-size: 18px;" wrapText="true"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button>
 
 
-    <children>
-        <VBox fx:id="vBoxContainer" spacing="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" AnchorPane.bottomAnchor="10.0">
-            <children>
-                <HBox fx:id="hBoxHeader" spacing="5.0" alignment="CENTER_LEFT">
-                    <children>
-                        <Button fx:id="backButton" text="&#x3C;" onAction="#onBackButtonClick"/>
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Label text="Blocked List" style="-fx-font-size: 18px;" wrapText="true"/>
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Button>
-                            <graphic>
-                                <ImageView fx:id="youtubeIcon"/>
-                                <ImageView fx:id="redditIcon"/>
-                                <ImageView fx:id="userIcon"/>
+                <graphic>
+                    <ImageView fx:id="youtubeIcon"/>
+                    <ImageView fx:id="redditIcon"/>
+                    <ImageView fx:id="userIcon"/>
 
-                            </graphic>
-                        </Button>
-                    </children>
-                </HBox>
-                <TextField fx:id="searchField" promptText="Search" />
-                <HBox fx:id="hBoxTabs" spacing="10.0" alignment="CENTER">
-                    <children>
-                        <Button text="Website +"/>
-                        <Button text="Application +"/>
-                    </children>
-                </HBox>
-                <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
-                    <columns>
-                        <TableColumn fx:id="iconColumn" text="" minWidth="50" prefWidth="50" maxWidth="50" style="-fx-alignment: center;"/>
-                        <TableColumn fx:id="nameColumn" text="Name" minWidth="100" prefWidth="100" maxWidth="100" style="-fx-alignment: center;"/>
-                        <TableColumn fx:id="locationColumn" text="Web/File Link" minWidth="200" prefWidth="250" maxWidth="300" style="-fx-alignment: center;" />
-                    </columns>
-                </TableView>
-                <Button fx:id="saveButton" text="Save" maxWidth="Infinity" VBox.vgrow="NEVER" />
-            </children>
-        </VBox>
-    </children>
-
-</AnchorPane >
+                </graphic>
+            </Button>
+        </HBox>
+        <TextField fx:id="searchField" promptText="Search"/>
+        <HBox fx:id="hBoxTabs" spacing="10.0" alignment="CENTER">
+            <Button text="Website +"/>
+            <Button text="Application +"/>
+        </HBox>
+        <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="iconColumn" text="" minWidth="50" prefWidth="50" maxWidth="50"
+                             style="-fx-alignment: center;"/>
+                <TableColumn fx:id="nameColumn" text="Name" minWidth="100" prefWidth="100" maxWidth="100"
+                             style="-fx-alignment: center;"/>
+                <TableColumn fx:id="locationColumn" text="Web/File Link" minWidth="200" prefWidth="250"
+                             maxWidth="300" style="-fx-alignment: center;"/>
+            </columns>
+        </TableView>
+        <Button fx:id="saveButton" text="Save" maxWidth="Infinity" VBox.vgrow="NEVER"/>
+    </VBox>
+</AnchorPane>
