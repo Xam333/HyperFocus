@@ -137,18 +137,14 @@
                styleClass="menuPane">
         <VBox>
             <!--Account Information-->
-            <Button styleClass="menuButton"
-                    prefWidth="280.0"
-                    prefHeight="50.0">
+            <Button styleClass="menuButton">
                 <graphic>
                     <HBox alignment="CENTER_LEFT">
                         <Region prefWidth="15.0" />
-                        <ImageView fitHeight="30.0"
-                                     fitWidth="30.0"
-                                     pickOnBounds="true"
-                                     preserveRatio="true">
-                        <Image url="@../images/userIcon.png" />
-                    </ImageView>
+                        <Label styleClass="navLabel"
+                               prefWidth="30.0"
+                               text="👤"
+                               textAlignment="CENTER"/>
                         <Region prefWidth="10.0" />
                         <Label styleClass="navLabel"
                                text="Account Information"
@@ -158,18 +154,14 @@
             </Button>
 
             <!--Parental Controls-->
-            <Button styleClass="menuButton"
-                    prefWidth="280.0"
-                    prefHeight="50.0">
+            <Button styleClass="menuButton">
                 <graphic>
                     <HBox alignment="CENTER_LEFT">
                         <Region prefWidth="15.0" />
-                        <ImageView fitHeight="30.0"
-                                   fitWidth="30.0"
-                                   pickOnBounds="true"
-                                   preserveRatio="true">
-                            <Image url="@../images/userIcon.png" />
-                        </ImageView>
+                        <Label styleClass="navLabel"
+                               prefWidth="30.0"
+                               text="👨‍👩‍👦"
+                               textAlignment="CENTER"/>
                         <Region prefWidth="10.0" />
                         <Label styleClass="navLabel"
                                text="Parental Controls"
@@ -179,18 +171,14 @@
             </Button>
 
             <!--Colour Settings-->
-            <Button styleClass="menuButton"
-                    prefWidth="280.0"
-                    prefHeight="50.0">
+            <Button styleClass="menuButton">
                 <graphic>
                     <HBox alignment="CENTER_LEFT">
                         <Region prefWidth="15.0" />
-                        <ImageView fitHeight="30.0"
-                                   fitWidth="30.0"
-                                   pickOnBounds="true"
-                                   preserveRatio="true">
-                            <Image url="@../images/userIcon.png" />
-                        </ImageView>
+                        <Label styleClass="navLabel"
+                               prefWidth="30.0"
+                               text="🎨"
+                               textAlignment="CENTER"/>
                         <Region prefWidth="10.0" />
                         <Label styleClass="navLabel"
                                text="Colour Settings"
@@ -200,18 +188,14 @@
             </Button>
 
             <!--Sound Settings-->
-            <Button styleClass="menuButton"
-                    prefWidth="280.0"
-                    prefHeight="50.0">
+            <Button styleClass="menuButton">
                 <graphic>
                     <HBox alignment="CENTER_LEFT">
                         <Region prefWidth="15.0" />
-                        <ImageView fitHeight="30.0"
-                                   fitWidth="30.0"
-                                   pickOnBounds="true"
-                                   preserveRatio="true">
-                            <Image url="@../images/userIcon.png" />
-                        </ImageView>
+                        <Label styleClass="navLabel"
+                               prefWidth="30.0"
+                               text="🔊"
+                               textAlignment="CENTER"/>
                         <Region prefWidth="10.0" />
                         <Label styleClass="navLabel"
                                text="Sound Settings"
