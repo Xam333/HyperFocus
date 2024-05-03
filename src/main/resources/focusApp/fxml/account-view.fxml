@@ -207,7 +207,8 @@
             </Button>
 
             <!--Parental Controls-->
-            <Button onAction="#onParentalControlsButtonClick"
+            <Button fx:id="parentalControlsButton"
+                    onAction="#onParentalControlsButtonClick"
                     styleClass="menuButton">
                 <graphic>
                     <HBox alignment="CENTER_LEFT">
@@ -225,7 +226,8 @@
             </Button>
 
             <!--Colour Settings-->
-            <Button onAction="#onColourSettingsButtonClick"
+            <Button fx:id="colourSettingsButton"
+                    onAction="#onColourSettingsButtonClick"
                     styleClass="menuButton">
                 <graphic>
                     <HBox alignment="CENTER_LEFT">
@@ -243,7 +245,8 @@
             </Button>
 
             <!--Sound Settings-->
-            <Button onAction="#onSoundSettingsButtonClick"
+            <Button fx:id="soundSettingsButton"
+                    onAction="#onSoundSettingsButtonClick"
                     styleClass="menuButton">
                 <graphic>
                     <HBox alignment="CENTER_LEFT">
@@ -262,6 +265,7 @@
         </VBox>
     </StackPane>
 
+    <!-- BLACK OUT PANE -->
     <StackPane fx:id="blackOutStackPane"
                prefHeight="600.0"
                prefWidth="390.0"
@@ -269,8 +273,7 @@
                visible="false">
     </StackPane>
 
-<!--    Create "black out pane" to darken scene -->
-    <!-- Log out confirmation -->
+    <!-- LOG OUT CONFIRMATION -->
     <StackPane fx:id="confirmLogOutStackPane"
                layoutY="225.0"
                layoutX="55.0"
@@ -307,7 +310,6 @@
                 <Insets bottom="25.0"/>
             </padding>
         </HBox>
-
     </StackPane>
 
 

@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -24,12 +25,24 @@ import java.util.ResourceBundle;
 
 
 public class BlockedController implements Initializable {
-
-
+    public StackPane addWebsiteStackPane;
+    public TextField addWebsiteTextField;
+    public StackPane addApplicationStackPane;
+    public TextField addApplicationTextField;
+    public Button addWebButton;
+    public Button addAppButton;
+    public Button parentalControlsButton;
+    public Button colourSettingsButton;
+    public Button soundSettingsButton;
+    boolean changesSaved = true;
     public Button saveButton;
     public Button cancelButton;
     public StackPane menuStackPane;
     public Button accountButton;
+    public StackPane blackOutStackPane;
+    public StackPane confirmCancelStackPane;
+    public Button abortButton;
+    public Button confirmButton;
     @FXML
     private ImageView userIcon;
     @FXML
@@ -57,11 +70,18 @@ public class BlockedController implements Initializable {
     }
     @FXML
     protected void onCancelButtonClick() throws IOException {
-        Stage stage = (Stage) cancelButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
-        stage.setScene(scene);
+        if(!changesSaved){
+            blackOutStackPane.setVisible(true);
+            confirmCancelStackPane.setVisible(true);
+        } else {
+            Stage stage = (Stage) cancelButton.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+            stage.setScene(scene);
+        }
+
     }
 
     @Override
@@ -95,6 +115,9 @@ public class BlockedController implements Initializable {
 
         tableView.setItems(testData());
 
+//        Automatically set as true until change is made
+        changesSaved = true;
+
     }
 
     public void onMenuStackPaneEnter(MouseEvent actionEvent) {
@@ -107,34 +130,124 @@ public class BlockedController implements Initializable {
 
 
 //    Add new websites and applications to database
-    public void onSaveButtonClick(ActionEvent actionEvent) {
-    }
-
-//    Navigate to form page or, open stack pane
-    public void onWebsiteButtonClick(ActionEvent actionEvent) {
-    }
-
-    public void onApplicationButtonClick(ActionEvent actionEvent) {
-    }
-
-//    Navigate to account page
-//    #onAccountButtonClick is shared by the nav bar account button,
-//    and the side menu account button.
-    public void onAccountButtonClick(ActionEvent actionEvent) throws IOException {
-        Stage stage = (Stage) accountButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/account-view.fxml"));
+    public void onSaveButtonClick(ActionEvent actionEvent) throws IOException {
+        changesSaved = true;
+        Stage stage = (Stage) saveButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
 
         scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
         stage.setScene(scene);
     }
 
-    public void onSoundSettingsButtonClick(ActionEvent actionEvent) {
+//    Navigate to form page or, open stack pane
+    public void onWebsiteButtonClick(ActionEvent actionEvent) {
+        blackOutStackPane.setVisible(true);
+        addWebsiteStackPane.setVisible(true);
+
     }
 
-    public void onColourSettingsButtonClick(ActionEvent actionEvent) {
+    public void onApplicationButtonClick(ActionEvent actionEvent) {
+        blackOutStackPane.setVisible(true);
+        addApplicationStackPane.setVisible(true);
     }
 
-    public void onParentalControlsButtonClick(ActionEvent actionEvent) {
+//    Navigate to account page
+//    #onAccountButtonClick is shared by the nav bar account button,
+//    and the side menu account button.
+    public void onAccountButtonClick(ActionEvent actionEvent) throws IOException {
+        if(!changesSaved){
+            blackOutStackPane.setVisible(true);
+            confirmCancelStackPane.setVisible(true);
+        } else {
+            Stage stage = (Stage) accountButton.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/account-view.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+            stage.setScene(scene);
+        }
+    }
+
+    public void onSoundSettingsButtonClick(ActionEvent actionEvent) throws IOException {
+        if(!changesSaved){
+            blackOutStackPane.setVisible(true);
+            confirmCancelStackPane.setVisible(true);
+        } else {
+//            MAKE SETTINGS PAGE
+            Stage stage = (Stage) soundSettingsButton.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+            stage.setScene(scene);
+        }
+    }
+
+    public void onColourSettingsButtonClick(ActionEvent actionEvent) throws IOException {
+        if(!changesSaved){
+            blackOutStackPane.setVisible(true);
+            confirmCancelStackPane.setVisible(true);
+        } else {
+//            MAKE SETTINGS PAGE
+            Stage stage = (Stage) colourSettingsButton.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+            stage.setScene(scene);
+        }
+    }
+
+    public void onParentalControlsButtonClick(ActionEvent actionEvent) throws IOException {
+        if(!changesSaved){
+            blackOutStackPane.setVisible(true);
+            confirmCancelStackPane.setVisible(true);
+        } else {
+//            MAKE SETTINGS PAGE
+            Stage stage = (Stage) parentalControlsButton.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+            stage.setScene(scene);
+        }
+    }
+
+    public void onConfirmButtonClick(ActionEvent actionEvent) throws IOException {
+        Stage stage = (Stage) confirmButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        stage.setScene(scene);
+    }
+
+    public void onAbortButtonClick(ActionEvent actionEvent) {
+        blackOutStackPane.setVisible(false);
+        confirmCancelStackPane.setVisible(false);
+    }
+
+    public void onXLabelClick(ActionEvent mouseEvent) {
+        blackOutStackPane.setVisible(false);
+        addWebsiteStackPane.setVisible(false);
+        addApplicationStackPane.setVisible(false);
+    }
+
+//    Store to temp database things, wait for save button to be clicked
+    public void onAddButtonClick(ActionEvent actionEvent) {
+//        Get addWebsiteTextField contents
+        changesSaved = false;
+        blackOutStackPane.setVisible(false);
+        addWebsiteStackPane.setVisible(false);
+        addApplicationStackPane.setVisible(false);
+    }
+
+    public void websiteEntered(KeyEvent keyEvent) {
+        addWebButton.setDisable(false);
+    }
+
+    public void onFileClick(ActionEvent actionEvent) {
+        addAppButton.setDisable(false);
     }
 }
