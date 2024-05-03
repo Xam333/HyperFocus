@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Arc;
@@ -52,20 +53,42 @@ public class TimerController {
         UpdateButtons();
     }
     @FXML
+    protected void mouseInStopButton(){ StopButton.setContentDisplay(ContentDisplay.LEFT);}
+    @FXML
+    protected void mouseOutStopButton(){ StopButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
+
+
+    @FXML
     protected void onPauseButtonClick(){
         timer.Control(Command.Pause);
         UpdateButtons();
     }
+    @FXML
+    protected void mouseInPauseButton(){ PauseButton.setContentDisplay(ContentDisplay.LEFT);}
+    @FXML
+    protected void mouseOutPauseButton(){ PauseButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
+
     @FXML
     protected void onResumeButtonClick(){
         timer.Control(Command.Resume);
         UpdateButtons();
     }
     @FXML
+    protected void mouseInResumeButton(){ ResumeButton.setContentDisplay(ContentDisplay.LEFT);}
+    @FXML
+    protected void mouseOutResumeButton(){ PauseButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
+
+    @FXML
     protected void onRestartButtonClick(){
         timer.Control(Command.Restart);
         UpdateButtons();
     }
+    @FXML
+    protected void mouseInRestartButton(){ RestartButton.setContentDisplay(ContentDisplay.LEFT);}
+    @FXML
+    protected void mouseOutRestartButton(){ RestartButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
+
+
     @FXML
     protected void onReturnButtonClick() throws IOException {
         Stage stage = (Stage) BackBtn.getScene().getWindow();
@@ -76,40 +99,76 @@ public class TimerController {
         scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
         stage.setScene(scene);
     }
+    @FXML
+    protected void mouseInReturnButton(){ ReturnButton.setContentDisplay(ContentDisplay.LEFT);}
+    @FXML
+    protected void mouseOutReturnButton(){ ReturnButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
 
 
     public void UpdateButtons(){
         switch(timer.getTimerState()){
             case Running -> {
                 StopButton.setDisable(false);
+                PauseButton.setDisable(false);
+
                 RestartButton.setDisable(true);
                 ReturnButton.setDisable(true);
-                PauseButton.setDisable(false);
                 ResumeButton.setDisable(true);
+
+                Platform.runLater(() ->{
+                    RestartButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                    ReturnButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                    ResumeButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                });
             }
 
             case Delayed,Restarting -> {
                 StopButton.setDisable(false);
+
                 RestartButton.setDisable(true);
                 ReturnButton.setDisable(true);
                 PauseButton.setDisable(true);
                 ResumeButton.setDisable(true);
+
+                Platform.runLater(() ->{
+                    RestartButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                    ReturnButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                    PauseButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                    ResumeButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                });
+
             }
 
             case Paused -> {
                 StopButton.setDisable(false);
+                ResumeButton.setDisable(false);
+
                 RestartButton.setDisable(true);
                 ReturnButton.setDisable(true);
                 PauseButton.setDisable(true);
-                ResumeButton.setDisable(false);
+
+                Platform.runLater(() ->{
+                    RestartButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                    ReturnButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                    PauseButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                });
+
             }
 
             case Stopped, Finished -> {
-                StopButton.setDisable(true);
                 RestartButton.setDisable(false);
                 ReturnButton.setDisable(false);
+
+                StopButton.setDisable(true);
                 PauseButton.setDisable(true);
                 ResumeButton.setDisable(true);
+
+                Platform.runLater(() ->{
+                    StopButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                    PauseButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                    ResumeButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                });
+
             }
 
 
