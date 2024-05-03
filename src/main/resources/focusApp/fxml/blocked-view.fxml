@@ -1,49 +1,221 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.BlockedController">
+<?import javafx.scene.layout.StackPane?>
+<?import com.sun.javafx.charts.Legend?>
+<?import javafx.scene.layout.Pane?>
+<AnchorPane maxHeight="-Infinity"
+            maxWidth="-Infinity"
+            minHeight="-Infinity"
+            minWidth="-Infinity"
+            prefHeight="600.0"
+            prefWidth="390.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="focusApp.controllers.BlockedController">
+
+    <!-- NAV BAR -->
+    <HBox alignment="CENTER"
+          prefHeight="75.0"
+          prefWidth="390.0"
+          spacing="5.0"
+          styleClass="navBox">
+
+        <!-- To Previous Page -->
+        <!-- This should call a side menu -->
+        <Pane minHeight="75.0"
+              onMouseEntered="#onMenuStackPaneEnter"
+              onMouseExited="#onMenuStackPaneExit">
+            <VBox layoutY="17">
+                <Button styleClass="navButton">
+                    <graphic>
+                        <ImageView fitHeight="40.0"
+                                   fitWidth="40.0"
+                                   pickOnBounds="true"
+                                   preserveRatio="true">
+                            <Image url="@../images/menuIcon.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </VBox>
+        </Pane>
 
 
-    <children>
-        <VBox fx:id="vBoxContainer" layoutX="-1.0" prefHeight="534.0" prefWidth="424.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
-            <children>
-                <HBox fx:id="hBoxHeader" alignment="CENTER_LEFT" minHeight="50.0" prefHeight="50.0" spacing="10.0" style="-fx-background-color: #59ADFF;" styleClass="headLabel" stylesheets="@../stylesheet.css">
-                    <children>
-                  <Region prefHeight="50.0" prefWidth="0.0" />
-                        <Button fx:id="backButton" onAction="#onBackButtonClick" prefHeight="37.0" prefWidth="37.0" text="&lt;" />
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Label style="-fx-font-size: 18px;" text="Blocked Apps" textFill="WHITE" wrapText="true" />
-                        <Region style="-fx-background-color: -backgroundColor;" HBox.hgrow="ALWAYS" />
-                        <Button prefHeight="33.0" prefWidth="39.0">
-                            <graphic>
-                                <ImageView fx:id="youtubeIcon" />
-                                <ImageView fx:id="redditIcon" />
-                                <ImageView fx:id="userIcon" />
 
-                            </graphic>
-                        </Button>
-                  <Region layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="0.0" />
-                    </children>
-                </HBox>
-                <HBox fx:id="hBoxTabs" alignment="CENTER" spacing="10.0">
-                    <children>
-                        <Button style="-fx-border-color: black; -fx-text-fill: black;" styleClass="smallPrimaryButton" stylesheets="@../stylesheet.css" text="Website +" />
-                        <Button text="Application +" />
-                    </children>
-                </HBox>
-                <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
-                    <columns>
-                        <TableColumn fx:id="iconColumn" maxWidth="50" minWidth="50" prefWidth="50" style="-fx-alignment: center;" text="" />
-                        <TableColumn fx:id="nameColumn" maxWidth="100" minWidth="100" prefWidth="100" style="-fx-alignment: center;" text="Name" />
-                        <TableColumn fx:id="locationColumn" maxWidth="300" minWidth="200" prefWidth="250" style="-fx-alignment: center;" text="Web/File Link" />
-                    </columns>
-                </TableView>
-                <Button fx:id="saveButton" maxWidth="Infinity" text="Save" VBox.vgrow="NEVER" />
-            </children>
+        <Region HBox.hgrow="ALWAYS" />
+
+        <!-- Page Title -->
+        <Label styleClass="navLabel"
+               text="Blocked Apps"
+               textAlignment="CENTER" />
+
+        <Region HBox.hgrow="ALWAYS" />
+
+        <!--        add functionality, go to account page-->
+        <!-- To Account Page -->
+        <Button fx:id="accountButton"
+                onAction="#onAccountButtonClick"
+                styleClass="navButton">
+            <graphic>
+                <ImageView fitHeight="40.0"
+                           fitWidth="40.0"
+                           pickOnBounds="true"
+                           preserveRatio="true">
+                    <Image url="@../images/userIcon.png" />
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+
+
+    <!-- ADD WEBSITE, APPLICATION BUTTONS -->
+    <VBox layoutX="55.0"
+          layoutY="113.0"
+          prefHeight="467.0"
+          prefWidth="280.0"
+          spacing="20.0">
+
+        <HBox alignment="CENTER" prefHeight="40.0" prefWidth="280.0" spacing="10.0">
+            <Button styleClass="defaultButton"
+                    onAction="#onWebsiteButtonClick"
+                    text="Website +" />
+            <Button styleClass="defaultButton"
+                    onAction="#onApplicationButtonClick"
+                    text="Application +" />
+        </HBox>
+
+
+        <!-- TABLE LAYOUT -->
+        <VBox prefHeight="300.0" prefWidth="280.0">
+            <Label styleClass="bodyLabel" text="Blocked Applications:" />
+
+            <TableView fx:id="tableView" styleClass="blockedTableView">
+                <columns>
+                    <TableColumn fx:id="iconColumn" maxWidth="50" minWidth="50" prefWidth="50" styleClass="blockedTableColumn" text=" " />
+                    <TableColumn fx:id="nameColumn" maxWidth="100" minWidth="70" prefWidth="81" styleClass="blockedTableColumn" text="Name" />
+                    <TableColumn fx:id="locationColumn" maxWidth="150" minWidth="120" prefWidth="144" styleClass="blockedTableColumn" text="Web/File Link" />
+                </columns>
+            </TableView>
+
+            <VBox.margin>
+                <Insets bottom="20.0" />
+            </VBox.margin>
         </VBox>
-    </children>
 
+        <!-- CANCEL, SAVE BUTTONS -->
+        <HBox alignment="BOTTOM_CENTER"
+              prefHeight="40.0"
+              prefWidth="280.0"
+              spacing="10.0">
+            <!-- Cancel button should act as back button -->
+            <Button fx:id="cancelButton"
+                    mnemonicParsing="false"
+                    onAction="#onCancelButtonClick"
+                    styleClass="smallSecondaryButton"
+                    text="CANCEL"/>
+
+            <Button fx:id="saveButton"
+                    mnemonicParsing="false"
+                    onAction="#onSaveButtonClick"
+                    styleClass="smallPrimaryButton"
+                    text="SAVE" />
+        </HBox>
+    </VBox>
+
+
+
+    <!-- SIDE MENU -->
+    <StackPane fx:id="menuStackPane"
+               onMouseExited="#onMenuStackPaneExit"
+               onMouseEntered="#onMenuStackPaneEnter"
+               layoutY="74.9"
+               visible="false"
+               prefHeight="525.1"
+               prefWidth="280.0"
+               styleClass="menuPane">
+        <VBox>
+            <!--Account Information-->
+            <Button onAction="#onAccountButtonClick"
+                    styleClass="menuButton">
+                <graphic>
+                    <HBox alignment="CENTER_LEFT">
+                        <Region prefWidth="15.0" />
+                        <Label styleClass="navLabel"
+                               prefWidth="30.0"
+                               text="👤"
+                               textAlignment="CENTER"/>
+                        <Region prefWidth="10.0" />
+                        <Label styleClass="navLabel"
+                               text="Account Information"
+                               textAlignment="CENTER"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <!--Parental Controls-->
+            <Button onAction="#onParentalControlsButtonClick"
+                    styleClass="menuButton">
+                <graphic>
+                    <HBox alignment="CENTER_LEFT">
+                        <Region prefWidth="15.0" />
+                        <Label styleClass="navLabel"
+                               prefWidth="30.0"
+                               text="👨‍👩‍👦"
+                               textAlignment="CENTER"/>
+                        <Region prefWidth="10.0" />
+                        <Label styleClass="navLabel"
+                               text="Parental Controls"
+                               textAlignment="CENTER"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <!--Colour Settings-->
+            <Button onAction="#onColourSettingsButtonClick"
+                    styleClass="menuButton">
+                <graphic>
+                    <HBox alignment="CENTER_LEFT">
+                        <Region prefWidth="15.0" />
+                        <Label styleClass="navLabel"
+                               prefWidth="30.0"
+                               text="🎨"
+                               textAlignment="CENTER"/>
+                        <Region prefWidth="10.0" />
+                        <Label styleClass="navLabel"
+                               text="Colour Settings"
+                               textAlignment="CENTER"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <!--Sound Settings-->
+            <Button onAction="#onSoundSettingsButtonClick"
+                    styleClass="menuButton">
+                <graphic>
+                    <HBox alignment="CENTER_LEFT">
+                        <Region prefWidth="15.0" />
+                        <Label styleClass="navLabel"
+                               prefWidth="30.0"
+                               text="🔊"
+                               textAlignment="CENTER"/>
+                        <Region prefWidth="10.0" />
+                        <Label styleClass="navLabel"
+                               text="Sound Settings"
+                               textAlignment="CENTER"/>
+                    </HBox>
+                </graphic>
+            </Button>
+        </VBox>
+    </StackPane>
 </AnchorPane>

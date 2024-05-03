@@ -4,18 +4,72 @@
     -backgroundColor: #E6F9FF;
 
     /* Temp */
-    -textBoxColor: #D6D6D6;
-
+    -textBoxColor: #FFF;
 
     -fx-background-color: -backgroundColor;
 }
 
+/* Layout */
 .navBox{
     -fx-background-color: -primaryColor;
 }
 
-/* Labels */
+/* Menu Pane */
+.menuPane{
+    -fx-background-color: -secondaryColor;
+}
 
+/* Confirmation */
+
+.blackOutPane{
+    -fx-background-color: #000000;
+    -fx-opacity: 0.5;
+}
+
+
+.confirmPane{
+    -fx-pref-width: 280px;
+    -fx-pref-height: 150px;
+    -fx-background-color: #FFFFFF;
+
+    -fx-border-radius: 8px;
+    -fx-border-width: 5px;
+    -fx-border-color: -primaryColor;
+
+    -fx-text-fill: -primaryColor;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+
+
+
+/* Blocked Pane */
+.blockedPane{
+    -fx-border-color: #000000;
+    -fx-background-color: -textBoxColor;
+}
+
+
+/* Blocked Table */
+.blockedTableColumn{
+    -fx-alignment: center;
+    -fx-background-color: -textBoxColor;
+    -fx-border-color: transparent -secondaryColor transparent -secondaryColor;
+}
+
+.blockedTableView{
+    -fx-border-color: transparent transparent -secondaryColor transparent;
+    -fx-background-color: transparent;
+}
+
+.blockedTableView .column-header {
+    -fx-border-color: -secondaryColor;
+}
+
+
+
+/* Labels */
 .label {
     -fx-font-family: INTER;
 }
@@ -58,18 +112,67 @@
 }
 
 
-/* Text Fields */
 
+/* Text Fields */
 .textBox {
     -fx-font-size: 14px;
     -fx-background-color: -textBoxColor;
-    -fx-prompt-text-fill: #000000;
+    -fx-prompt-text-fill: #414141;
+}
+
+
+/* Sliders */
+.timerSlider .track{
+    -fx-background-color: linear-gradient(to right, -primaryColor 40%, -textBoxColor 40%);
+}
+
+.timerSlider .thumb{
+    -fx-border-radius: 1.0em;
+    -fx-border-width: 3px;
+    -fx-border-color: -textBoxColor;
+    -fx-body-color: -primaryColor;
+
+
 }
 
 
 /* Buttons */
-/* Large Buttons*/
+.navButton{
+    -fx-background-color: transparent;
+}
 
+.defaultButton {
+    -fx-pref-width: 140px;
+    -fx-pref-height: 40px;
+    -fx-background-color: #FFF;
+
+    -fx-border-radius: 8px;
+    -fx-border-color: #000000;
+
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+
+    -fx-cursor: hand;
+}
+
+.defaultButton:hover {
+    -fx-background-color: #F5F5F5;
+
+}
+
+.menuButton{
+    -fx-pref-width: 280.0;
+    -fx-pref-height: 50.0;
+    -fx-background-color: transparent;
+}
+
+.menuButton:hover {
+    -fx-background-color: -primaryColor;
+
+}
+
+
+/* Large Buttons*/
 .largePrimaryButton {
     -fx-pref-width: 256px;
     -fx-pref-height: 50px;
@@ -110,7 +213,26 @@
 
 
 
-/* Small Buttons*/
+
+/* Small Buttons */
+.smallDefaultButton {
+    -fx-pref-width: 100px;
+    -fx-pref-height: 40px;
+    -fx-background-color: #FFF;
+
+    -fx-border-radius: 8px;
+    -fx-border-color: #000000;
+
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+
+    -fx-cursor: hand;
+}
+
+.smallDefaultButton:hover {
+    -fx-background-color: #F5F5F5;
+
+}
 
 .smallPrimaryButton {
     -fx-pref-width: 140px;
@@ -135,7 +257,7 @@
     -fx-background-color: #FFF;
 
     -fx-border-radius: 8px;
-    -fx-border-width: 3px;
+    -fx-border-width: 2px;
     -fx-border-color: -primaryColor;
 
     -fx-text-fill: -primaryColor;
@@ -149,3 +271,49 @@
     -fx-border-color: -secondaryColor;
     -fx-text-fill: -secondaryColor;
 }
+
+
+
+/* Tiny Buttons */
+.tinyPrimaryButton{
+    -fx-pref-width: 60px;
+    -fx-background-color: -primaryColor;
+    -fx-background-radius: 8px;
+
+    -fx-text-fill: #FFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+
+    -fx-cursor: hand;
+}
+
+.tinyPrimaryButton:hover {
+    -fx-background-color: -secondaryColor;
+}
+
+
+.tinySecondaryButton {
+    -fx-pref-width: 60px;
+    -fx-background-color: #FFF;
+
+    -fx-border-radius: 8px;
+    -fx-border-width: 2px;
+    -fx-border-color: -primaryColor;
+
+    -fx-text-fill: -primaryColor;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+
+
+    -fx-cursor: hand;
+}
+
+.tinySecondaryButton:hover {
+    -fx-border-color: -secondaryColor;
+    -fx-text-fill: -secondaryColor;
+}
+
+
+
+
+
