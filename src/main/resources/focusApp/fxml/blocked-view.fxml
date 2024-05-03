@@ -88,7 +88,7 @@
 
         <HBox alignment="CENTER" prefHeight="40.0" prefWidth="280.0" spacing="10.0">
             <Button styleClass="defaultButton"
-                    onAction="#onWebsiteButtonClick"
+                    onAction="#onAddWebsite"
                     text="Website +" />
             <Button styleClass="defaultButton"
                     onAction="#onApplicationButtonClick"

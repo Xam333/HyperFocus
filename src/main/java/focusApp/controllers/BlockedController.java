@@ -20,7 +20,14 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
+
+//Jsoup
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 
 public class BlockedController implements Initializable {
@@ -55,6 +62,69 @@ public class BlockedController implements Initializable {
         BlockedApplication a2 = new BlockedApplication(redditIcon, "Reddit", "www.reddit.com");
         return FXCollections.observableArrayList(a1,a2);
     }
+
+    @FXML
+    private void onAddWebsite()
+    {
+        String newWebsite = showUrlDialog();
+        System.out.println("This is a test: " + newWebsite);
+        System.out.println(newWebsite);
+        String[] info = getWebPageTitleAndImage(newWebsite);
+        System.out.println("Title: " + info[0]);
+        System.out.println("Image URL: " + info[1]);
+    }
+    private String showUrlDialog() {
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Enter URL");
+
+        TextField urlField = new TextField();
+        urlField.setPromptText("https://example.com");
+        dialog.getDialogPane().setContent(urlField);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == ButtonType.OK) {
+                return urlField.getText();
+            }
+            return null;
+        });
+
+        // The blocking call that will wait for the dialog to close
+        Optional<String> result = dialog.showAndWait();
+        return result.orElse(null); // Returns the URL if OK was pressed, otherwise returns null
+    }
+
+    /**
+     * Retrieves the webpage title and the first image source URL.
+     * @param url The URL of the webpage.
+     * @return A string array where the first element is the title and the second is the image URL.
+     */
+    public static String[] getWebPageTitleAndImage(String url) {
+        try {
+            Document doc = Jsoup.connect(url).get();
+
+            // Get the title of the webpage
+            String title = doc.title();
+
+            // Attempt to get the URL of the favicon
+            String faviconUrl = "No favicon found";
+            Elements links = doc.head().select("link[href]");
+            for (Element link : links) {
+                String relValue = link.attr("rel");
+                if (relValue.contains("icon")) {
+                    faviconUrl = link.absUrl("href");
+                    break;
+                }
+            }
+
+            return new String[]{title, faviconUrl};
+        } catch (IOException e) {
+            System.err.println("Error fetching the webpage: " + e.getMessage());
+            return new String[]{"Error retrieving title", "Error retrieving favicon"};
+        }
+    }
+
+
     @FXML
     protected void onCancelButtonClick() throws IOException {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
