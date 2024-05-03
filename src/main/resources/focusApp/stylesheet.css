@@ -3,11 +3,16 @@
     -secondaryColor: #4382BF;
     -backgroundColor: #E6F9FF;
 
+    -SubPrimaryColor: #59ACFF;
+    -SubSecondaryColor: #F0ECD3;
+    -SubTertiaryColor: #2C6FDC;
+    -SubBackGroundColor: #E6F9FF;
+
     /* Temp */
     -textBoxColor: #D6D6D6;
 
 
-    -fx-background-color: -backgroundColor;
+    -fx-background-color: -SubBackGroundColor;
 }
 
 .navBox{
@@ -148,6 +153,46 @@
 .smallSecondaryButton:hover {
     -fx-border-color: -secondaryColor;
     -fx-text-fill: -secondaryColor;
+}
+
+/*Timer Button Styles*/
+.ButtonControlUpper{
+    -fx-pref-height: 60px;
+    -fx-pref-width: 140px;
+    -fx-background-color: -SubTertiaryColor;
+    -fx-background-radius:  0px;
+
+    -fx-text-fill: #FFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+.ButtonControlUpper:hover, .ButtonControlLower:hover{
+    -fx-background-color: -SubSecondaryColor;
+    -fx-text-fill: -SubTertiaryColor;
+}
+.ButtonControlUpper:hover .label, .ButtonControlLower:hover .label{
+    -fx-text-fill: -SubTertiaryColor;
+}
+
+.ButtonControlLower {
+    -fx-pref-height: 60px;
+    -fx-pref-width: 200px;
+    -fx-background-color: -SubTertiaryColor;
+    -fx-background-radius:  0px;
+
+    -fx-text-fill: #FFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+.ButtonController {
+    -fx-background-color: -SubSecondaryColor;
+    -fx-background-radius: 8px;
+}
+
+.ButtonControlIcon {
+    -fx-text-fill: #FFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 17px;
 }
 
 

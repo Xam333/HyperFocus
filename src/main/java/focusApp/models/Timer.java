@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class Timer {
 
-    private final boolean DebugMode = true;
+    private final boolean DebugMode = false;
 
 
     public TimerState getTimerState() {
@@ -251,7 +251,7 @@ public class Timer {
         }
 
         // Update GUI elements to their Pre-State for the current state.
-        Timer_Controller.UpdateArc();
+        Timer_Controller.HideArc();
         Timer_Controller.UpdateStopWatch();
         Timer_Controller.UpdateTimerStatus();
         Timer_Controller.UpdateButtons();
@@ -272,7 +272,7 @@ public class Timer {
         // Update GUI elements to their Pre-State for the current state.
         Timer_Controller.UpdateTimerStatus();
         Timer_Controller.UpdateStopWatch();
-        Timer_Controller.UpdateArc();
+        Timer_Controller.HideArc();
         Timer_Controller.UpdateButtons();
     }
 

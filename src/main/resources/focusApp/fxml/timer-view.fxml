@@ -7,9 +7,9 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="644.0" prefWidth="390.0" style="-fx-background-color: #E6F9FF;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.TimerController">
+<AnchorPane prefHeight="600.0" prefWidth="390.0" styleClass="root" stylesheets="@../stylesheet.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.TimerController">
 
-    <VBox fx:id="vBoxContainer" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+    <VBox fx:id="vBoxContainer" spacing="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
 
         <HBox fx:id="hBoxHeader" alignment="CENTER_LEFT" style="-fx-background-color: red;">
 
@@ -29,27 +29,25 @@
 
         </HBox>
 
-        <HBox>
-            <Region HBox.hgrow="ALWAYS" />
+        <HBox alignment="CENTER">
             <Label fx:id="TimerStatus" text="..." textAlignment="CENTER" wrapText="true">
             <font>
                <Font size="24.0" />
             </font></Label>
-            <Region HBox.hgrow="ALWAYS" />
         </HBox>
       <StackPane prefHeight="150.0" prefWidth="200.0">
          <children>
             <Group>
                <children>
-                  <Circle fill="#333333" radius="180.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-                  <Arc fill="TRANSPARENT" length="360.0" radiusX="175.0" radiusY="175.0" stroke="#868686" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="15.0" />
-                  <Arc fx:id="arc" centerX="175.0" centerY="100.0" fill="TRANSPARENT" layoutX="-175.0" layoutY="-100.0" length="360.0" radiusX="175.0" radiusY="175.0" startAngle="90.0" stroke="#1b81e0" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="10.0" />
-                  <HBox layoutX="-132.0" layoutY="-52.0" prefHeight="104.0" prefWidth="265.0">
+                  <Circle fill="#333333" radius="180.0" stroke="TRANSPARENT" strokeType="INSIDE" style="-fx-fill: -SubPrimaryColor;" />
+                  <Arc fill="TRANSPARENT" length="360.0" radiusX="175.0" radiusY="175.0" stroke="#868686" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="15.0" style="-fx-stroke: -SubSecondaryColor;" />
+                  <Arc fx:id="arc" centerX="175.0" centerY="100.0" fill="TRANSPARENT" layoutX="-175.0" layoutY="-100.0" length="360.0" radiusX="175.0" radiusY="175.0" startAngle="90.0" stroke="#1b81e0" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="10.0" style="-fx-stroke: -SubTertiaryColor;" />
+                  <HBox layoutX="-162.0" layoutY="-43.0" prefHeight="86.0" prefWidth="325.0">
                      <children>
 
-                                 <Label fx:id="StopWatch" alignment="CENTER" contentDisplay="CENTER" prefHeight="104.0" prefWidth="276.0" text="00:00:00" textAlignment="CENTER" textFill="WHITE">
+                                 <Label fx:id="StopWatch" alignment="CENTER" contentDisplay="CENTER" prefHeight="86.0" prefWidth="350.0" text="--:--:--" textAlignment="CENTER" textFill="WHITE">
                            <font>
-                              <Font size="71.0" />
+                              <Font size="72.0" />
                            </font>
                            </Label>
                      </children>
@@ -93,23 +91,59 @@
             </Group>
          </children>
       </StackPane>
-      <HBox prefHeight="100.0" prefWidth="200.0">
+      <VBox alignment="CENTER" spacing="2.0" styleClass="ButtonController" stylesheets="@../stylesheet.css">
          <children>
-            <Button fx:id="PauseButton" alignment="CENTER" graphicTextGap="10.0" mnemonicParsing="false" onAction="#onPauseButtonClick" styleClass="smallPrimaryButton" stylesheets="@../stylesheet.css" text="Pause" textFill="WHITE">
-               <font>
-                  <Font size="32.0" />
-               </font>
-            </Button>
-            <Button fx:id="ResumeButton" alignment="CENTER" graphicTextGap="10.0" mnemonicParsing="false" onAction="#onResumeButtonClick" styleClass="smallPrimaryButton" stylesheets="@../stylesheet.css" text="Resume" textFill="TRANSPARENT">
-               <font>
-                  <Font size="19.0" />
-               </font>
-            </Button>
-            <Button fx:id="StopButton" mnemonicParsing="false" onAction="#onStopButtonClick" styleClass="smallPrimaryButton" stylesheets="@../stylesheet.css" text="Stop" />
-            <Button fx:id="RestartButton" mnemonicParsing="false" onAction="#onRestartButtonClick" styleClass="smallPrimaryButton" stylesheets="@../stylesheet.css" text="Restart" />
-            <Button fx:id="ReturnButton" mnemonicParsing="false" styleClass="smallPrimaryButton" stylesheets="@../stylesheet.css" text="Return" />
+            <HBox alignment="CENTER" prefHeight="14.0" prefWidth="370.0" spacing="1.0">
+               <children>
+                  <Button fx:id="PauseButton" alignment="CENTER" focusTraversable="false" graphicTextGap="5.0" mnemonicParsing="false" onAction="#onPauseButtonClick" style="-fx-background-radius: 8px 0px 0px 0px;" styleClass="ButtonControlUpper" stylesheets="@../stylesheet.css" text="Pause">
+                     <graphic>
+                        <Label text="⏸" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="1.0" />
+                           </font>
+                        </Label>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="ResumeButton" alignment="CENTER" focusTraversable="false" graphicTextGap="5.0" mnemonicParsing="false" onAction="#onResumeButtonClick" styleClass="ButtonControlUpper" stylesheets="@../stylesheet.css" text="Resume">
+                     <graphic>
+                        <Label styleClass="ButtonControlIcon" stylesheets="@../stylesheet.css" text="▶">
+                           <font>
+                              <Font size="1.0" />
+                           </font>
+                        </Label>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="StopButton" alignment="CENTER" focusTraversable="false" graphicTextGap="5.0" mnemonicParsing="false" onAction="#onStopButtonClick" style="-fx-background-radius: 0px 8px 0px 0px;" styleClass="ButtonControlUpper" stylesheets="@../stylesheet.css" text="Stop">
+                     <graphic>
+                        <Label styleClass="ButtonControlIcon" stylesheets="@../stylesheet.css" text="⏹" />
+                     </graphic>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="0.0" spacing="1.0">
+               <children>
+                  <Button fx:id="RestartButton" alignment="CENTER" focusTraversable="false" graphicTextGap="5.0" mnemonicParsing="false" onAction="#onRestartButtonClick" prefHeight="31.0" prefWidth="134.0" style="-fx-background-radius: 0px 0px 0px 8px;" styleClass="ButtonControlLower" stylesheets="@../stylesheet.css" text="Restart">
+                     <graphic>
+                        <Label text="🔁" textFill="WHITE">
+                           <font>
+                              <Font size="1.0" />
+                           </font>
+                        </Label>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="ReturnButton" focusTraversable="false" graphicTextGap="5.0" mnemonicParsing="false" onAction="#onReturnButtonClick" style="-fx-background-radius: 0px 0px 8px 0px;" styleClass="ButtonControlLower" stylesheets="@../stylesheet.css" text="Return">
+                     <graphic>
+                        <Label styleClass="ButtonControlIcon" text="⬅">
+                           <font>
+                              <Font size="1.0" />
+                           </font>
+                        </Label>
+                     </graphic>
+                  </Button>
+               </children>
+            </HBox>
          </children>
-      </HBox>
+      </VBox>
 
     </VBox>
 </AnchorPane>

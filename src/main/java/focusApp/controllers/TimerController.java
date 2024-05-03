@@ -56,20 +56,27 @@ public class TimerController {
         timer.Control(Command.Pause);
         UpdateButtons();
     }
-
-
-
     @FXML
     protected void onResumeButtonClick(){
         timer.Control(Command.Resume);
         UpdateButtons();
     }
-
     @FXML
     protected void onRestartButtonClick(){
         timer.Control(Command.Restart);
         UpdateButtons();
     }
+    @FXML
+    protected void onReturnButtonClick() throws IOException {
+        Stage stage = (Stage) BackBtn.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/hello-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+        // Set scene stylesheet
+        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        stage.setScene(scene);
+    }
+
 
     public void UpdateButtons(){
         switch(timer.getTimerState()){
@@ -124,20 +131,13 @@ public class TimerController {
     public void UpdateTimerStatus(){ Platform.runLater(() -> TimerStatus.setText(timer.getStatus())); }
     public void UpdateStopWatch(){ Platform.runLater(() -> StopWatch.setText(timer.FormatTime())); }
     public void UpdateArc(){
-        Platform.runLater(() -> {
-
-            switch (timer.getTimerState()){
-                case Running -> arc.setLength(((timer.getRunning_CD_MS() + 1) / timer.getRunning_TD_MS()) * 360);
-                case Finished, Stopped -> {
-                    System.out.println("Fionished / Stopped");
-//                    arc.setVisible(false);
-                    arc.setLength(0.0);
-                }
-            }
-        });
+        Platform.runLater(() -> arc.setLength(((timer.getRunning_CD_MS() + 1) / timer.getRunning_TD_MS()) * 360));
+    }
+    public void HideArc(){
+        arc.setLength(0.0);
+        arc.setVisible(false);
     }
     public void ResetArc(){
-        System.out.println("Resting");
         arc.setLength(360);
         arc.setVisible(true);
     }
@@ -151,14 +151,6 @@ public class TimerController {
                 MiniArc.setVisible(false);
             }
             // Timer can only be in a state of Delayed otherwise the Main timer is either running, paused or finished.
-        });
-    }
-
-    public void UpdateControlButtons(boolean Lock) {
-        Platform.runLater(() -> {
-            PauseButton.setDisable(Lock);
-            ResumeButton.setDisable(Lock);
-            StopButton.setDisable(Lock);
         });
     }
 
@@ -177,7 +169,5 @@ public class TimerController {
         scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
         stage.setScene(scene);
     }
-
-
 
 }
