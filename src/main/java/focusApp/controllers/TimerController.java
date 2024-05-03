@@ -15,6 +15,9 @@ import javafx.scene.control.Label;
 import javafx.scene.shape.Arc;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class TimerController {
@@ -28,29 +31,82 @@ public class TimerController {
     private Label StopWatch;
     @FXML
     private Label TimerStatus;
-
     @FXML
     private Arc arc;
-
 
 
     @FXML
     private Button PauseButton;
     @FXML
     private Button ResumeButton;
+    @FXML
+    private Button StopButton;
+    @FXML
+    private Button RestartButton;
+    @FXML
+    private Button ReturnButton;
 
-
+    @FXML
+    protected void onStopButtonClick(){
+        timer.Control(Command.Stop);
+        UpdateButtons();
+    }
     @FXML
     protected void onPauseButtonClick(){
         timer.Control(Command.Pause);
-        PauseButton.setVisible(false);
-        ResumeButton.setVisible(true);
+        UpdateButtons();
     }
+
+
+
     @FXML
     protected void onResumeButtonClick(){
         timer.Control(Command.Resume);
-        PauseButton.setVisible(true);
-        ResumeButton.setVisible(false);
+        UpdateButtons();
+    }
+
+    @FXML
+    protected void onRestartButtonClick(){
+        timer.Control(Command.Restart);
+        UpdateButtons();
+    }
+
+    public void UpdateButtons(){
+        switch(timer.getTimerState()){
+            case Running -> {
+                StopButton.setDisable(false);
+                RestartButton.setDisable(true);
+                ReturnButton.setDisable(true);
+                PauseButton.setDisable(false);
+                ResumeButton.setDisable(true);
+            }
+
+            case Delayed,Restarting -> {
+                StopButton.setDisable(false);
+                RestartButton.setDisable(true);
+                ReturnButton.setDisable(true);
+                PauseButton.setDisable(true);
+                ResumeButton.setDisable(true);
+            }
+
+            case Paused -> {
+                StopButton.setDisable(false);
+                RestartButton.setDisable(true);
+                ReturnButton.setDisable(true);
+                PauseButton.setDisable(true);
+                ResumeButton.setDisable(false);
+            }
+
+            case Stopped, Finished -> {
+                StopButton.setDisable(true);
+                RestartButton.setDisable(false);
+                ReturnButton.setDisable(false);
+                PauseButton.setDisable(true);
+                ResumeButton.setDisable(true);
+            }
+
+
+        }
     }
 
 
@@ -60,9 +116,8 @@ public class TimerController {
         Double TO = 0.05;
         Double TD =  0.05;
         timer = new Timer(TO, TD, this);
+
         timer.Control(Command.Start);
-
-
     }
 
 
@@ -70,13 +125,21 @@ public class TimerController {
     public void UpdateStopWatch(){ Platform.runLater(() -> StopWatch.setText(timer.FormatTime())); }
     public void UpdateArc(){
         Platform.runLater(() -> {
-            if (timer.getTimerState() == TimerState.Running){
-                arc.setLength(((timer.getRunning_CD_MS() + 1) / timer.getRunning_TD_MS()) * 360);
-            }else if (timer.getTimerState() == TimerState.Finished){
-                arc.setVisible(false);
+
+            switch (timer.getTimerState()){
+                case Running -> arc.setLength(((timer.getRunning_CD_MS() + 1) / timer.getRunning_TD_MS()) * 360);
+                case Finished, Stopped -> {
+                    System.out.println("Fionished / Stopped");
+//                    arc.setVisible(false);
+                    arc.setLength(0.0);
+                }
             }
-            // if timer is in a State of Pause or Delay do nothing.
         });
+    }
+    public void ResetArc(){
+        System.out.println("Resting");
+        arc.setLength(360);
+        arc.setVisible(true);
     }
 
 
@@ -91,10 +154,11 @@ public class TimerController {
         });
     }
 
-    public void UpdatePaReButtons(boolean Lock) {
+    public void UpdateControlButtons(boolean Lock) {
         Platform.runLater(() -> {
             PauseButton.setDisable(Lock);
             ResumeButton.setDisable(Lock);
+            StopButton.setDisable(Lock);
         });
     }
 

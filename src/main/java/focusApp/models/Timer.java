@@ -14,20 +14,20 @@ import java.util.concurrent.TimeUnit;
  */
 public class Timer {
 
-    private final boolean DebugMode = false;
+    private final boolean DebugMode = true;
 
 
     public TimerState getTimerState() {
         return Timer_State;
     }
 
-    private TimerState Timer_State;
+    private static TimerState Timer_State;
 
 
 
     // Main information needed for the timer.
     private LocalTime Timer_End;
-    private final LocalTime Timer_Start;
+    private LocalTime Timer_Start;
     private final TimerController Timer_Controller;
 
     /**
@@ -68,7 +68,7 @@ public class Timer {
 
 
     private Duration Running_C_Duration;
-    private final Duration Running_T_Duration;
+    private Duration Running_T_Duration;
 
     public double getRunning_CD_MS(){
         return Running_C_Duration.toMillis();
@@ -92,20 +92,9 @@ public class Timer {
     public Timer (Double TimerOffset, Double TimerDuration, TimerController Timer_Controller){
         Timer_Preset_Offset = TimerOffset == null ? 0.0 : (TimerOffset * 60);
         Timer_Preset_Duration = TimerDuration == null ? 0.0 : (TimerDuration * 60);
-        Timer_State = (Timer_Preset_Offset != 0.0) ? TimerState.Delayed : TimerState.Running;
-
-        this.Timer_Start = LocalTime.now().plusSeconds((long) Timer_Preset_Offset);
-        this.Timer_End = Timer_Start.plusSeconds((long)Timer_Preset_Duration);
         this.Timer_Controller = Timer_Controller;
 
-        boolean TimeCheck = Timer_End.isBefore(Timer_Start);
-        Running_C_Duration = Duration.between(Timer_Start, Timer_End).plusHours(TimeCheck ? 24 : 0);
-        Running_T_Duration = Running_C_Duration;
-
-        if(Timer_State == TimerState.Delayed){
-            Delayed_C_Duration = Duration.between(LocalTime.now(),Timer_Start).plusHours(TimeCheck ? 24 : 0);
-            Delayed_T_Duration = Delayed_C_Duration;
-        }
+        CreateTimer();
 
         if (DebugMode){
             System.out.println("Timer_Preset_Offset: " + Timer_Preset_Offset + "sec");
@@ -114,6 +103,23 @@ public class Timer {
             System.out.println("Timer End: " + Timer_End.format(Timer_12_Format));
             System.out.println("Counting Duration: " + FormatTime());
             System.out.println("Timer TimerState: " + Timer_State);
+        }
+    }
+
+
+    private void CreateTimer(){
+        Timer_State = (Timer_Preset_Offset != 0.0) ? TimerState.Delayed : TimerState.Running;
+
+        this.Timer_Start = LocalTime.now().plusSeconds((long) Timer_Preset_Offset);
+        this.Timer_End = Timer_Start.plusSeconds((long)Timer_Preset_Duration);
+
+        boolean TimeCheck = Timer_End.isBefore(Timer_Start);
+        Running_C_Duration = Duration.between(Timer_Start, Timer_End).plusHours(TimeCheck ? 24 : 0);
+        Running_T_Duration = Running_C_Duration;
+
+        if(Timer_State == TimerState.Delayed){
+            Delayed_C_Duration = Duration.between(LocalTime.now(),Timer_Start).plusHours(TimeCheck ? 24 : 0);
+            Delayed_T_Duration = Delayed_C_Duration;
         }
     }
 
@@ -180,6 +186,7 @@ public class Timer {
             case Paused -> { return "Timer is Paused."; }
             case Finished -> { return "Timer is Finished"; }
             case Delayed -> { return "Timer Starting at: " + Timer_Start.format(Timer_12_Format); }
+            case Stopped -> { return "Timer Stopped."; }
             default -> throw new IllegalArgumentException("Invalid Time TimerState: " + Timer_State);
         }
     }
@@ -194,6 +201,7 @@ public class Timer {
             case Finish -> Finish();
             case Pause -> Pause();
             case Resume -> Resume();
+            case Restart -> Restart();
             default -> throw new IllegalArgumentException("Command: " + command + " is invalid.");
         }
     }
@@ -204,6 +212,7 @@ public class Timer {
         // Update GUI elements to their Pre-State for the current state.
         Timer_Controller.UpdateTimerStatus();
         Timer_Controller.UpdateStopWatch();
+        Timer_Controller.UpdateButtons();
 
         // Start the Scheduler.
         TimeScheduler = Executors.newScheduledThreadPool(1);
@@ -223,7 +232,7 @@ public class Timer {
 
         // Update GUI elements to their Pre-State for the current state.
         Timer_Controller.UpdateMiniArc();
-        Timer_Controller.UpdatePaReButtons(false);
+        Timer_Controller.UpdateButtons();
         Timer_Controller.UpdateTimerStatus();
 
         // Start the Scheduler.
@@ -245,14 +254,37 @@ public class Timer {
         Timer_Controller.UpdateArc();
         Timer_Controller.UpdateStopWatch();
         Timer_Controller.UpdateTimerStatus();
-        Timer_Controller.UpdatePaReButtons(true);
+        Timer_Controller.UpdateButtons();
         Notification.PlaySound(-10);
 
         // Timer is finished.
     }
 
     private void Stop(){
-        TimeScheduler.shutdownNow();
+
+        if(TimeScheduler != null && !TimeScheduler.isShutdown() && (Timer_State == TimerState.Running || Timer_State == TimerState.Delayed)){
+            EnforceState(TimerState.Stopped);
+            TimeScheduler.shutdownNow();
+        }
+        // Drain the Running Counting Duration to -1.
+        Running_C_Duration = Duration.ZERO.minusSeconds(1);
+
+        // Update GUI elements to their Pre-State for the current state.
+        Timer_Controller.UpdateTimerStatus();
+        Timer_Controller.UpdateStopWatch();
+        Timer_Controller.UpdateArc();
+        Timer_Controller.UpdateButtons();
+    }
+
+    private void Restart(){
+        // Time scheduler has been shutdown either through the timer finishing or the timer being stopped early.
+        EnforceState(TimerState.Restarting);
+
+        Timer_Controller.ResetArc();
+        Timer_Controller.UpdateButtons();
+
+        CreateTimer();
+        Control(Command.Start);
     }
 
     /**
@@ -267,6 +299,7 @@ public class Timer {
         // Update GUI elements to their Pre-State for the current state.
         Timer_Controller.UpdateTimerStatus();
         Timer_Controller.UpdateStopWatch();
+        Timer_Controller.UpdateButtons();
 
         // Start the Scheduler.
         TimeScheduler = Executors.newScheduledThreadPool(1);
@@ -286,6 +319,7 @@ public class Timer {
         // Update GUI elements to their Pre-State for the current state.
         Timer_Controller.UpdateTimerStatus();
         Timer_Controller.UpdateStopWatch();
+        Timer_Controller.UpdateButtons();
     }
 
     /**
