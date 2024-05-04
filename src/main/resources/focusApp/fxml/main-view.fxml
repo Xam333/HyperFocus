@@ -252,7 +252,8 @@
             </Button>
 
             <!--Parental Controls-->
-            <Button onAction="#onParentalControlsButtonClick"
+            <Button fx:id="parentalControlsButton"
+                    onAction="#onParentalControlsButtonClick"
                     styleClass="menuButton">
                 <graphic>
                     <HBox alignment="CENTER_LEFT">
@@ -270,7 +271,8 @@
             </Button>
 
             <!--Colour Settings-->
-            <Button onAction="#onColourSettingsButtonClick"
+            <Button fx:id="colourSettingsButton"
+                    onAction="#onColourSettingsButtonClick"
                     styleClass="menuButton">
                 <graphic>
                     <HBox alignment="CENTER_LEFT">
@@ -288,7 +290,8 @@
             </Button>
 
             <!--Sound Settings-->
-            <Button onAction="#onSoundSettingsButtonClick"
+            <Button fx:id="soundSettingsButton"
+                    onAction="#onSoundSettingsButtonClick"
                     styleClass="menuButton">
                 <graphic>
                     <HBox alignment="CENTER_LEFT">

@@ -26,7 +26,6 @@
     -fx-opacity: 0.5;
 }
 
-
 .confirmPane{
     -fx-pref-width: 280px;
     -fx-pref-height: 150px;
@@ -117,6 +116,12 @@
 .textBox {
     -fx-font-size: 14px;
     -fx-background-color: -textBoxColor;
+    -fx-prompt-text-fill: #414141;
+}
+
+.addBox {
+    -fx-font-size: 14px;
+    -fx-background-color: #d3d3d3;
     -fx-prompt-text-fill: #414141;
 }
 
@@ -311,6 +316,23 @@
 .tinySecondaryButton:hover {
     -fx-border-color: -secondaryColor;
     -fx-text-fill: -secondaryColor;
+}
+
+.tinyXButton {
+    -fx-pref-width: 20px;
+    -fx-background-color: #FFF;
+
+    -fx-border-radius: 8px;
+
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+
+    -fx-cursor: hand;
+}
+
+.tinyXButton:hover {
+    -fx-text-fill: #FF0000;
+
 }
 
 

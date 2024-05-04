@@ -27,6 +27,9 @@ public class AccountController {
     public Button abortButton;
     public Button confirmButton;
     public StackPane blackOutStackPane;
+    public Button soundSettingsButton;
+    public Button colourSettingsButton;
+    public Button parentalControlsButton;
 
     public void onMenuStackPaneEnter(MouseEvent mouseEvent) {
         menuStackPane.setVisible(true);
@@ -36,13 +39,31 @@ public class AccountController {
         menuStackPane.setVisible(false);
     }
 
-    public void onParentalControlsButtonClick(ActionEvent actionEvent) {
+    public void onParentalControlsButtonClick(ActionEvent actionEvent) throws IOException {
+        Stage stage = (Stage) parentalControlsButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        stage.setScene(scene);
     }
 
-    public void onColourSettingsButtonClick(ActionEvent actionEvent) {
+    public void onColourSettingsButtonClick(ActionEvent actionEvent) throws IOException {
+        Stage stage = (Stage) colourSettingsButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        stage.setScene(scene);
     }
 
-    public void onSoundSettingsButtonClick(ActionEvent actionEvent) {
+    public void onSoundSettingsButtonClick(ActionEvent actionEvent) throws IOException {
+        Stage stage = (Stage) soundSettingsButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        stage.setScene(scene);
     }
 
     public void onEditPasswordButtonClick(ActionEvent actionEvent) {
