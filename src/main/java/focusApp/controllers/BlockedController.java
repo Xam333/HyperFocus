@@ -50,6 +50,9 @@ public class BlockedController implements Initializable {
     public StackPane confirmCancelStackPane;
     public Button abortButton;
     public Button confirmButton;
+
+    @FXML
+    private TextField getAddWebsiteTextField;
     @FXML
     private ImageView userIcon;
     @FXML
@@ -71,13 +74,13 @@ public class BlockedController implements Initializable {
 
     ObservableList<BlockedApplication> testData()
     {
-        BlockedApplication a1 = new BlockedApplication(youtubeIcon, "Youtube", "www.youtube.com");
-        BlockedApplication a2 = new BlockedApplication(redditIcon, "Reddit", "www.reddit.com");
+        BlockedApplication a1 = new BlockedApplication("youtubeIcon", "Youtube", "www.youtube.com");
+        BlockedApplication a2 = new BlockedApplication("redditIcon", "Reddit", "www.reddit.com");
         return FXCollections.observableArrayList(a1,a2);
     }
 
     @FXML
-    private void onAddWebsite()
+    private void onAddWebsite() //REDUNTANT
     {
         String newWebsite = showUrlDialog();
         System.out.println("This is a test: " + newWebsite);
@@ -85,6 +88,16 @@ public class BlockedController implements Initializable {
         String[] info = getWebPageTitleAndImage(newWebsite);
         System.out.println("Title: " + info[0]);
         System.out.println("Image URL: " + info[1]);
+    }
+
+    @FXML
+    private void addNewWebsite(String newWebsiteURL)
+    {
+        String[] info = getWebPageTitleAndImage(newWebsiteURL);
+
+        System.out.println("Image URL: " + info[0]);
+        System.out.println("Name: " + info[1]);
+        System.out.println("Web/File Link: " + info[2]);
     }
     private String showUrlDialog() {
         Dialog<String> dialog = new Dialog<>();
@@ -105,7 +118,7 @@ public class BlockedController implements Initializable {
         // The blocking call that will wait for the dialog to close
         Optional<String> result = dialog.showAndWait();
         return result.orElse(null); // Returns the URL if OK was pressed, otherwise returns null
-    }
+    } //REDUNTANT
 
     /**
      * Retrieves the webpage title and the first image source URL.
@@ -130,7 +143,7 @@ public class BlockedController implements Initializable {
                 }
             }
 
-            return new String[]{title, faviconUrl};
+            return new String[]{faviconUrl, title, url};
         } catch (IOException e) {
             System.err.println("Error fetching the webpage: " + e.getMessage());
             return new String[]{"Error retrieving title", "Error retrieving favicon"};
@@ -305,8 +318,10 @@ public class BlockedController implements Initializable {
     }
 
 //    Store to temp database things, wait for save button to be clicked
+    @FXML
     public void onAddButtonClick(ActionEvent actionEvent) {
 //        Get addWebsiteTextField contents
+        addNewWebsite(addWebsiteTextField.getText());
         changesSaved = false;
         blackOutStackPane.setVisible(false);
         addWebsiteStackPane.setVisible(false);
