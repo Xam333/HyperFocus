@@ -3,10 +3,7 @@ package focusApp.database;
 import org.sqlite.SQLiteErrorCode;
 import org.sqlite.SQLiteException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class ApplicationDAO implements IApplicationDAO {
     private Connection connection;
@@ -34,6 +31,7 @@ public class ApplicationDAO implements IApplicationDAO {
             return new Application(id, name, fileLocation, null);
 
         } catch (SQLiteException sqlex) {
+            /* 19 is unique constraint error code */
             if (sqlex.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE) {
                 return null;
             }
@@ -69,8 +67,9 @@ public class ApplicationDAO implements IApplicationDAO {
 
             return null;
 
-        } catch (SQLiteException sqlex) {
-            if (sqlex.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE) {
+        } catch (SQLException sqlex) {
+            /* 19 is unique constrain error */
+            if (sqlex.getErrorCode() == 19) {
                 return null;
             }
             sqlex.printStackTrace();
@@ -96,8 +95,9 @@ public class ApplicationDAO implements IApplicationDAO {
                 return true;
             }
 
-        } catch (SQLiteException sqlex) {
-            if (sqlex.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE) {
+        } catch (SQLException sqlex) {
+            /* 19 is unique constrain error code */
+            if (sqlex.getErrorCode() == 19) {
                 return false;
             }
             sqlex.printStackTrace();
@@ -122,13 +122,13 @@ public class ApplicationDAO implements IApplicationDAO {
                 return true;
             }
 
-        } catch (SQLiteException sqlex) {
-            if (sqlex.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE) {
-                if (sqlex.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE) {
-                    return false;
-                }
+        } catch (SQLException sqlex) {
+//            if (sqlex.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE) {
+//                if (sqlex.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE) {
+//                    return false;
+//                }
                 sqlex.printStackTrace();
-            }
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }

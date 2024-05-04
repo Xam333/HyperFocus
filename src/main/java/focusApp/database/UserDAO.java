@@ -4,10 +4,7 @@ import focusApp.models.User;
 import org.sqlite.SQLiteErrorCode;
 import org.sqlite.SQLiteException;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.Connection;
-import java.sql.ResultSet;
+import java.sql.*;
 
 public class UserDAO implements IUserDAO {
     private Connection connection;
