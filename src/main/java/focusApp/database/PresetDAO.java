@@ -1,7 +1,11 @@
 package focusApp.database;
 
+import org.sqlite.SQLiteErrorCode;
+import org.sqlite.SQLiteException;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Connection;
 
@@ -26,9 +30,9 @@ public class PresetDAO implements IPresetDAO {
             ArrayList<Preset> output = new ArrayList<>();
 
             while (result.next()) {
-                Preset preset = new Preset(result.getInt("presetID"), result.getString("presetName"));
+                Preset presets = new Preset(result.getInt("presetID"), result.getString("presetName"));
 
-                output.add(preset);
+                output.add(presets);
             }
 
             return output;
@@ -37,6 +41,72 @@ public class PresetDAO implements IPresetDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public Preset addPreset(int userID, String presetsName) {
+        try {
+            String query = "INSERT INTO presets(userID, presetName) VALUES(?, ?)";
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setInt(1, userID);
+            statement.setString(2, presetsName);
+
+            statement.execute();
+
+            int id = getLastPrest(userID);
+
+            return new Preset(id, presetsName);
+        } catch (SQLiteException sqlex) {
+            if (sqlex.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE) {
+                return null;
+            }
+            sqlex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean addWebsitePreset(int presetID, int websiteID) {
+        try {
+            String query = "INSERT INTO presetsToWebsite(presetID, websiteID) VALUES(?,?)";
+            PreparedStatement statement = connection.prepareStatement(query);
+
+           statement.setInt(1, presetID);
+           statement.setInt(2, websiteID);
+
+           return statement.execute();
+
+        } catch (SQLiteException sqlex) {
+            if (sqlex.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE) {
+                return false;
+            }
+            sqlex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean addApplicationPreset(int presetID, int applicationID) {
+        try {
+            String query = "INSERT INTO presetsToApplication(presetID, applicationID) VALUES(?,?)";
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setInt(1, presetID);
+            statement.setInt(2, applicationID);
+
+            return statement.execute();
+
+        } catch (SQLiteException sqlex) {
+            if (sqlex.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_PRIMARYKEY) {
+                return false;
+            }
+            sqlex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override
@@ -101,5 +171,23 @@ public class PresetDAO implements IPresetDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    int getLastPrest(int userID) {
+        try {
+            String query = "SELECT presetID FROM presets WHERE userID = ? ORDER BY presetID desc";
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setInt(1, userID);
+
+            ResultSet res = statement.executeQuery();
+
+            if (res.next()) {
+                return res.getInt("presetID");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }

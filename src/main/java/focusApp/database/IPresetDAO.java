@@ -12,6 +12,30 @@ public interface IPresetDAO {
     public ArrayList<Preset> getUsersPresets(int userID);
 
     /**
+     * create a new preset
+     * @param userID user id
+     * @param presetName preset name
+     * @return the preset that was created
+     */
+    public Preset addPreset(int userID, String presetName);
+
+    /**
+     * add website to a preset
+     * @param presetID preset id
+     * @param websiteID website id
+     * @return preset website was added to
+     */
+    public boolean addWebsitePreset(int presetID, int websiteID);
+
+    /**
+     * add application to presets
+     * @param presetID id of the preset to be added
+     * @param applicationID id of the application to be added
+     * @return preset the application was added to
+     */
+    public boolean addApplicationPreset(int presetID, int applicationID);
+
+    /**
      * function to return the applications from a specific preset
      * @param presetID id of the preset
      * @return list of applications from preset
