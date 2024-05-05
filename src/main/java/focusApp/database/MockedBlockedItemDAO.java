@@ -1,6 +1,8 @@
 package focusApp.database;
 
 import focusApp.models.BlockedApplication;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,8 @@ public class MockedBlockedItemDAO implements IBlockedItemDAO{
     public MockedBlockedItemDAO()
     {
         //Add initial data
-        addApplication(new BlockedApplication("youtubeIcon", "Youtube", "www.youtube.com"));
+        //addApplication(new BlockedApplication("youtubeIcon", "Youtube", "www.youtube.com"));
+        //addApplication(new BlockedApplication("redditIcon", "Reddit", "www.reddit.com"));
 
     }
 
@@ -25,32 +28,37 @@ public class MockedBlockedItemDAO implements IBlockedItemDAO{
     }
 
     @Override
-    public boolean changeApplicationName(int id, String newName) {
-        return false;
+    public void updateContact(BlockedApplication blockedApplication) {
+        for (int i = 0; i < blockedItems.size(); i++) {
+            if (blockedItems.get(i).getId() == blockedApplication.getId()) {
+                blockedItems.set(i, blockedApplication);
+                break;
+            }
+        }
     }
 
     @Override
-    public boolean changeApplicationUrl(int id, String newUrl) {
-        return false;
+    public void deleteContact(BlockedApplication blockedApplication) {
+        blockedItems.remove(blockedApplication);
     }
 
     @Override
-    public boolean changeApplicationIcon(int id, String newIconUrl) {
-        return false;
-    }
-
-    @Override
-    public int getApplicationID(String name) {
-        return 0;
-    }
-
-    @Override
-    public BlockedApplication getApplication(int id) {
+    public BlockedApplication getBlockedApplication(int id) {
+        for (BlockedApplication blockedApplication : blockedItems) {
+            if (blockedApplication.getId() == id) {
+                return blockedApplication;
+            }
+        }
         return null;
     }
 
     @Override
     public List<BlockedApplication> getAllApplications() {
         return new ArrayList<>(blockedItems);
+    }
+
+    @Override
+    public ObservableList<BlockedApplication> dataList(List<BlockedApplication> applications) {
+        return FXCollections.observableArrayList(applications);
     }
 }

@@ -1,6 +1,9 @@
 package focusApp.controllers;
 
 import focusApp.HelloApplication;
+import focusApp.database.BlockedItem;
+import focusApp.database.IBlockedItemDAO;
+import focusApp.database.MockedBlockedItemDAO;
 import focusApp.models.BlockedApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -20,6 +24,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -61,7 +66,7 @@ public class BlockedController implements Initializable {
     private ImageView redditIcon;
 
     @FXML
-    private TableColumn<BlockedApplication, ImageView> iconColumn;
+    private TableColumn<BlockedApplication, String> iconColumn;
 
     @FXML
     private TableColumn<BlockedApplication, String> nameColumn;
@@ -72,12 +77,12 @@ public class BlockedController implements Initializable {
     @FXML
     private TableView<BlockedApplication> tableView;
 
-    ObservableList<BlockedApplication> testData()
-    {
-        BlockedApplication a1 = new BlockedApplication("youtubeIcon", "Youtube", "www.youtube.com");
-        BlockedApplication a2 = new BlockedApplication("redditIcon", "Reddit", "www.reddit.com");
-        return FXCollections.observableArrayList(a1,a2);
+    private IBlockedItemDAO blockedDAO;
+    public BlockedController(){
+        blockedDAO = new MockedBlockedItemDAO();
+
     }
+
 
     @FXML
     private void onAddWebsite() //REDUNTANT
@@ -94,6 +99,8 @@ public class BlockedController implements Initializable {
     private void addNewWebsite(String newWebsiteURL)
     {
         String[] info = getWebPageTitleAndImage(newWebsiteURL);
+        blockedDAO.addApplication((new BlockedApplication(info[0], info[1], info[2])));
+        syncBlockedApplications();
 
         System.out.println("Image URL: " + info[0]);
         System.out.println("Name: " + info[1]);
@@ -167,6 +174,34 @@ public class BlockedController implements Initializable {
 
     }
 
+    public void syncBlockedApplications()
+    {
+        ObservableList<BlockedApplication> dataList = blockedDAO.dataList(blockedDAO.getAllApplications());
+        tableView.setItems(dataList);
+
+        iconColumn.setCellValueFactory(new PropertyValueFactory<>("iconColumn"));
+
+        iconColumn.setCellFactory(tc -> new TableCell<BlockedApplication, String>() {
+            private final ImageView imageView = new ImageView();
+
+            @Override
+            protected void updateItem(String url, boolean empty) {
+                super.updateItem(url, empty);
+                if (empty || url == null) {
+                    setGraphic(null);
+                    setText(null);
+                } else {
+                    // Set the image URL and properties
+                    imageView.setImage(new Image(url, true));  // true for background loading
+                    imageView.setFitHeight(30); // Adjust size as needed
+                    imageView.setFitWidth(30);
+                    imageView.setPreserveRatio(true);
+                    setGraphic(imageView);
+                }
+            }
+        });
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -192,11 +227,11 @@ public class BlockedController implements Initializable {
 //        redditIcon.setPreserveRatio(true);
 
 
-        iconColumn.setCellValueFactory(new PropertyValueFactory<BlockedApplication, ImageView>("iconColumn"));
+        iconColumn.setCellValueFactory(new PropertyValueFactory<BlockedApplication, String>("iconColumn"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<BlockedApplication, String>("nameColumn"));
         locationColumn.setCellValueFactory(new PropertyValueFactory<BlockedApplication, String>("locationColumn"));
 
-        tableView.setItems(testData());
+        syncBlockedApplications();
 
 //        Automatically set as true until change is made
         changesSaved = true;
