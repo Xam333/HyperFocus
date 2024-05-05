@@ -16,13 +16,14 @@ public class Timer {
 
     private final boolean DebugMode = false;
 
-
+    /**
+     * Need the Current state the timer is in?
+     * @return The Current state of the time.
+     */
     public TimerState getTimerState() {
         return Timer_State;
     }
-
     private static TimerState Timer_State;
-
 
 
     // Main information needed for the timer.
@@ -31,9 +32,13 @@ public class Timer {
     private final TimerController Timer_Controller;
 
     /**
-     * Stores the value of the timer offset and the timer duration.
+     * Stores the value of the timer offset.
      */
     private final double Timer_Preset_Offset;
+
+    /**
+     * Stores the value of the timer duration.
+     */
     private final double Timer_Preset_Duration;
 
 
@@ -53,28 +58,60 @@ public class Timer {
      * Global scheduler for the timer.
      */
     private static ScheduledExecutorService TimeScheduler;
+
+    /**
+     * The duration that is left on a timer when the user pauses it.
+     */
     private Duration Paused_C_Duration;
 
 
-    private Duration Delayed_C_Duration;
-    private Duration Delayed_T_Duration;
+    /**
+     * The duration form current time to start time (Delayed), can be altered.
+     */
+    private Duration Delayed_Counting_Duration;
+    /**
+     * The duration form current time to start time (Delayed), can not be altered.
+     */
+    private Duration Delayed_Total_Duration;
 
-    public double getDelayed_CD_MS(){
-        return Delayed_C_Duration.toMillis();
+    /**
+     * Get the Delayed Counting Duration in Milliseconds.
+     * @return Delayed Counting Duration in Milliseconds.
+     */
+    public double getDCDinMS(){
+        return Delayed_Counting_Duration.toMillis();
     }
-    public double getDelayed_TD_MS(){
-        return Delayed_T_Duration.toMillis();
+
+    /**
+     * Get the Delayed Total Duration in Milliseconds.
+     * @return Delayed Total Duration in Milliseconds.
+     */
+    public double getDTDinMS(){
+        return Delayed_Total_Duration.toMillis();
     }
 
+    /**
+     * The duration from start time to end time (Running), can be altered.
+     */
+    private Duration Running_Counting_Duration;
+    /**
+     * The duration from start time to end time (Running), can not be altered.
+     */
+    private Duration Running_Total_Duration;
 
-    private Duration Running_C_Duration;
-    private Duration Running_T_Duration;
-
-    public double getRunning_CD_MS(){
-        return Running_C_Duration.toMillis();
+    /**
+     * Get the Running Counting Duration in Milliseconds.
+     * @return Running Counting Duration in Milliseconds.
+     */
+    public double getRCDinMS(){
+        return Running_Counting_Duration.toMillis();
     }
-    public double getRunning_TD_MS(){
-        return Running_T_Duration.toMillis();
+    /**
+     * Get the Running Total Duration in Milliseconds.
+     * @return Running Total Duration in Milliseconds.
+     */
+    public double getRTDinMS(){
+        return Running_Total_Duration.toMillis();
     }
 
 
@@ -106,7 +143,9 @@ public class Timer {
         }
     }
 
-
+    /**
+     * This method acts as a factory method to update the fields with new values effectively restarting the timer.
+     */
     private void CreateTimer(){
         Timer_State = (Timer_Preset_Offset != 0.0) ? TimerState.Delayed : TimerState.Running;
 
@@ -114,32 +153,33 @@ public class Timer {
         this.Timer_End = Timer_Start.plusSeconds((long)Timer_Preset_Duration);
 
         boolean TimeCheck = Timer_End.isBefore(Timer_Start);
-        Running_C_Duration = Duration.between(Timer_Start, Timer_End).plusHours(TimeCheck ? 24 : 0);
-        Running_T_Duration = Running_C_Duration;
+        Running_Counting_Duration = Duration.between(Timer_Start, Timer_End).plusHours(TimeCheck ? 24 : 0);
+        Running_Total_Duration = Running_Counting_Duration;
 
         if(Timer_State == TimerState.Delayed){
-            Delayed_C_Duration = Duration.between(LocalTime.now(),Timer_Start).plusHours(TimeCheck ? 24 : 0);
-            Delayed_T_Duration = Delayed_C_Duration;
+            Delayed_Counting_Duration = Duration.between(LocalTime.now(),Timer_Start).plusHours(TimeCheck ? 24 : 0);
+            Delayed_Total_Duration = Delayed_Counting_Duration;
         }
     }
 
     /**
-     * This method is used to execute commands during the timer.
+     * Delayed Time is when the timer state is delayed, all code in this method will execute every millisecond.
      */
-
-
     private void DelayedTime(){
-        Delayed_C_Duration = Delayed_C_Duration.minusMillis(1);
+        Delayed_Counting_Duration = Delayed_Counting_Duration.minusMillis(1);
 
-        if(Delayed_C_Duration.getSeconds() < 0) Start();
+        if(Delayed_Counting_Duration.getSeconds() < 0) Start();
 
         Timer_Controller.UpdateMiniArc();
     }
 
+    /**
+     * Running Time is when the timer state is running, all code in this method will execute every millisecond.
+     */
     private void RunningTime(){
-        Running_C_Duration = Running_C_Duration.minusMillis(1);
+        Running_Counting_Duration = Running_Counting_Duration.minusMillis(1);
 
-        if(Running_C_Duration.getSeconds() < 0) Finish();
+        if(Running_Counting_Duration.getSeconds() < 0) Finish();
 
         Timer_Controller.UpdateArc();
         Timer_Controller.UpdateStopWatch();
@@ -150,7 +190,7 @@ public class Timer {
      * @return Formatted time (hh:mm:ss)
      */
     public String FormatTime(){
-        Duration T = Running_C_Duration;
+        Duration T = Running_Counting_Duration;
 
         long Hours = T.toHours();
         long Minutes = T.minusHours(Hours).toMinutes();
@@ -180,18 +220,23 @@ public class Timer {
         }
         Timer_State = EnforceThis;
     }
+
+    /**
+     * Get the status based on the current timer state.
+     * @return the status for the current timer state
+     */
     public String getStatus(){
         switch (Timer_State){
-            case Running -> { return "Timer is Running."; }
-            case Paused -> { return "Timer is Paused."; }
-            case Finished -> { return "Timer is Finished"; }
-            case Delayed -> { return "Timer Starting at: " + Timer_Start.format(Timer_12_Format); }
+            case Running -> { return "Timer Running."; }
+            case Paused -> { return "Timer Paused."; }
+            case Finished -> { return "Timer Finished"; }
             case Stopped -> { return "Timer Stopped."; }
+            case Delayed -> { return Timer_Start.format(Timer_12_Format); }
             default -> throw new IllegalArgumentException("Invalid Time TimerState: " + Timer_State);
         }
     }
     /**
-     * Controls the timer.
+     * Issues a command to the timer, check Command Enum for valid commands.
      * @param command The command to run.
      */
     public void Control(Command command){
@@ -205,13 +250,15 @@ public class Timer {
             default -> throw new IllegalArgumentException("Command: " + command + " is invalid.");
         }
     }
-
+    /**
+     * Puts the timer in a Delayed state and updates the GUI based on the state.
+     */
     private void DelayedStart(){
         // State is enforced in the constructor.
 
         // Update GUI elements to their Pre-State for the current state.
+        Timer_Controller.UpdateGUI();
         Timer_Controller.UpdateTimerStatus();
-        Timer_Controller.UpdateStopWatch();
         Timer_Controller.UpdateButtons();
 
         // Start the Scheduler.
@@ -220,7 +267,7 @@ public class Timer {
     }
 
     /**
-     * Starts the timer.
+     * Puts the timer in a Running state and updates the GUI based on the state.
      */
     private void Start(){
         // If timer is in a state of Delayed shutdown the existing scheduler and enforce Running state,
@@ -231,9 +278,10 @@ public class Timer {
         }
 
         // Update GUI elements to their Pre-State for the current state.
+        Timer_Controller.UpdateGUI();
         Timer_Controller.UpdateMiniArc();
-        Timer_Controller.UpdateButtons();
         Timer_Controller.UpdateTimerStatus();
+        Timer_Controller.UpdateButtons();
 
         // Start the Scheduler.
         TimeScheduler = Executors.newScheduledThreadPool(1);
@@ -241,7 +289,7 @@ public class Timer {
     }
 
     /**
-     * Stops the timer.
+     * Puts the timer in a Finished state and updates the GUI based on the state.
      */
     private void Finish(){
         // If timer is in a state of Running shutdown the existing scheduler and enforce Finished state.
@@ -251,7 +299,7 @@ public class Timer {
         }
 
         // Update GUI elements to their Pre-State for the current state.
-        Timer_Controller.HideArc();
+        Timer_Controller.UpdateGUI();
         Timer_Controller.UpdateStopWatch();
         Timer_Controller.UpdateTimerStatus();
         Timer_Controller.UpdateButtons();
@@ -259,7 +307,9 @@ public class Timer {
 
         // Timer is finished.
     }
-
+    /**
+     * Puts the timer in a Stopped state and updates the GUI based on the state.
+     */
     private void Stop(){
 
         if(TimeScheduler != null && !TimeScheduler.isShutdown() && (Timer_State == TimerState.Running || Timer_State == TimerState.Delayed)){
@@ -267,33 +317,37 @@ public class Timer {
             TimeScheduler.shutdownNow();
         }
         // Drain the Running Counting Duration to -1.
-        Running_C_Duration = Duration.ZERO.minusSeconds(1);
+        Running_Counting_Duration = Duration.ZERO.minusSeconds(1);
 
         // Update GUI elements to their Pre-State for the current state.
+        Timer_Controller.UpdateGUI();
         Timer_Controller.UpdateTimerStatus();
         Timer_Controller.UpdateStopWatch();
-        Timer_Controller.HideArc();
         Timer_Controller.UpdateButtons();
     }
-
+    /**
+     * Puts the timer in a Restart state and updates the GUI based on the state then calls for a new timer.
+     */
     private void Restart(){
         // Time scheduler has been shutdown either through the timer finishing or the timer being stopped early.
         EnforceState(TimerState.Restarting);
 
-        Timer_Controller.ResetArc();
+        Timer_Controller.UpdateGUI();
         Timer_Controller.UpdateButtons();
+        Timer_Controller.UpdateTimerStatus();
 
         CreateTimer();
         Control(Command.Start);
     }
 
     /**
-     * Resumes the timer.
+     * Puts the timer in a Running state and updates the GUI based on the state,
+     * Note: Resume can only be use if the timer is in a state of pause.
      */
     private void Resume(){
         // State Enforcement and Pre-State tasks.
         Timer_End = LocalTime.now().plus(Paused_C_Duration.toMillis(), ChronoUnit.MILLIS);
-        Running_C_Duration = Paused_C_Duration;
+        Running_Counting_Duration = Paused_C_Duration;
         EnforceState(TimerState.Running);
 
         // Update GUI elements to their Pre-State for the current state.
@@ -307,7 +361,7 @@ public class Timer {
     }
 
     /**
-     * Pauses the timer.
+     * Puts the timer in a Paused state and updates the GUI based on the state.
      */
     private void Pause(){
         // State Enforcement and Pre-State tasks.
@@ -323,7 +377,7 @@ public class Timer {
     }
 
     /**
-     * Forces the timer to stop if the application is closed.
+     * Hard Stops the timer used for when the user closes application while timer is still running.
      */
     public static void ForceStopTimer(){
         if(TimeScheduler != null && !TimeScheduler.isShutdown()){

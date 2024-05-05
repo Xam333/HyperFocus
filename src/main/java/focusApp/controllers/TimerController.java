@@ -4,10 +4,10 @@ import focusApp.models.Command;
 import focusApp.models.Timer;
 import focusApp.HelloApplication;
 
-import focusApp.models.TimerState;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
@@ -16,9 +16,6 @@ import javafx.scene.control.Label;
 import javafx.scene.shape.Arc;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 public class TimerController {
@@ -27,13 +24,17 @@ public class TimerController {
 
     @FXML
     private Button BackBtn;
-
     @FXML
     private Label StopWatch;
     @FXML
     private Label TimerStatus;
     @FXML
     private Arc arc;
+    @FXML
+    private Arc MiniArc;
+    @FXML
+    private Group DelayedGroup;
+
 
 
     @FXML
@@ -50,7 +51,6 @@ public class TimerController {
     @FXML
     protected void onStopButtonClick(){
         timer.Control(Command.Stop);
-        UpdateButtons();
     }
     @FXML
     protected void mouseInStopButton(){ StopButton.setContentDisplay(ContentDisplay.LEFT);}
@@ -61,27 +61,26 @@ public class TimerController {
     @FXML
     protected void onPauseButtonClick(){
         timer.Control(Command.Pause);
-        UpdateButtons();
     }
     @FXML
     protected void mouseInPauseButton(){ PauseButton.setContentDisplay(ContentDisplay.LEFT);}
     @FXML
     protected void mouseOutPauseButton(){ PauseButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
 
+
     @FXML
     protected void onResumeButtonClick(){
         timer.Control(Command.Resume);
-        UpdateButtons();
     }
     @FXML
     protected void mouseInResumeButton(){ ResumeButton.setContentDisplay(ContentDisplay.LEFT);}
     @FXML
-    protected void mouseOutResumeButton(){ PauseButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
+    protected void mouseOutResumeButton(){ ResumeButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
+
 
     @FXML
     protected void onRestartButtonClick(){
         timer.Control(Command.Restart);
-        UpdateButtons();
     }
     @FXML
     protected void mouseInRestartButton(){ RestartButton.setContentDisplay(ContentDisplay.LEFT);}
@@ -122,7 +121,7 @@ public class TimerController {
                 });
             }
 
-            case Delayed,Restarting -> {
+            case Delayed, Restarting -> {
                 StopButton.setDisable(false);
 
                 RestartButton.setDisable(true);
@@ -136,13 +135,12 @@ public class TimerController {
                     PauseButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                     ResumeButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                 });
-
             }
 
             case Paused -> {
-                StopButton.setDisable(false);
                 ResumeButton.setDisable(false);
 
+                StopButton.setDisable(true);
                 RestartButton.setDisable(true);
                 ReturnButton.setDisable(true);
                 PauseButton.setDisable(true);
@@ -152,7 +150,6 @@ public class TimerController {
                     ReturnButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                     PauseButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                 });
-
             }
 
             case Stopped, Finished -> {
@@ -168,13 +165,9 @@ public class TimerController {
                     PauseButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                     ResumeButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                 });
-
             }
-
-
         }
     }
-
 
     public void initialize() {
         // Get offset and duration from main (Get offset and Get Duration)
@@ -186,36 +179,44 @@ public class TimerController {
         timer.Control(Command.Start);
     }
 
-
-    public void UpdateTimerStatus(){ Platform.runLater(() -> TimerStatus.setText(timer.getStatus())); }
-    public void UpdateStopWatch(){ Platform.runLater(() -> StopWatch.setText(timer.FormatTime())); }
+    public void UpdateTimerStatus(){
+        Platform.runLater(() -> TimerStatus.setText(timer.getStatus()));
+    }
+    public void UpdateStopWatch(){
+        Platform.runLater(() -> StopWatch.setText(timer.FormatTime()));
+    }
     public void UpdateArc(){
-        Platform.runLater(() -> arc.setLength(((timer.getRunning_CD_MS() + 1) / timer.getRunning_TD_MS()) * 360));
+        Platform.runLater(() -> arc.setLength(((timer.getRCDinMS() + 1) / timer.getRTDinMS()) * 360));
     }
-    public void HideArc(){
-        arc.setLength(0.0);
-        arc.setVisible(false);
-    }
-    public void ResetArc(){
-        arc.setLength(360);
-        arc.setVisible(true);
-    }
-
-
     public void UpdateMiniArc(){
-        Platform.runLater(() ->{
-            if (timer.getTimerState() == TimerState.Delayed){
-                MiniArc.setLength(((timer.getDelayed_CD_MS() + 1) / timer.getDelayed_TD_MS()) * 360);
-            }else{
-                MiniArc.setVisible(false);
+        Platform.runLater(() ->  MiniArc.setLength(((timer.getDCDinMS() + 1) / timer.getDTDinMS()) * 360));
+    }
+
+    public void UpdateGUI(){
+        Platform.runLater(() -> {
+            switch (timer.getTimerState()){
+                case Delayed, Restarting-> {
+                    DelayedGroup.setVisible(true);
+                    MiniArc.setLength(360);
+                    MiniArc.setVisible(true);
+                    arc.setLength(360);
+                    arc.setVisible(true);
+                    StopWatch.setVisible(false);
+                }
+                case Running, Stopped -> {
+                    DelayedGroup.setVisible(false);
+                    MiniArc.setLength(0);
+                    MiniArc.setVisible(false);
+                    arc.setLength(360);
+                    StopWatch.setVisible(true);
+                }
+                case Finished -> {
+                    arc.setLength(0);
+                    arc.setVisible(false);
+                }
             }
-            // Timer can only be in a state of Delayed otherwise the Main timer is either running, paused or finished.
         });
     }
-
-    @FXML
-    private Arc MiniArc;
-
 
     @FXML
     protected void onBackButtonClick() throws IOException {

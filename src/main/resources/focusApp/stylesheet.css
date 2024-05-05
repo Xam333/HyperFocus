@@ -195,6 +195,24 @@
     -fx-font-size: 17px;
 }
 
+.TimerStatusBox, .TimerStopwatch{
+    -fx-background-color: -SubTertiaryColor;
+    -fx-background-radius:  8px;
+}
+.TimerStopwatch .label{
+    -fx-text-fill: #FFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 60px;
+}
+
+.DelayedStatus {
+    -fx-text-fill: #FFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 30px;
+
+}
+
+
 
 
 
