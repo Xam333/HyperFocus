@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class Timer {
 
     private final boolean DebugMode = false;
+    public boolean Speak;
 
     /**
      * Need the Current state the timer is in?
@@ -130,6 +131,8 @@ public class Timer {
         Timer_Preset_Offset = TimerOffset == null ? 0.0 : (TimerOffset * 60);
         Timer_Preset_Duration = TimerDuration == null ? 0.0 : (TimerDuration * 60);
         this.Timer_Controller = Timer_Controller;
+        // Get a global value????
+        this.Speak = false;
 
         CreateTimer();
 
@@ -235,7 +238,7 @@ public class Timer {
             default -> throw new IllegalArgumentException("Invalid Time TimerState: " + Timer_State);
         }
     }
-    /**
+        /**
      * Issues a command to the timer, check Command Enum for valid commands.
      * @param command The command to run.
      */
@@ -250,6 +253,7 @@ public class Timer {
             default -> throw new IllegalArgumentException("Command: " + command + " is invalid.");
         }
     }
+
     /**
      * Puts the timer in a Delayed state and updates the GUI based on the state.
      */
@@ -260,6 +264,9 @@ public class Timer {
         Timer_Controller.UpdateGUI();
         Timer_Controller.UpdateTimerStatus();
         Timer_Controller.UpdateButtons();
+
+        // If the text to speech is on.
+        if(Speak){ Notification.SpeakText("Timer starting at:" + Timer_Start.format(Timer_12_Format)); }
 
         // Start the Scheduler.
         TimeScheduler = Executors.newScheduledThreadPool(1);
@@ -282,6 +289,9 @@ public class Timer {
         Timer_Controller.UpdateTimerStatus();
         Timer_Controller.UpdateButtons();
 
+        // If the text to speech is on.
+        if(Speak){ Notification.SpeakText("Timer running."); }
+
         // Start the Scheduler.
         TimeScheduler = Executors.newScheduledThreadPool(1);
         TimeScheduler.scheduleAtFixedRate(this::RunningTime, 0, 1, TimeUnit.MILLISECONDS);
@@ -302,10 +312,13 @@ public class Timer {
         Timer_Controller.UpdateStopWatch();
         Timer_Controller.UpdateTimerStatus();
         Timer_Controller.UpdateButtons();
+
         Notification.PlaySound(-10);
 
-        // Timer is finished.
+        // If the text to speech is on.
+        if(Speak){ Notification.SpeakText("Timer finished."); }
     }
+
     /**
      * Puts the timer in a Stopped state and updates the GUI based on the state.
      */
@@ -323,7 +336,11 @@ public class Timer {
         Timer_Controller.UpdateTimerStatus();
         Timer_Controller.UpdateStopWatch();
         Timer_Controller.UpdateButtons();
+
+        // If the text to speech is on.
+        if(Speak){ Notification.SpeakText("Timer stopped."); }
     }
+
     /**
      * Puts the timer in a Restart state and updates the GUI based on the state then calls for a new timer.
      */
@@ -354,6 +371,9 @@ public class Timer {
         Timer_Controller.UpdateStopWatch();
         Timer_Controller.UpdateButtons();
 
+        // If the text to speech is on.
+        if(Speak){ Notification.SpeakText("Timer resumed."); }
+
         // Start the Scheduler.
         TimeScheduler = Executors.newScheduledThreadPool(1);
         TimeScheduler.scheduleAtFixedRate(this::RunningTime, 0, 1, TimeUnit.MILLISECONDS);
@@ -374,6 +394,9 @@ public class Timer {
         Timer_Controller.UpdateTimerStatus();
         Timer_Controller.UpdateStopWatch();
         Timer_Controller.UpdateButtons();
+
+
+        if(Speak){ Notification.SpeakText("Timer paused."); }
     }
 
     /**

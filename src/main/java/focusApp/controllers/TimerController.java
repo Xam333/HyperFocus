@@ -1,7 +1,6 @@
 package focusApp.controllers;
 
 import focusApp.models.Command;
-import focusApp.models.Notification;
 import focusApp.models.Timer;
 import focusApp.HelloApplication;
 
@@ -49,14 +48,9 @@ public class TimerController {
     private Button ReturnButton;
 
     @FXML
-    protected void onStopButtonClick(){
-        timer.Control(Command.Stop);
-
-    }
+    protected void onStopButtonClick(){ timer.Control(Command.Stop); }
     @FXML
-    protected void mouseInStopButton(){
-        StopButton.setContentDisplay(ContentDisplay.LEFT);
-    }
+    protected void mouseInStopButton(){ StopButton.setContentDisplay(ContentDisplay.LEFT); }
     @FXML
     protected void mouseOutStopButton(){ StopButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
 
@@ -176,17 +170,14 @@ public class TimerController {
         // Get offset and duration from main (Get offset and Get Duration)
 
         Double TO = 0.05;
-        Double TD =  120.0;
+        Double TD =  0.05;
         timer = new Timer(TO, TD, this);
 
         timer.Control(Command.Start);
     }
 
     public void UpdateTimerStatus(){
-        Platform.runLater(() ->{
-            TimerStatus.setText(timer.getStatus());
-            Notification.SpeakText(timer.getStatus());
-        });
+        Platform.runLater(() -> TimerStatus.setText(timer.getStatus()));
     }
     public void UpdateStopWatch(){
         Platform.runLater(() -> StopWatch.setText(timer.FormatTime()));
@@ -226,7 +217,7 @@ public class TimerController {
 
     @FXML
     protected void onBackButtonClick() throws IOException {
-        timer.Control(Command.Stop); // kills the timer so no duplicates are running
+        Timer.ForceStopTimer(); // kills the timer so no duplicates are running
         Stage stage = (Stage) BackBtn.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
