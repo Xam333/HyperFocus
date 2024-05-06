@@ -1,6 +1,7 @@
 package focusApp.controllers;
 
 import focusApp.models.Command;
+import focusApp.models.Notification;
 import focusApp.models.Timer;
 import focusApp.HelloApplication;
 
@@ -36,7 +37,6 @@ public class TimerController {
     private Group DelayedGroup;
 
 
-
     @FXML
     private Button PauseButton;
     @FXML
@@ -51,9 +51,12 @@ public class TimerController {
     @FXML
     protected void onStopButtonClick(){
         timer.Control(Command.Stop);
+
     }
     @FXML
-    protected void mouseInStopButton(){ StopButton.setContentDisplay(ContentDisplay.LEFT);}
+    protected void mouseInStopButton(){
+        StopButton.setContentDisplay(ContentDisplay.LEFT);
+    }
     @FXML
     protected void mouseOutStopButton(){ StopButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
 
@@ -173,14 +176,17 @@ public class TimerController {
         // Get offset and duration from main (Get offset and Get Duration)
 
         Double TO = 0.05;
-        Double TD =  0.05;
+        Double TD =  120.0;
         timer = new Timer(TO, TD, this);
 
         timer.Control(Command.Start);
     }
 
     public void UpdateTimerStatus(){
-        Platform.runLater(() -> TimerStatus.setText(timer.getStatus()));
+        Platform.runLater(() ->{
+            TimerStatus.setText(timer.getStatus());
+            Notification.SpeakText(timer.getStatus());
+        });
     }
     public void UpdateStopWatch(){
         Platform.runLater(() -> StopWatch.setText(timer.FormatTime()));

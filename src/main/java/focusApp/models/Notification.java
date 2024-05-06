@@ -1,8 +1,13 @@
 package focusApp.models;
 
+
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
+
+import com.sun.speech.freetts.Voice;
+import com.sun.speech.freetts.VoiceManager;
+
 
 
 public class Notification {
@@ -45,5 +50,17 @@ public class Notification {
         } catch (LineUnavailableException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void SpeakText(String TextToSpeak){
+        Thread Speak = new Thread(() -> {
+            System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
+            VoiceManager VM = VoiceManager.getInstance();
+            Voice V = VM.getVoice("kevin16");
+            V.allocate();
+            V.speak(TextToSpeak);
+            V.deallocate();
+        });
+        Speak.start();
     }
 }

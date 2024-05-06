@@ -279,7 +279,6 @@ public class Timer {
 
         // Update GUI elements to their Pre-State for the current state.
         Timer_Controller.UpdateGUI();
-        Timer_Controller.UpdateMiniArc();
         Timer_Controller.UpdateTimerStatus();
         Timer_Controller.UpdateButtons();
 
@@ -370,6 +369,7 @@ public class Timer {
             EnforceState(TimerState.Paused);
             TimeScheduler.shutdownNow();
         }
+
         // Update GUI elements to their Pre-State for the current state.
         Timer_Controller.UpdateTimerStatus();
         Timer_Controller.UpdateStopWatch();

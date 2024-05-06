@@ -6,6 +6,7 @@ module focusApp {
     requires jdk.dynalink;
     requires jdk.jshell;
     requires org.xerial.sqlitejdbc;
+    requires freetts;
 
 
     opens focusApp to javafx.fxml;
