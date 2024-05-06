@@ -22,12 +22,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 //Jsoup
 import org.jsoup.Jsoup;
@@ -35,8 +33,15 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import javax.swing.*;
+
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 
 public class BlockedController implements Initializable {
+
+    private String fileLocation;
     public StackPane addWebsiteStackPane;
     public TextField addWebsiteTextField;
     public StackPane addApplicationStackPane;
@@ -83,9 +88,9 @@ public class BlockedController implements Initializable {
 
     }
 
-
+    /*REDUNDANT
     @FXML
-    private void onAddWebsite() //REDUNTANT
+    private void onAddWebsite() //REDUNDANT
     {
         String newWebsite = showUrlDialog();
         System.out.println("This is a test: " + newWebsite);
@@ -95,18 +100,7 @@ public class BlockedController implements Initializable {
         System.out.println("Image URL: " + info[1]);
     }
 
-    @FXML
-    private void addNewWebsite(String newWebsiteURL)
-    {
-        String[] info = getWebPageTitleAndImage(newWebsiteURL);
-        blockedDAO.addApplication((new BlockedApplication(info[0], info[1], info[2])));
-        syncBlockedApplications();
-
-        System.out.println("Image URL: " + info[0]);
-        System.out.println("Name: " + info[1]);
-        System.out.println("Web/File Link: " + info[2]);
-    }
-    private String showUrlDialog() {
+    private String showUrlDialog() { //REDUNDANT
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Enter URL");
 
@@ -125,7 +119,33 @@ public class BlockedController implements Initializable {
         // The blocking call that will wait for the dialog to close
         Optional<String> result = dialog.showAndWait();
         return result.orElse(null); // Returns the URL if OK was pressed, otherwise returns null
-    } //REDUNTANT
+    } //REDUNDANT
+    */
+
+    @FXML
+    private void addNewWebsite(String newWebsiteURL)
+    {
+        String[] info = getWebPageTitleAndImage(newWebsiteURL);
+        blockedDAO.addApplication((new BlockedApplication(info[0], info[1], info[2])));
+        syncBlockedApplications();
+
+        System.out.println("Image URL: " + info[0]);
+        System.out.println("Name: " + info[1]);
+        System.out.println("Web/File Link: " + info[2]);
+    }
+
+    @FXML
+    private void addNewApplication(String newApplicationLocation)
+    {
+        String[] info = getExecutableTitleAndIcon(newApplicationLocation);
+
+        blockedDAO.addApplication((new BlockedApplication(info[0], info[1], info[2])));
+        syncBlockedApplications();
+
+        System.out.println("Image URL: " + info[0]);
+        System.out.println("Name: " + info[1]);
+        System.out.println("Web/File Link: " + info[2]);
+    }
 
     /**
      * Retrieves the webpage title and the first image source URL.
@@ -156,6 +176,59 @@ public class BlockedController implements Initializable {
             return new String[]{"Error retrieving title", "Error retrieving favicon"};
         }
     }
+
+    //C:\Program Files (x86)\Nisscan\NDS II 2.56\NDS II 2_56.exe
+    public static String[] getExecutableTitleAndIcon(String exeLocation)
+    {
+        String regex = "([^\\\\]+)";
+        ArrayList<String> matches = new ArrayList<>();
+
+        // Compile the regex
+        Pattern pattern = Pattern.compile(regex);
+
+        System.out.println("Matches in path: " + exeLocation);
+        Matcher matcher = pattern.matcher(exeLocation);
+        int count = 1;
+        while (matcher.find())
+        {
+            System.out.println("Segment " + count + ": " + matcher.group(1));
+            matches.add(matcher.group(1));
+            count++;
+        }
+
+        System.out.println("This is the Application: " + matches.get(matches.size()-2));
+        String foundTitle = matches.get(matches.size()-2);
+
+        String fileIcon = "https://winaero.com/blog/wp-content/uploads/2018/12/file-explorer-folder-libraries-icon-18298.png";
+
+        return new String[]{fileIcon, foundTitle, exeLocation};
+    }
+
+    public String fileSearch() {
+        JFrame frame = new JFrame("Open File");
+
+        // Create a file chooser.
+        JFileChooser fileChooser = new JFileChooser();
+
+        // Set the file chooser to open at the current directory.
+        fileChooser.setCurrentDirectory(new File("."));
+
+        // Open the file chooser dialog.
+        int result = fileChooser.showOpenDialog(frame);
+
+        // If the user selects a file.
+        if (result == JFileChooser.APPROVE_OPTION) {
+            // Get the selected file.
+            File selectedFile = fileChooser.getSelectedFile();
+            // Display the path of the selected file.
+            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+            return selectedFile.getAbsolutePath();
+        }
+        else return "Not Found";
+    }
+
+
+
 
 
     @FXML
@@ -356,7 +429,15 @@ public class BlockedController implements Initializable {
     @FXML
     public void onAddButtonClick(ActionEvent actionEvent) {
 //        Get addWebsiteTextField contents
-        addNewWebsite(addWebsiteTextField.getText());
+        if(addWebsiteStackPane.isVisible())
+        {
+            addNewWebsite(addWebsiteTextField.getText());
+        }
+        else
+        {
+            addNewApplication(fileLocation);
+        }
+
         changesSaved = false;
         blackOutStackPane.setVisible(false);
         addWebsiteStackPane.setVisible(false);
@@ -368,6 +449,8 @@ public class BlockedController implements Initializable {
     }
 
     public void onFileClick(ActionEvent actionEvent) {
+        fileLocation = fileSearch();
+        addApplicationTextField.setText(fileLocation);
         addAppButton.setDisable(false);
     }
 }
