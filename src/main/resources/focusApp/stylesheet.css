@@ -128,7 +128,7 @@
 
 /* Sliders */
 .timerSlider .track{
-    -fx-background-color: linear-gradient(to right, -primaryColor 40%, -textBoxColor 40%);
+    -fx-background-color: #FFF;
 }
 
 .timerSlider .thumb{
@@ -136,8 +136,6 @@
     -fx-border-width: 3px;
     -fx-border-color: -textBoxColor;
     -fx-body-color: -primaryColor;
-
-
 }
 
 

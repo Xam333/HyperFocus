@@ -26,13 +26,19 @@ public class TimerController {
     @FXML
     private Label StopWatch;
 
+    private double startTime;  // Placeholder for start time
+    private double endTime;  // Placeholder for end time
 
-    public void initialize() {
-        // Get offset and duration from main (Get offset and Get Duration)
-        timer = new Timer(0.0, 0.5, this);
+
+    public void initializeTimer(int startTime, int endTime) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+
+        // Example usage: Initialize the timer with given times
+        timer = new Timer((double)startTime, (double)endTime, this);  // Create Timer object with given times
+
+        // Start the timer or take other actions
         timer.Control(Command.Start);
-
-//        Timer T2 = new Timer(null, 10, this);
     }
 
     public void UpdateStopWatch(String TimeString){
