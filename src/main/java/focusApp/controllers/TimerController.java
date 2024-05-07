@@ -11,6 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.ToggleButton;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Arc;
@@ -46,7 +47,19 @@ public class TimerController {
     private Button RestartButton;
     @FXML
     private Button ReturnButton;
+    @FXML
+    private ToggleButton ToggleListen;
 
+    @FXML
+    protected void  onToggleListenClick() {
+        timer.TurnOnTTS(ToggleListen.isSelected());
+    }
+    @FXML
+    protected void mouseInToggleListen(){ ToggleListen.setContentDisplay(ContentDisplay.LEFT); }
+    @FXML
+    protected void mouseOutToggleListen(){ ToggleListen.setContentDisplay(ContentDisplay.GRAPHIC_ONLY); }
+
+    
     @FXML
     protected void onStopButtonClick(){ timer.Control(Command.Stop); }
     @FXML

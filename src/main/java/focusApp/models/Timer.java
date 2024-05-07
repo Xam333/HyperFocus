@@ -146,6 +146,10 @@ public class Timer {
         }
     }
 
+    public void TurnOnTTS(boolean value){
+        Speak = value;
+    }
+
     /**
      * This method acts as a factory method to update the fields with new values effectively restarting the timer.
      */
@@ -209,7 +213,7 @@ public class Timer {
             // Case 2: if Seconds is >= 0, returns a time format like this (ss)
             case 2 -> { return String.format("%02d", Seconds); }
 
-            default -> { return "--:--"; }
+            default -> { return "--:--:--"; }
         }
     }
 
@@ -238,7 +242,8 @@ public class Timer {
             default -> throw new IllegalArgumentException("Invalid Time TimerState: " + Timer_State);
         }
     }
-        /**
+
+    /**
      * Issues a command to the timer, check Command Enum for valid commands.
      * @param command The command to run.
      */

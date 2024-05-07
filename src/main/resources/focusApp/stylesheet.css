@@ -166,7 +166,7 @@
     -fx-font-weight: bold;
     -fx-font-size: 14px;
 }
-.ButtonControlUpper:hover, .ButtonControlLower:hover{
+.ButtonControlUpper:hover, .ButtonControlLower:hover {
     -fx-background-color: -SubSecondaryColor;
     -fx-text-fill: -SubTertiaryColor;
 }
@@ -209,10 +209,30 @@
     -fx-text-fill: #FFF;
     -fx-font-weight: bold;
     -fx-font-size: 30px;
-
 }
 
+.ToggleListen {
+    -fx-background-radius:  8px 8px 8px 8px;
+    -fx-background-color:  -SubTertiaryColor;
 
+    -fx-text-fill: #FFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+.ToggleListen: hover{
+     -fx-background-color:  -SubSecondaryColor;
+     -fx-text-fill: -SubTertiaryColor;
+}
+.ToggleListen: hover .label {
+    -fx-text-fill: -SubTertiaryColor;
+}
 
+.ToggleListen:selected {
+    -fx-background-color:  -SubSecondaryColor;
+    -fx-text-fill: -SubTertiaryColor;
+}
+.ToggleListen:selected .label {
+    -fx-text-fill: -SubTertiaryColor;
+}
 
 
