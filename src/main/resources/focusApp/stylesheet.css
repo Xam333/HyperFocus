@@ -3,10 +3,15 @@
     -secondaryColor: #4382BF;
     -backgroundColor: #E6F9FF;
 
+    -SubPrimaryColor: #59ACFF;
+    -SubSecondaryColor: #F0ECD3;
+    -SubTertiaryColor: #2C6FDC;
+    -SubBackGroundColor: #E6F9FF;
+
     /* Temp */
     -textBoxColor: #FFF;
 
-    -fx-background-color: -backgroundColor;
+    -fx-background-color: -SubBackGroundColor;
 }
 
 /* Layout */
@@ -275,7 +280,85 @@
     -fx-text-fill: -secondaryColor;
 }
 
+/*Timer Button Styles*/
+.ButtonControlUpper{
+    -fx-pref-height: 60px;
+    -fx-pref-width: 140px;
+    -fx-background-color: -SubTertiaryColor;
+    -fx-background-radius:  0px;
 
+    -fx-text-fill: #FFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+.ButtonControlUpper:hover, .ButtonControlLower:hover {
+    -fx-background-color: -SubSecondaryColor;
+    -fx-text-fill: -SubTertiaryColor;
+}
+.ButtonControlUpper:hover .label, .ButtonControlLower:hover .label{
+    -fx-text-fill: -SubTertiaryColor;
+}
+
+.ButtonControlLower {
+    -fx-pref-height: 60px;
+    -fx-pref-width: 200px;
+    -fx-background-color: -SubTertiaryColor;
+    -fx-background-radius:  0px;
+
+    -fx-text-fill: #FFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+.ButtonController {
+    -fx-background-color: -SubSecondaryColor;
+    -fx-background-radius: 8px;
+}
+
+.ButtonControlIcon {
+    -fx-text-fill: #FFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 17px;
+}
+
+.TimerStatusBox, .TimerStopwatch{
+    -fx-background-color: -SubTertiaryColor;
+    -fx-background-radius:  8px;
+}
+.TimerStopwatch .label{
+    -fx-text-fill: #FFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 60px;
+}
+
+.DelayedStatus {
+    -fx-text-fill: #FFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 30px;
+}
+
+.ToggleListen {
+    -fx-background-radius:  8px 8px 8px 8px;
+    -fx-background-color:  -SubTertiaryColor;
+
+    -fx-text-fill: #FFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+.ToggleListen: hover{
+     -fx-background-color:  -SubSecondaryColor;
+     -fx-text-fill: -SubTertiaryColor;
+}
+.ToggleListen: hover .label {
+    -fx-text-fill: -SubTertiaryColor;
+}
+
+.ToggleListen:selected {
+    -fx-background-color:  -SubSecondaryColor;
+    -fx-text-fill: -SubTertiaryColor;
+}
+.ToggleListen:selected .label {
+    -fx-text-fill: -SubTertiaryColor;
+}
 
 /* Tiny Buttons */
 .tinyPrimaryButton{
