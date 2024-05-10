@@ -179,12 +179,10 @@ public class TimerController {
         }
     }
 
-    public void initialize() {
+    public void initialize(double startTime, double endTime) {
         // Get offset and duration from main (Get offset and Get Duration)
 
-        Double TO = 0.05;
-        Double TD =  0.05;
-        timer = new Timer(TO, TD, this);
+        timer = new Timer(startTime, endTime, this);
 
         timer.Control(Command.Start);
     }

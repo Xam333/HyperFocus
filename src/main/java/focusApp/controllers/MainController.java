@@ -116,7 +116,7 @@ public class MainController implements Initializable {
         TimerController timerController = fxmlLoader.getController();
 
         // Pass the start time and end time to the timer controller
-        timerController.initializeTimer(startTime, endTime);
+        timerController.initialize(startTime, endTime);
 
         // Set scene stylesheet
         scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());

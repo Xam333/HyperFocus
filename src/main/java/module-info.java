@@ -7,6 +7,7 @@ module focusApp {
     requires jdk.jshell;
     requires org.xerial.sqlitejdbc;
     requires freetts;
+    requires org.jsoup;
 
 
     opens focusApp to javafx.fxml;
