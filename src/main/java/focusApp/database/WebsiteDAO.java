@@ -1,5 +1,6 @@
 package focusApp.database;
 
+import focusApp.models.WebsiteItem;
 import org.sqlite.SQLiteErrorCode;
 import org.sqlite.SQLiteException;
 
@@ -14,7 +15,7 @@ public class WebsiteDAO implements IWebsiteDAO {
     }
 
     @Override
-    public Website addWebsite(String name, String url) {
+    public WebsiteItem addWebsite(String name, String url) {
         try {
             String query = "INSERT INTO websites(websiteName, url)  VALUES(?,?)";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -26,7 +27,7 @@ public class WebsiteDAO implements IWebsiteDAO {
 
             int id = getWebsiteID(name);
 
-            return new Website(id, name, url, null);
+            return new WebsiteItem(id, name, url, null);
 
         } catch (SQLiteException sqlex) {
             if (sqlex.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE) {
@@ -40,7 +41,7 @@ public class WebsiteDAO implements IWebsiteDAO {
     }
 
     @Override
-    public Website addWebsite(String name, String url, String iconUri) {
+    public WebsiteItem addWebsite(String name, String url, String iconUri) {
         try {
             String query = "INSERT INTO websites(websiteName, url, icon) VALUES(?,?,?)";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -53,7 +54,7 @@ public class WebsiteDAO implements IWebsiteDAO {
 
             int id = getWebsiteID(name);
 
-            return new Website(id, name, url, iconUri);
+            return new WebsiteItem(id, name, url, iconUri);
 
         } catch (SQLiteException sqlex) {
             if (sqlex.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE) {
@@ -160,7 +161,7 @@ public class WebsiteDAO implements IWebsiteDAO {
     }
 
     @Override
-    public Website getWebsite(int id) {
+    public WebsiteItem getWebsite(int id) {
         try {
             String query = "SELECT websiteName, url, icon FROM websites WHERE websiteID = ?";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -170,7 +171,7 @@ public class WebsiteDAO implements IWebsiteDAO {
             ResultSet res = statement.executeQuery();
 
             if (res.next()) {
-                return new Website(id, res.getString("websiteName"), res.getString("url"), res.getString("icon"));
+                return new WebsiteItem(id, res.getString("websiteName"), res.getString("url"), res.getString("icon"));
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,5 +1,8 @@
 package focusApp.database;
 
+import focusApp.models.ApplicationItem;
+import focusApp.models.WebsiteItem;
+
 import java.util.ArrayList;
 
 public interface IPresetDAO {
@@ -40,12 +43,12 @@ public interface IPresetDAO {
      * @param presetID id of the preset
      * @return list of applications from preset
      */
-    public ArrayList<Application> getPresetApplication(int presetID);
+    public ArrayList<ApplicationItem> getPresetApplication(int presetID);
 
     /**
      * function to return the websites from a specific preset
      * @param presetID
      * @return list of websites from preset
      */
-    public ArrayList<Website> getPresetWebsite(int presetID);
+    public ArrayList<WebsiteItem> getPresetWebsite(int presetID);
 }

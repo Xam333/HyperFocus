@@ -1,5 +1,6 @@
 package focusApp.database;
 
+import focusApp.models.ApplicationItem;
 import org.sqlite.SQLiteErrorCode;
 import org.sqlite.SQLiteException;
 
@@ -14,7 +15,7 @@ public class ApplicationDAO implements IApplicationDAO {
     }
 
     @Override
-    public Application addApplication(String name, String fileLocation) {
+    public ApplicationItem addApplication(String name, String fileLocation) {
         try {
 
             String query = "INSERT INTO applications(applicationName, url) VALUES(?,?)";
@@ -28,7 +29,7 @@ public class ApplicationDAO implements IApplicationDAO {
 
             int id = getApplicationID(name);
 
-            return new Application(id, name, fileLocation, null);
+            return new ApplicationItem(id, name, fileLocation, null);
 
         } catch (SQLiteException sqlex) {
             /* 19 is unique constraint error code */
@@ -44,7 +45,7 @@ public class ApplicationDAO implements IApplicationDAO {
     }
 
     @Override
-    public Application addApplication(String name, String fileLocation, String iconLocation) {
+    public ApplicationItem addApplication(String name, String fileLocation, String iconLocation) {
         try {
             if (getApplicationID(name) != -1) {
                 return null;
@@ -62,7 +63,7 @@ public class ApplicationDAO implements IApplicationDAO {
             int id = getApplicationID(name);
 
             if (id != -1) {
-                return new Application(id, name, fileLocation, iconLocation);
+                return new ApplicationItem(id, name, fileLocation, iconLocation);
             }
 
             return null;
@@ -178,7 +179,7 @@ public class ApplicationDAO implements IApplicationDAO {
     }
 
     @Override
-    public Application getApplication(int id) {
+    public ApplicationItem getApplication(int id) {
         try {
             String query = "SELECT applicationID, applicationName, url, icon FROM applications WHERE applicationID = ?";
             PreparedStatement statemnt = connection.prepareStatement(query);
@@ -188,7 +189,7 @@ public class ApplicationDAO implements IApplicationDAO {
             ResultSet res = statemnt.executeQuery();
 
             if (res != null) {
-                return new Application(res.getInt("applicationID"), res.getString("applicationName"), res.getString("url"), res.getString("icon"));
+                return new ApplicationItem(res.getInt("applicationID"), res.getString("applicationName"), res.getString("url"), res.getString("icon"));
             }
 
         } catch (Exception e) {

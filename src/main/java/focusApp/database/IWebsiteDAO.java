@@ -1,21 +1,25 @@
 package focusApp.database;
 
+import focusApp.models.WebsiteItem;
+
 public interface IWebsiteDAO {
 
     /**
      * adds a website to the database
      * @param name website name
      * @param url website url
+     * @return websiteItem or null if website already existed
      */
-    public Website addWebsite(String name, String url);
+    public WebsiteItem addWebsite(String name, String url);
 
     /**
      * adds a website to the database
      * @param name website name
      * @param url website url
      * @param iconUri file path to icon
+     * @return websiteItem or null if website already existed
      */
-    public Website addWebsite(String name, String url, String iconUri);
+    public WebsiteItem addWebsite(String name, String url, String iconUri);
 
     /**
      * changes the websites name in the db
@@ -53,5 +57,5 @@ public interface IWebsiteDAO {
      * @param id the websites id
      * @return website class
      */
-    public Website getWebsite(int id);
+    public WebsiteItem getWebsite(int id);
 }

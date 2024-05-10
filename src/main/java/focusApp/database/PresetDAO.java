@@ -1,11 +1,12 @@
 package focusApp.database;
 
+import focusApp.models.ApplicationItem;
+import focusApp.models.WebsiteItem;
 import org.sqlite.SQLiteErrorCode;
 import org.sqlite.SQLiteException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Connection;
 
@@ -110,7 +111,7 @@ public class PresetDAO implements IPresetDAO {
     }
 
     @Override
-    public ArrayList<Application> getPresetApplication(int presetID) {
+    public ArrayList<ApplicationItem> getPresetApplication(int presetID) {
         try {
             String query = """
                     SELECT
@@ -125,10 +126,10 @@ public class PresetDAO implements IPresetDAO {
 
             ResultSet result = statement.executeQuery();
 
-            ArrayList<Application> output = new ArrayList<>();
+            ArrayList<ApplicationItem> output = new ArrayList<>();
 
             while (result.next()) {
-                Application application = new Application(result.getInt("applicationID"), result.getString("applicationName"), result.getString("url"), result.getString("icon"));
+                ApplicationItem application = new ApplicationItem(result.getInt("applicationID"), result.getString("applicationName"), result.getString("url"), result.getString("icon"));
 
                 output.add(application);
             }
@@ -142,7 +143,7 @@ public class PresetDAO implements IPresetDAO {
     }
 
     @Override
-    public ArrayList<Website> getPresetWebsite(int presetID) {
+    public ArrayList<WebsiteItem> getPresetWebsite(int presetID) {
         try {
             String query = """
                     SELECT
@@ -157,10 +158,10 @@ public class PresetDAO implements IPresetDAO {
 
             ResultSet result = statement.executeQuery();
 
-            ArrayList<Website> output = new ArrayList<>();
+            ArrayList<WebsiteItem> output = new ArrayList<>();
 
             while (result.next()) {
-                Website website = new Website(result.getInt("websiteID"), result.getString("websiteName"), result.getString("url"), result.getString("icon"));
+                WebsiteItem website = new WebsiteItem(result.getInt("websiteID"), result.getString("websiteName"), result.getString("url"), result.getString("icon"));
 
                 output.add(website);
             }

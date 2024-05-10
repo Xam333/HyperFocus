@@ -1,9 +1,18 @@
 package focusApp.controllers;
 
 import focusApp.HelloApplication;
-import focusApp.database.BlockedItem;
-import focusApp.database.IBlockedItemDAO;
-import focusApp.database.MockedBlockedItemDAO;
+import focusApp.models.UserHolder;
+
+import focusApp.database.*;
+import focusApp.models.ApplicationItem;
+import focusApp.models.WebsiteItem;
+import focusApp.database.PresetDAO;
+import focusApp.database.WebsiteDAO;
+import focusApp.database.ApplicationDAO;
+import focusApp.database.Preset;
+import focusApp.models.User;
+import focusApp.models.BlockedItem;
+
 import focusApp.models.BlockedApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -71,20 +80,55 @@ public class BlockedController implements Initializable {
     private ImageView redditIcon;
 
     @FXML
-    private TableColumn<BlockedApplication, String> iconColumn;
+    private TableColumn<BlockedItem, String> iconColumn;
 
     @FXML
-    private TableColumn<BlockedApplication, String> nameColumn;
+    private TableColumn<BlockedItem, String> nameColumn;
 
     @FXML
-    private TableColumn<BlockedApplication, String> locationColumn;
+    private TableColumn<BlockedItem, String> locationColumn;
 
     @FXML
-    private TableView<BlockedApplication> tableView;
+    private TableView<BlockedItem> tableView;
 
     private IBlockedItemDAO blockedDAO;
+    private PresetDAO presetDAO;
+    private ApplicationDAO applicationDAO;
+    private WebsiteDAO websiteDAO;
+    private Preset currentPreset;
+    private UserHolder userHolder;
+    private User user;
+    private ArrayList<BlockedItem> blockedItems;
+
     public BlockedController(){
         blockedDAO = new MockedBlockedItemDAO();
+        presetDAO = new PresetDAO();
+        applicationDAO = new ApplicationDAO();
+        websiteDAO = new WebsiteDAO();
+        userHolder = UserHolder.getInstance();
+        blockedItems = new ArrayList<BlockedItem>();
+
+        /* only using one preset per user for now */
+
+        /* get preset for user and if none create new preset */
+
+        /* check if user logged in */
+        user = userHolder.getUser();
+        if (user == null) {
+            throw new Error("User is null");
+        }
+
+        /* get all presets and if a preset exists use that otherwise create new preset */
+        ArrayList<Preset> presets = presetDAO.getUsersPresets(user.getId());
+        if (presets.isEmpty()) {
+            currentPreset = presetDAO.addPreset(user.getId(), "Main");
+        } else {
+            currentPreset = presets.get(0);
+        }
+
+        /* populate blockedItems list from preset */
+        blockedItems.addAll(presetDAO.getPresetWebsite(currentPreset.getPresetID()));
+        blockedItems.addAll(presetDAO.getPresetApplication(currentPreset.getPresetID()));
 
     }
 
@@ -126,25 +170,49 @@ public class BlockedController implements Initializable {
     private void addNewWebsite(String newWebsiteURL)
     {
         String[] info = getWebPageTitleAndImage(newWebsiteURL);
-        blockedDAO.addApplication((new BlockedApplication(info[0], info[1], info[2])));
-        syncBlockedApplications();
+        WebsiteItem websiteItem = websiteDAO.addWebsite(info[1], info[2], info[0]);
+//        blockedDAO.addApplication((new BlockedApplication(info[0], info[1], info[2])));
+//        syncBlockedApplications();
 
-        System.out.println("Image URL: " + info[0]);
-        System.out.println("Name: " + info[1]);
-        System.out.println("Web/File Link: " + info[2]);
+        if (websiteItem == null) {
+            websiteItem = websiteDAO.getWebsite(websiteDAO.getWebsiteID(info[1]));
+        }
+
+        boolean presetAdded = presetDAO.addWebsitePreset(currentPreset.getPresetID(), websiteItem.getID());
+
+        if (presetAdded) {
+            /* logging */
+            System.out.println("Image URL: " + info[0]);
+            System.out.println("Name: " + info[1]);
+            System.out.println("Web/File Link: " + info[2]);
+
+        } else {
+            System.out.println("Preset already has website: " + info[1]);
+        }
     }
 
     @FXML
     private void addNewApplication(String newApplicationLocation)
     {
         String[] info = getExecutableTitleAndIcon(newApplicationLocation);
+        ApplicationItem applicationItem = applicationDAO.addApplication(info[1], info[2], info[0]);
+//        blockedDAO.addApplication((new BlockedApplication(info[0], info[1], info[2])));
+//        syncBlockedApplications();
 
-        blockedDAO.addApplication((new BlockedApplication(info[0], info[1], info[2])));
-        syncBlockedApplications();
+        if (applicationItem == null) {
+            applicationItem = applicationDAO.getApplication(applicationDAO.getApplicationID(info[1]));
+        }
 
-        System.out.println("Image URL: " + info[0]);
-        System.out.println("Name: " + info[1]);
-        System.out.println("Web/File Link: " + info[2]);
+        boolean presetAdded = presetDAO.addApplicationPreset(currentPreset.getPresetID(), applicationItem.getID());
+
+        if (presetAdded) {
+            /* logging */
+            System.out.println("Image URL: " + info[0]);
+            System.out.println("Name: " + info[1]);
+            System.out.println("Web/File Link: " + info[2]);
+        } else {
+            System.out.println("Preset already has application: " + info[1]);
+        }
     }
 
     /**
@@ -249,17 +317,22 @@ public class BlockedController implements Initializable {
 
     public void syncBlockedApplications()
     {
-        ObservableList<BlockedApplication> dataList = blockedDAO.dataList(blockedDAO.getAllApplications());
+//        ObservableList<BlockedApplication> dataList = blockedDAO.dataList(blockedDAO.getAllApplications());
+
+        ObservableList<BlockedItem> dataList = FXCollections.observableArrayList(blockedItems);
+
         tableView.setItems(dataList);
 
-        iconColumn.setCellValueFactory(new PropertyValueFactory<>("iconColumn"));
 
-        iconColumn.setCellFactory(tc -> new TableCell<BlockedApplication, String>() {
+        iconColumn.setCellValueFactory(new PropertyValueFactory<>("iconURI"));
+
+        iconColumn.setCellFactory(tc -> new TableCell<BlockedItem, String>() {
             private final ImageView imageView = new ImageView();
 
             @Override
             protected void updateItem(String url, boolean empty) {
                 super.updateItem(url, empty);
+                System.out.println(url);
                 if (empty || url == null) {
                     setGraphic(null);
                     setText(null);
@@ -300,9 +373,9 @@ public class BlockedController implements Initializable {
 //        redditIcon.setPreserveRatio(true);
 
 
-        iconColumn.setCellValueFactory(new PropertyValueFactory<BlockedApplication, String>("iconColumn"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<BlockedApplication, String>("nameColumn"));
-        locationColumn.setCellValueFactory(new PropertyValueFactory<BlockedApplication, String>("locationColumn"));
+        iconColumn.setCellValueFactory(new PropertyValueFactory<BlockedItem, String>("iconURI"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<BlockedItem, String>("name"));
+        locationColumn.setCellValueFactory(new PropertyValueFactory<BlockedItem, String>("URI"));
 
         syncBlockedApplications();
 
