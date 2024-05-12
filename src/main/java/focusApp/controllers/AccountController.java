@@ -2,6 +2,7 @@ package focusApp.controllers;
 
 import focusApp.HelloApplication;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -30,13 +31,19 @@ public class AccountController {
     public Button soundSettingsButton;
     public Button colourSettingsButton;
     public Button parentalControlsButton;
+    private boolean isMenuOpen = false;
 
-    public void onMenuStackPaneEnter(MouseEvent mouseEvent) {
-        menuStackPane.setVisible(true);
-    }
-
-    public void onMenuStackPaneExit(MouseEvent mouseEvent) {
-        menuStackPane.setVisible(false);
+    @FXML
+    private void toggleMenu() {
+        if (isMenuOpen) {
+            // Close the menu
+            menuStackPane.setVisible(false);
+            isMenuOpen = false;
+        } else {
+            // Open the menu
+            menuStackPane.setVisible(true);
+            isMenuOpen = true;
+        }
     }
 
     public void onParentalControlsButtonClick(ActionEvent actionEvent) throws IOException {

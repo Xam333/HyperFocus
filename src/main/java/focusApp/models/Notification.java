@@ -1,46 +1,59 @@
 package focusApp.models;
 
 import javax.sound.sampled.*;
-
 import java.io.File;
-import java.io.IOException;
-
+import com.sun.speech.freetts.Voice;
+import com.sun.speech.freetts.VoiceManager;
 
 public class Notification {
+
+    private static final String VoiceDirectory = "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory";
+
+    private static Voice SpeakingVoice;
+
+    /**
+     * Plays a sound of the supported audio format (wav).
+     * @param Volume controls the volume of the sound.
+     */
     public static void PlaySound(float Volume){
-        // This will read from the DB or from a DB information class.
-        String SoundFilePath = "src/main/resources/focusApp/Sounds/alarm1.wav";
+        try {
+            String soundFilePath = "src/main/resources/focusApp/Sounds/alarm1.wav";
+            File AlarmPath = new File(soundFilePath);
 
-        try{
-            AudioInputStream AIS = AudioSystem.getAudioInputStream(new File(SoundFilePath));
-            AudioFormat AF = AIS.getFormat();
+            if (AlarmPath.exists()){
 
-            DataLine.Info I = new DataLine.Info(SourceDataLine.class, AF);
-            SourceDataLine L = (SourceDataLine) AudioSystem.getLine(I);
+                // Get the audio from the file.
+                AudioInputStream audioInput = AudioSystem.getAudioInputStream(AlarmPath);
+                Clip alarmClip = AudioSystem.getClip();
+                alarmClip.open(audioInput);
 
-            L.open(AF);
-            L.start();
+                // Add in volume control.
+                FloatControl VolumeControl = (FloatControl) alarmClip.getControl(FloatControl.Type.MASTER_GAIN);
+                VolumeControl.setValue(Volume);
 
-            FloatControl VolumeControl = (FloatControl) L.getControl(FloatControl.Type.MASTER_GAIN);
-            VolumeControl.setValue(Volume);
+                // Play the audio.
+                alarmClip.start();
 
-
-            int bufferSize = (int) AF.getSampleRate() * AF.getFrameSize();
-            byte[] buffer = new byte[bufferSize];
-            int bytesRead;
-            while ((bytesRead = AIS.read(buffer, 0, buffer.length)) != -1){
-                L.write(buffer, 0, bytesRead);
+            } else {
+              System.out.println("Alarm File Not Found!");
             }
-
-            L.drain();
-            L.close();
-            AIS.close();
-        } catch (UnsupportedAudioFileException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (LineUnavailableException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e){
+            System.out.println(e);
         }
+    }
+
+    public static void SpeakText(String TextToSpeak){
+
+        Thread SpeakThread = new Thread(() -> {
+            if (SpeakingVoice != null){ SpeakingVoice.deallocate(); }
+            System.setProperty("freetts.voices", VoiceDirectory);
+            VoiceManager VM = VoiceManager.getInstance();
+            SpeakingVoice = VM.getVoice("kevin16");
+
+            SpeakingVoice.allocate();
+            SpeakingVoice.speak(TextToSpeak);
+            SpeakingVoice.deallocate();
+        });
+        SpeakThread.start();
     }
 }

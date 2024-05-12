@@ -2,11 +2,15 @@ package focusApp;
 import java.io.IOException;
 import java.util.Objects;
 
+import focusApp.models.Timer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.Objects;
 
 
 public class HelloApplication extends Application {
@@ -20,7 +24,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         // Load fxml file
-        FXMLLoader root = new FXMLLoader(HelloApplication.class.getResource("fxml/hello-view.fxml"));
+        FXMLLoader root = new FXMLLoader(HelloApplication.class.getResource("fxml/home-view.fxml"));
         // Set scene
         Scene scene = new Scene(root.load(), WIDTH, HEIGHT);
         // Set scene stylesheet
@@ -38,6 +42,7 @@ public class HelloApplication extends Application {
         stage.setY(280);            // Set Y position of window
 
         // Show stage
+        stage.setOnCloseRequest(windowEvent -> Timer.ForceStopTimer());
         stage.show();
     }
 
