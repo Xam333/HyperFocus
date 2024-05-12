@@ -94,7 +94,7 @@ public class Timer {
     /**
      * The duration from start time to end time (Running), can be altered.
      */
-    private Duration Running_Counting_Duration;
+    public Duration Running_Counting_Duration;
     /**
      * The duration from start time to end time (Running), can not be altered.
      */
@@ -172,7 +172,7 @@ public class Timer {
     /**
      * Delayed Time is when the timer state is delayed, all code in this method will execute every millisecond.
      */
-    private void DelayedTime(){
+    public void DelayedTime(){
         Delayed_Counting_Duration = Delayed_Counting_Duration.minusMillis(1);
 
         if(Delayed_Counting_Duration.getSeconds() < 0) Start();
@@ -183,7 +183,7 @@ public class Timer {
     /**
      * Running Time is when the timer state is running, all code in this method will execute every millisecond.
      */
-    private void RunningTime(){
+    public void RunningTime(){
         Running_Counting_Duration = Running_Counting_Duration.minusMillis(1);
 
         if(Running_Counting_Duration.getSeconds() < 0) Finish();
