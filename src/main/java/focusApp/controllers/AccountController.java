@@ -13,6 +13,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+import focusApp.models.UserHolder;
+import focusApp.models.User;
+import focusApp.database.UserDAO;
+
 public class AccountController {
     public StackPane menuStackPane;
     public Label userNameLabel;
@@ -21,6 +25,7 @@ public class AccountController {
     public PasswordField passwordTextField;
     public Button editPasswordButton;
     public Button editUserNameButton;
+    public Label accountError;
     public Button logOutButton;
     public Label totalTimeFocused;
     public Button mainPageButton;
@@ -32,6 +37,21 @@ public class AccountController {
     public Button colourSettingsButton;
     public Button parentalControlsButton;
     private boolean isMenuOpen = false;
+
+
+    private UserHolder userHolder;
+    private User user;
+    private UserDAO userDAO;
+
+    public AccountController() {
+        userHolder = UserHolder.getInstance();
+        user = userHolder.getUser();
+        userDAO = new UserDAO();
+    }
+
+    public void initialize() {
+        userNameTextField.setText(user.getUserName());
+    }
 
     @FXML
     private void toggleMenu() {
@@ -73,12 +93,26 @@ public class AccountController {
         stage.setScene(scene);
     }
 
+    /* will be updated one the parental lock feature is implemented (pop up requiring password for change */
     public void onEditPasswordButtonClick(ActionEvent actionEvent) {
         passwordTextField.setEditable(!passwordTextField.isEditable());
 
     }
 
     public void onEditUserNameButtonClick(ActionEvent actionEvent) {
+        if (userNameTextField.isEditable()) {
+            if (userDAO.updateName(user.getId(), userNameTextField.getText())) {
+                user.setUserName(userNameTextField.getText());
+                userHolder.setUser(user);
+                accountError.setText("");
+            } else {
+                accountError.setText("Username is already taken");
+                return;
+            }
+            editUserNameButton.setText("EDIT");
+        } else {
+            editUserNameButton.setText("SAVE");
+        }
         userNameTextField.setEditable(!userNameTextField.isEditable());
     }
 

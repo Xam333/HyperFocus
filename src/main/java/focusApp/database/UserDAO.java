@@ -44,6 +44,29 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
+    public boolean updateName(int id, String newName) {
+        try {
+            String query = "UPDATE user SET userName = ? WHERE id = ?";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setString(1, newName);
+            statement.setInt(2, id);
+
+            return (statement.executeUpdate() != 0);
+
+        } catch (SQLiteException sqlex) {
+            if (sqlex.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE) {
+                return false;
+            }
+            sqlex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
     public boolean getParentalLock(int id) {
        try {
            /* get statement based on user id */

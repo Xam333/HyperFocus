@@ -156,11 +156,19 @@
                         text="EDIT"
                         textAlignment="CENTER"/>
             </HBox>
+            <Label fx:id="accountError"
+                   styleClass="warningLabel"
+                   textAlignment="CENTER"
+                   wrapText="true"
+                   maxHeight="0"
+            >
+
+            </Label>
         </VBox>
 
         <VBox alignment="BOTTOM_CENTER">
             <padding>
-                <Insets top="50.0"/>
+                <Insets top="40.0"/>
             </padding>
             <Button fx:id="logOutButton"
                     mnemonicParsing="false"

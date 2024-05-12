@@ -79,7 +79,7 @@ public class PresetDAO implements IPresetDAO {
            return statement.execute();
 
         } catch (SQLiteException sqlex) {
-            if (sqlex.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE) {
+            if (sqlex.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_PRIMARYKEY) {
                 return false;
             }
             sqlex.printStackTrace();
