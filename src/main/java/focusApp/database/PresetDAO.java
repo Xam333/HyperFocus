@@ -68,6 +68,45 @@ public class PresetDAO implements IPresetDAO {
         return null;
     }
 
+    @Override
+    public Preset generateNewPreset(int userID) {
+        try {
+            String query = "SELECT count(presetID) FROM presets WHERE userID = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setInt(1, userID);
+
+            ResultSet res = statement.executeQuery();
+
+            int newId = 0;
+            if (res != null) {
+                newId = res.getInt("count(presetID)") + 1;
+            } else {
+                return null;
+            }
+
+            String newName = "Preset " + Integer.toString(newId);
+
+            query = "INSERT INTO presets(userID, presetName) VALUES(?,?)";
+
+            statement = connection.prepareStatement(query);
+
+            statement.setInt(1, userID);
+            statement.setString(2, newName);
+
+
+            if (0 == statement.executeUpdate()) {
+                return null;
+            }
+
+            return new Preset(getLastPrest(userID), newName);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public boolean addWebsitePreset(int presetID, int websiteID) {
         try {
             String query = "INSERT INTO presetsToWebsite(presetID, websiteID) VALUES(?,?)";

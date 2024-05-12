@@ -12,6 +12,7 @@ import focusApp.database.ApplicationDAO;
 import focusApp.database.Preset;
 import focusApp.models.User;
 import focusApp.models.BlockedItem;
+import focusApp.models.PresetHolder;
 
 import focusApp.models.BlockedApplication;
 import javafx.collections.FXCollections;
@@ -96,6 +97,7 @@ public class BlockedController implements Initializable {
     private PresetDAO presetDAO;
     private ApplicationDAO applicationDAO;
     private WebsiteDAO websiteDAO;
+    private PresetHolder presetHolder;
     private Preset currentPreset;
     private UserHolder userHolder;
     private User user;
@@ -107,6 +109,7 @@ public class BlockedController implements Initializable {
         applicationDAO = new ApplicationDAO();
         websiteDAO = new WebsiteDAO();
         userHolder = UserHolder.getInstance();
+        presetHolder = PresetHolder.getInstance();
         blockedItems = new ArrayList<BlockedItem>();
 
         /* only using one preset per user for now */
@@ -119,13 +122,12 @@ public class BlockedController implements Initializable {
             throw new Error("User is null");
         }
 
-        /* get all presets and if a preset exists use that otherwise create new preset */
-        ArrayList<Preset> presets = presetDAO.getUsersPresets(user.getId());
-        if (presets.isEmpty()) {
-            currentPreset = presetDAO.addPreset(user.getId(), "Main");
-        } else {
-            currentPreset = presets.get(0);
+        currentPreset = presetHolder.getPreset();
+        if (currentPreset == null) {
+            throw new Error("Preset is null");
         }
+
+        /* get all presets and if a preset exists use that otherwise create new preset */
 
         /* populate blockedItems list from preset */
         blockedItems.addAll(presetDAO.getPresetWebsite(currentPreset.getPresetID()));

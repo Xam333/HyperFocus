@@ -18,6 +18,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.ComboBox?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="390.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.MainController">
 
    <!-- NAV BAR -->
@@ -61,15 +62,12 @@
       <HBox alignment="CENTER" prefHeight="58.0" prefWidth="280.0" spacing="50.0">
 
 <!-- Select Preset Drop down-->
-         <MenuButton mnemonicParsing="false" styleClass="defaultButton" text="Select Preset">
-            <items>
-               <MenuItem mnemonicParsing="false" text="My Preset 1" />
-                <MenuItem mnemonicParsing="false" text="My Preset 2" />
-            </items>
-         </MenuButton>
+          <ComboBox fx:id="presetsButton" styleClass="defaultButton" onAction="#onPresetsButtonClick">
+
+          </ComboBox>
 
 <!--         Save Button-->
-         <Button mnemonicParsing="false" styleClass="smallDefaultButton" text="Save" />
+         <Button fx:id="addPresetButton" onAction="#onAddPresetClick" mnemonicParsing="false" styleClass="smallDefaultButton" text="+ preset" />
       </HBox>
 
 

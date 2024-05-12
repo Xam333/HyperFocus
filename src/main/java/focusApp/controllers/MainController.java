@@ -3,17 +3,17 @@ package focusApp.controllers;
 import focusApp.HelloApplication;
 import focusApp.database.IBlockedItemDAO;
 import focusApp.database.MockedBlockedItemDAO;
-import focusApp.models.BlockedApplication;
+import focusApp.models.*;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -24,6 +24,7 @@ import javafx.stage.Stage;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.io.Console;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -35,6 +36,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import java.util.Objects;
 import java.util.ResourceBundle;
+
+import focusApp.database.Preset;
+import focusApp.database.PresetDAO;
+
+import java.util.ArrayList;
 
 public class MainController implements Initializable {
     public Button startButton;
@@ -58,11 +64,51 @@ public class MainController implements Initializable {
     @FXML
     private Slider endTimeSlider;
 
+    @FXML
+    private ComboBox presetsButton;
+
+    @FXML
+    private GridPane blockedIcons;
+
     public int startTime;
     public int endTime;
 
+    private UserHolder userHolder;
+    private User user;
+    private PresetDAO presetDAO;
+    private PresetHolder presetHolder;
+    private ArrayList<Preset> presets;
+
+
+    public MainController() {
+        userHolder = UserHolder.getInstance();
+        presetHolder = PresetHolder.getInstance();
+        user = userHolder.getUser();
+        presetDAO = new PresetDAO();
+        presets = presetDAO.getUsersPresets(user.getId());
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        ArrayList<String> presetNames = new ArrayList<>();
+
+        for (Preset preset : presetDAO.getUsersPresets(user.getId())) {
+            presetNames.add(preset.getPresetName());
+        }
+
+        /* create preset if none exist */
+        if (presetNames.isEmpty()) {
+            presetNames.add(presetDAO.generateNewPreset(user.getId()).getPresetName());
+        }
+
+
+        ObservableList<String> presetsList = FXCollections.observableList(presetNames);
+
+        presetsButton.setItems(presetsList);
+
+        presetsButton.getSelectionModel().selectFirst();
+
+
         // Listen for changes to the slider and update the label
         startTimeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             int totalMinutes = newVal.intValue();  // Convert slider value to int
@@ -104,6 +150,96 @@ public class MainController implements Initializable {
             endTimeLabel.setText(formattedTime);  // Update the label with the formatted time
         });
 
+        /* update the blocked list */
+        updateBlockList();
+    }
+
+    /**
+     * create new preset and open preset edditor view
+     */
+    public void onAddPresetClick(ActionEvent actionEvent) throws IOException {
+
+        /* create new preset and add it to holder */
+        Preset preset = presetDAO.generateNewPreset(user.getId());
+        if (preset == null) {
+            throw new Error("generated preset is null");
+        }
+        presetHolder.setPreset(preset);
+
+        Stage stage = (Stage) blockedApplicationPane.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/blocked-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+        // Set scene stylesheet
+        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        stage.setScene(scene);
+    }
+
+    /**
+     * when clicking preset in dropdown menu
+     */
+    public void onPresetsButtonClick() {
+        updateBlockList();
+    }
+
+    /**
+     * update the blocked items display
+     */
+    public void updateBlockList() {
+        String presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
+
+        System.out.println(presetName);
+
+        Preset currentPreset = null;
+
+        for (Preset preset : presetDAO.getUsersPresets(user.getId())) {
+            if (Objects.equals(preset.getPresetName(), presetName)) {
+                presetHolder.setPreset(preset);
+                currentPreset = preset;
+                break;
+            }
+        }
+
+        if (currentPreset == null) {
+            return;
+        }
+
+        ArrayList<BlockedItem> blockedItems = new ArrayList<>();
+
+
+        blockedItems.addAll(presetDAO.getPresetWebsite(currentPreset.getPresetID()));
+        blockedItems.addAll(presetDAO.getPresetApplication(currentPreset.getPresetID()));
+
+        int column = 0;
+        int row = 0;
+        int maxColumn = 6;
+        int imageSize = 30;
+
+        blockedIcons.getChildren().clear();
+
+        /* default icon */
+        String defaultIcon = "/focusApp/images/defaultIcon.png";
+
+        /* this code is currently slow */
+        /* maybe to do with the urls */
+        for (BlockedItem item : blockedItems) {
+            Image img;
+            if (item.getIconURI().endsWith("png")) {
+                img = new Image(item.getIconURI().toString(), true);
+            } else {
+                String url = getClass().getResource(defaultIcon).toString();
+                img = new Image(url, true);
+            }
+            ImageView icon = new ImageView(img);
+            icon.setFitWidth(imageSize);
+            icon.setFitHeight(imageSize);
+            blockedIcons.add(icon, column, row);
+            column++;
+            if (column >= maxColumn) {
+                row++;
+                column = 0;
+            }
+        }
     }
 
     public void onBlockedApplicationsPaneClick(MouseEvent mouseEvent) throws IOException {
