@@ -36,7 +36,10 @@ public class LoginController {
     public Label denyLoginLabel;
     @FXML
     public Label denyRegisterLabel;
-    public ImageView focusAppLogo;
+    @FXML
+    public Hyperlink regLink;
+    @FXML
+    public Hyperlink loginLink;
 
     /* singleton used to hold user class for use in other controllers */
     private UserHolder userHolder = UserHolder.getInstance();
@@ -45,18 +48,19 @@ public class LoginController {
 
     @FXML
     private void initialize(){
-        // Assuming image.png is directly in src/main/resources/
-        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/focusApp/images/FocusApp_LogoT.png")));
-        focusAppLogo.setImage(image);
-        focusAppLogo.setFitWidth(190);  // Set the width of the ImageView
-        //imageView.setFitHeight(150); // Set the height of the ImageView
-        focusAppLogo.setPreserveRatio(true);
+
     }
+
+//    Return to home page
+
     @FXML
     protected void onBackButtonClick() throws IOException {
         Stage stage = (Stage) backButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/home-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+        // Set scene stylesheet
+        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
         stage.setScene(scene);
     }
 
@@ -75,9 +79,12 @@ public class LoginController {
             Stage stage = (Stage) loginButton.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+            // Set scene stylesheet
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
             stage.setScene(scene);
         } else {
-            denyLoginLabel.setText("Username or password incorrect. Please try again.");
+            denyLoginLabel.setText("* Incorrect username or password. *");
         }
     }
 
@@ -87,7 +94,10 @@ public class LoginController {
     protected void onConfirmButtonClick() throws IOException {
         /* check two inputted passwords are same */
         if (!Objects.equals(regPasswordTextField.getText(), confirmPasswordTextField.getText())) {
-            denyRegisterLabel.setText("Passwords don't match.");
+            denyRegisterLabel.setText("* Passwords don't match. *");
+            return;
+        } else if (regPasswordTextField.getLength() == 0 || regUserNameTextField.getLength() == 0) {
+            denyRegisterLabel.setText("* password and username must not be 0 characters *");
             return;
         }
 
@@ -101,9 +111,38 @@ public class LoginController {
             Stage stage = (Stage) confirmButton.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/login-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+            // Set scene stylesheet
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
             stage.setScene(scene);
         } else {
-            denyRegisterLabel.setText("This username is already taken/Passwords don't match.");
+            denyRegisterLabel.setText("This username is already taken");
         }
+    }
+
+
+//    Takes user from login page to register page
+    @FXML
+    protected void onRegisterLinkClick() throws IOException{
+        Stage stage = (Stage) regLink.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/register-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+        // Set scene stylesheet
+        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        stage.setScene(scene);
+    }
+
+
+    //    Takes user from register page to login page
+    @FXML
+    protected void onLoginLinkClick() throws IOException{
+        Stage stage = (Stage) loginLink.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/login-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+        // Set scene stylesheet
+        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        stage.setScene(scene);
     }
 }

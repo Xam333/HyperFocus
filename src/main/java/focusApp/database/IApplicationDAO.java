@@ -1,5 +1,7 @@
 package focusApp.database;
 
+import focusApp.models.ApplicationItem;
+
 public interface IApplicationDAO {
 
     /**
@@ -7,7 +9,7 @@ public interface IApplicationDAO {
      * @param name application name
      * @param fileLocation application uri location
      */
-    public Application addApplication(String name, String fileLocation);
+    public ApplicationItem addApplication(String name, String fileLocation);
 
     /**
      * adds an application to the database
@@ -15,7 +17,7 @@ public interface IApplicationDAO {
      * @param fileLocation application location
      * @param iconLocation application icon location
      */
-    public Application addApplication(String name, String fileLocation, String iconLocation);
+    public ApplicationItem addApplication(String name, String fileLocation, String iconLocation);
 
     /**
      * changes the application name
@@ -53,5 +55,5 @@ public interface IApplicationDAO {
      * @param id the id of the website
      * @return website class
      */
-    public Application getApplication(int id);
+    public ApplicationItem getApplication(int id);
 }

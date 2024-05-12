@@ -4,10 +4,7 @@ import focusApp.models.User;
 import org.sqlite.SQLiteErrorCode;
 import org.sqlite.SQLiteException;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.Connection;
-import java.sql.ResultSet;
+import java.sql.*;
 
 public class UserDAO implements IUserDAO {
     private Connection connection;
@@ -44,6 +41,29 @@ public class UserDAO implements IUserDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public boolean updateName(int id, String newName) {
+        try {
+            String query = "UPDATE user SET userName = ? WHERE id = ?";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setString(1, newName);
+            statement.setInt(2, id);
+
+            return (statement.executeUpdate() != 0);
+
+        } catch (SQLiteException sqlex) {
+            if (sqlex.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE) {
+                return false;
+            }
+            sqlex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override

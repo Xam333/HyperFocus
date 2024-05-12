@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.geometry.Insets?>
+<AnchorPane maxHeight="-Infinity"
+            maxWidth="-Infinity"
+            minHeight="-Infinity"
+            minWidth="-Infinity"
+            prefHeight="600.0"
+            prefWidth="390.0"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="focusApp.controllers.AccountController">
+
+
+    <!-- NAV BAR -->
+    <HBox alignment="CENTER"
+          prefHeight="75.0"
+          prefWidth="390.0"
+          spacing="5.0"
+          styleClass="navBox">
+
+        <!-- To Previous Page -->
+        <!-- This should call a side menu -->
+        <Pane minHeight="75.0">
+            <VBox layoutY="17">
+                <Button styleClass="navButton" onAction="#toggleMenu">
+                    <graphic>
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@../images/menuIcon.png" />
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </VBox>
+        </Pane>
+
+
+
+        <Region HBox.hgrow="ALWAYS" />
+
+        <!-- Page Title -->
+        <Label styleClass="navLabel"
+               text="My Account"
+               textAlignment="CENTER" />
+
+        <Region HBox.hgrow="ALWAYS" />
+
+        <!--        add functionality, go to account page-->
+        <!-- To Account Page -->
+        <Button styleClass="navButton">
+            <graphic>
+                <ImageView fitHeight="40.0"
+                           fitWidth="40.0"
+                           pickOnBounds="true"
+                           preserveRatio="true">
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+
+
+    <VBox alignment="TOP_CENTER"
+          layoutX="53.0"
+          layoutY="75.0"
+          prefHeight="525.0"
+          prefWidth="284.0">
+
+        <!-- PROFILE PICTURE -->
+        <ImageView fitHeight="200.0"
+                   fitWidth="200.0"
+                   pickOnBounds="true"
+                   preserveRatio="true"
+                   VBox.vgrow="ALWAYS">
+            <VBox.margin>
+                <Insets top="25.0" bottom="15.0"/>
+            </VBox.margin>
+            <Image url="@../images/userIconDark.png"/>
+        </ImageView>
+        <HBox alignment="CENTER">
+            <Label styleClass="headLabel"
+                   text="Total Time Focused:  "
+                   textAlignment="CENTER"
+                   wrapText="true">
+            </Label>
+
+            <!-- This label should be changed depending on time focused stored in db-->
+            <Label fx:id="totalTimeFocused"
+                   styleClass="headLabel"
+                   text="temp"
+                   textAlignment="CENTER"
+                   wrapText="true">
+            </Label>
+        </HBox>
+
+
+        <VBox alignment="CENTER_LEFT">
+
+            <!-- USERNAME -->
+            <Label fx:id="userNameLabel"
+                   styleClass="bodyLabel"
+                   text="User Name:"
+                   textAlignment="CENTER"
+                   wrapText="true">
+                <VBox.margin>
+                    <Insets top="15.0"/>
+                </VBox.margin>
+            </Label>
+            <HBox>
+                <TextField fx:id="userNameTextField"
+                           styleClass="textBox"
+                           text="Place Holder"
+                           editable="false"
+                           prefWidth="200.0"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button fx:id="editUserNameButton"
+                        mnemonicParsing="false"
+                        onAction="#onEditUserNameButtonClick"
+                        styleClass="tinyPrimaryButton"
+                        text="EDIT"
+                        textAlignment="CENTER"/>
+            </HBox>
+
+
+            <!-- PASSWORD -->
+            <Label fx:id="passwordLabel"
+                   styleClass="bodyLabel"
+                   text="Password:"
+                   textAlignment="CENTER"
+                   wrapText="true">
+                <VBox.margin>
+                    <Insets top="10.0"/>
+                </VBox.margin>
+            </Label>
+            <HBox>
+                <PasswordField fx:id="passwordTextField"
+                               styleClass="textBox"
+                               text="Place Holder"
+                               editable="false"
+                               prefWidth="200.0"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button fx:id="editPasswordButton"
+                        mnemonicParsing="false"
+                        onAction="#onEditPasswordButtonClick"
+                        styleClass="tinyPrimaryButton"
+                        text="EDIT"
+                        textAlignment="CENTER"/>
+            </HBox>
+            <Label fx:id="accountError"
+                   styleClass="warningLabel"
+                   textAlignment="CENTER"
+                   wrapText="true"
+                   maxHeight="0"
+            >
+
+            </Label>
+        </VBox>
+
+        <VBox alignment="BOTTOM_CENTER">
+            <padding>
+                <Insets top="40.0"/>
+            </padding>
+            <Button fx:id="logOutButton"
+                    mnemonicParsing="false"
+                    onAction="#onLogOutButtonClick"
+                    styleClass="largeSecondaryButton"
+                    text="LOG OUT">
+            </Button>
+        </VBox>
+    </VBox>
+
+
+    <!-- SIDE MENU -->
+    <StackPane fx:id="menuStackPane"
+               layoutY="74.9"
+               visible="false"
+               prefHeight="525.1"
+               prefWidth="280.0"
+               styleClass="menuPane">
+        <VBox>
+            <!-- Main Page -->
+            <Button fx:id="mainPageButton"
+                    onAction="#onMainPageButtonClick"
+                    styleClass="menuButton">
+                <graphic>
+                    <HBox alignment="CENTER_LEFT">
+                        <Region prefWidth="15.0" />
+                        <Label styleClass="navLabel"
+                               prefWidth="30.0"
+                               text="⬅"
+                               textAlignment="CENTER"/>
+                        <Region prefWidth="10.0" />
+                        <Label styleClass="navLabel"
+                               text="Main Page"
+                               textAlignment="CENTER"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <!--Parental Controls-->
+            <Button fx:id="parentalControlsButton"
+                    onAction="#onParentalControlsButtonClick"
+                    styleClass="menuButton">
+                <graphic>
+                    <HBox alignment="CENTER_LEFT">
+                        <Region prefWidth="15.0" />
+                        <Label styleClass="navLabel"
+                               prefWidth="30.0"
+                               text="👨‍👩‍👦"
+                               textAlignment="CENTER"/>
+                        <Region prefWidth="10.0" />
+                        <Label styleClass="navLabel"
+                               text="Parental Controls"
+                               textAlignment="CENTER"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <!--Colour Settings-->
+            <Button fx:id="colourSettingsButton"
+                    onAction="#onColourSettingsButtonClick"
+                    styleClass="menuButton">
+                <graphic>
+                    <HBox alignment="CENTER_LEFT">
+                        <Region prefWidth="15.0" />
+                        <Label styleClass="navLabel"
+                               prefWidth="30.0"
+                               text="🎨"
+                               textAlignment="CENTER"/>
+                        <Region prefWidth="10.0" />
+                        <Label styleClass="navLabel"
+                               text="Colour Settings"
+                               textAlignment="CENTER"/>
+                    </HBox>
+                </graphic>
+            </Button>
+
+            <!--Sound Settings-->
+            <Button fx:id="soundSettingsButton"
+                    onAction="#onSoundSettingsButtonClick"
+                    styleClass="menuButton">
+                <graphic>
+                    <HBox alignment="CENTER_LEFT">
+                        <Region prefWidth="15.0" />
+                        <Label styleClass="navLabel"
+                               prefWidth="30.0"
+                               text="🔊"
+                               textAlignment="CENTER"/>
+                        <Region prefWidth="10.0" />
+                        <Label styleClass="navLabel"
+                               text="Sound Settings"
+                               textAlignment="CENTER"/>
+                    </HBox>
+                </graphic>
+            </Button>
+        </VBox>
+    </StackPane>
+
+    <!-- BLACK OUT PANE -->
+    <StackPane fx:id="blackOutStackPane"
+               prefHeight="600.0"
+               prefWidth="390.0"
+               styleClass="blackOutPane"
+               visible="false">
+    </StackPane>
+
+    <!-- LOG OUT CONFIRMATION -->
+    <StackPane fx:id="confirmLogOutStackPane"
+               layoutY="225.0"
+               layoutX="55.0"
+               styleClass="confirmPane"
+               visible="false">
+        <VBox alignment="TOP_CENTER">
+            <padding>
+                <Insets top="25.0"/>
+            </padding>
+            <Label styleClass="bodyLabel"
+                   text="Are you sure you want to log out?"
+                   textAlignment="CENTER"
+                    wrapText="true"/>
+        </VBox>
+        <HBox alignment="BOTTOM_CENTER">
+            <Region prefWidth="35.0" />
+            <Button fx:id="abortButton"
+                    mnemonicParsing="false"
+                    onAction="#onAbortButtonClick"
+                    styleClass="tinySecondaryButton"
+                    text="NO"
+                    textAlignment="CENTER"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Button fx:id="confirmButton"
+                    mnemonicParsing="false"
+                    onAction="#onConfirmButtonClick"
+                    styleClass="tinyPrimaryButton"
+                    text="YES"
+                    textAlignment="CENTER"/>
+            <Region prefWidth="35.0" />
+            <padding>
+                <Insets bottom="25.0"/>
+            </padding>
+        </HBox>
+    </StackPane>
+
+
+</AnchorPane>
