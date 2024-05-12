@@ -24,7 +24,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         // Load fxml file
-        FXMLLoader root = new FXMLLoader(HelloApplication.class.getResource("fxml/hello-view.fxml"));
+        FXMLLoader root = new FXMLLoader(HelloApplication.class.getResource("fxml/home-view.fxml"));
         // Set scene
         Scene scene = new Scene(root.load(), WIDTH, HEIGHT);
         // Set scene stylesheet

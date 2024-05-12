@@ -35,24 +35,17 @@
 
         <!-- To Previous Page -->
         <!-- This should call a side menu -->
-        <Pane minHeight="75.0"
-              onMouseEntered="#onMenuStackPaneEnter"
-              onMouseExited="#onMenuStackPaneExit">
+        <Pane minHeight="75.0">
             <VBox layoutY="17">
-                <Button styleClass="navButton">
+                <Button styleClass="navButton" onAction="#toggleMenu">
                     <graphic>
-                        <ImageView fitHeight="40.0"
-                                   fitWidth="40.0"
-                                   pickOnBounds="true"
-                                   preserveRatio="true">
-                            <Image url="@../images/menuIcon.png"/>
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@../images/menuIcon.png" />
                         </ImageView>
                     </graphic>
                 </Button>
             </VBox>
         </Pane>
-
-
 
         <Region HBox.hgrow="ALWAYS" />
 
@@ -134,12 +127,8 @@
         </HBox>
     </VBox>
 
-
-
     <!-- SIDE MENU -->
     <StackPane fx:id="menuStackPane"
-               onMouseExited="#onMenuStackPaneExit"
-               onMouseEntered="#onMenuStackPaneEnter"
                layoutY="74.9"
                visible="false"
                prefHeight="525.1"
@@ -319,7 +308,6 @@
             </HBox>
         </VBox>
     </StackPane>
-
 
     <!-- ADD APPLICATION PANE -->
     <StackPane fx:id="addApplicationStackPane"

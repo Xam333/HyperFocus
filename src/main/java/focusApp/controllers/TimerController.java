@@ -24,7 +24,7 @@ public class TimerController {
     private Timer timer;
 
     @FXML
-    private Button BackBtn;
+    private Button ReturnButton;
     @FXML
     private Label StopWatch;
     @FXML
@@ -45,8 +45,6 @@ public class TimerController {
     private Button StopButton;
     @FXML
     private Button RestartButton;
-    @FXML
-    private Button ReturnButton;
     @FXML
     private ToggleButton ToggleListen;
 
@@ -100,8 +98,8 @@ public class TimerController {
 
     @FXML
     protected void onReturnButtonClick() throws IOException {
-        Stage stage = (Stage) BackBtn.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/hello-view.fxml"));
+        Stage stage = (Stage) ReturnButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
 
         // Set scene stylesheet
@@ -224,18 +222,6 @@ public class TimerController {
                 }
             }
         });
-    }
-
-    @FXML
-    protected void onBackButtonClick() throws IOException {
-        Timer.ForceStopTimer(); // kills the timer so no duplicates are running
-        Stage stage = (Stage) BackBtn.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
-
-        // Set scene stylesheet
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
-        stage.setScene(scene);
     }
 
 }

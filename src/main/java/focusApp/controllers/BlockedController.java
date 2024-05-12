@@ -60,6 +60,7 @@ public class BlockedController implements Initializable {
     public StackPane confirmCancelStackPane;
     public Button abortButton;
     public Button confirmButton;
+    private Boolean isMenuOpen = false;
 
     @FXML
     private TextField getAddWebsiteTextField;
@@ -85,7 +86,6 @@ public class BlockedController implements Initializable {
     private IBlockedItemDAO blockedDAO;
     public BlockedController(){
         blockedDAO = new MockedBlockedItemDAO();
-
     }
 
     /*REDUNDANT
@@ -227,10 +227,6 @@ public class BlockedController implements Initializable {
         else return "Not Found";
     }
 
-
-
-
-
     @FXML
     protected void onCancelButtonClick() throws IOException {
         if(!changesSaved){
@@ -311,12 +307,17 @@ public class BlockedController implements Initializable {
 
     }
 
-    public void onMenuStackPaneEnter(MouseEvent actionEvent) {
-
-        menuStackPane.setVisible(true);
-    }
-    public void onMenuStackPaneExit(MouseEvent mouseEvent) {
-        menuStackPane.setVisible(false);
+    @FXML
+    private void toggleMenu() {
+        if (isMenuOpen) {
+            // Close the menu
+            menuStackPane.setVisible(false);
+            isMenuOpen = false;
+        } else {
+            // Open the menu
+            menuStackPane.setVisible(true);
+            isMenuOpen = true;
+        }
     }
 
 

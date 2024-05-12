@@ -1,7 +1,11 @@
 package focusApp.controllers;
 
 import focusApp.HelloApplication;
+import focusApp.database.IBlockedItemDAO;
+import focusApp.database.MockedBlockedItemDAO;
+import focusApp.models.BlockedApplication;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +14,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -19,6 +26,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -36,6 +44,7 @@ public class MainController implements Initializable {
     public Button parentalControlsButton;
     public Button colourSettingsButton;
     public Button soundSettingsButton;
+    private Boolean isMenuOpen = false;
 
     @FXML
     private Label startTimeLabel;
@@ -94,6 +103,7 @@ public class MainController implements Initializable {
 
             endTimeLabel.setText(formattedTime);  // Update the label with the formatted time
         });
+
     }
 
     public void onBlockedApplicationsPaneClick(MouseEvent mouseEvent) throws IOException {
@@ -105,7 +115,6 @@ public class MainController implements Initializable {
         scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
         stage.setScene(scene);
     }
-
 
     public void onStartButtonClick(ActionEvent actionEvent) throws IOException {
         Stage stage = (Stage) startButton.getScene().getWindow();
@@ -123,13 +132,17 @@ public class MainController implements Initializable {
         stage.setScene(scene);
     }
 
-    public void onMenuStackPaneEnter(MouseEvent actionEvent) {
-        menuStackPane.setVisible(!menuStackPane.isVisible());
-    }
-
-
-    public void onMenuStackPaneExit(MouseEvent mouseEvent) {
-        menuStackPane.setVisible(false);
+    @FXML
+    private void toggleMenu() {
+        if (isMenuOpen) {
+            // Close the menu
+            menuStackPane.setVisible(false);
+            isMenuOpen = false;
+        } else {
+            // Open the menu
+            menuStackPane.setVisible(true);
+            isMenuOpen = true;
+        }
     }
 
     public void onAccountButtonClick(ActionEvent actionEvent) throws IOException {

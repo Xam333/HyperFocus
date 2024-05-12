@@ -8,23 +8,18 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <AnchorPane prefHeight="600.0" prefWidth="390.0" styleClass="root" stylesheets="@../stylesheet.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.TimerController">
 
     <VBox fx:id="vBoxContainer" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
 
-        <HBox fx:id="hBoxHeader" alignment="CENTER" spacing="131.0" styleClass="navBox" stylesheets="@../stylesheet.css">
-
-            <Button fx:id="BackBtn" alignment="CENTER" onAction="#onBackButtonClick" text="&lt;" />
-
-            <Label alignment="CENTER" contentDisplay="CENTER" style="-fx-font-size: 18px;" text="Timer" textAlignment="CENTER" wrapText="true" />
-
-            <Button alignment="CENTER" text="..." />
-
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
-
+        <!-- NAV BAR -->
+        <HBox alignment="CENTER" prefHeight="75.0" prefWidth="390.0" spacing="5.0" styleClass="navBox">
+            <!-- Page Title -->
+            <Label styleClass="navLabel" text="Focus Timer" textAlignment="CENTER" />
         </HBox>
+
       <StackPane prefHeight="150.0" prefWidth="200.0">
          <children>
             <Group>

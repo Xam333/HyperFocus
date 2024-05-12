@@ -35,6 +35,7 @@
     -fx-pref-width: 280px;
     -fx-pref-height: 150px;
     -fx-background-color: #FFFFFF;
+    -fx-background-radius: 12px;
 
     -fx-border-radius: 8px;
     -fx-border-width: 5px;
@@ -44,8 +45,6 @@
     -fx-font-weight: bold;
     -fx-font-size: 14px;
 }
-
-
 
 
 /* Blocked Pane */
@@ -147,6 +146,7 @@
 /* Buttons */
 .navButton{
     -fx-background-color: transparent;
+    -fx-cursor: hand;
 }
 
 .defaultButton {
@@ -165,18 +165,17 @@
 
 .defaultButton:hover {
     -fx-background-color: #F5F5F5;
-
 }
 
 .menuButton{
     -fx-pref-width: 280.0;
     -fx-pref-height: 50.0;
     -fx-background-color: transparent;
+    -fx-cursor: hand;
 }
 
 .menuButton:hover {
     -fx-background-color: -primaryColor;
-
 }
 
 
@@ -290,6 +289,7 @@
     -fx-text-fill: #FFF;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
+    -fx-cursor: hand;
 }
 .ButtonControlUpper:hover, .ButtonControlLower:hover {
     -fx-background-color: -SubSecondaryColor;
@@ -308,6 +308,7 @@
     -fx-text-fill: #FFF;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
+    -fx-cursor: hand;
 }
 .ButtonController {
     -fx-background-color: -SubSecondaryColor;

@@ -234,10 +234,10 @@ public class Timer {
      */
     public String getStatus(){
         switch (Timer_State){
-            case Running -> { return "Timer Running."; }
-            case Paused -> { return "Timer Paused."; }
+            case Running -> { return "Timer Running"; }
+            case Paused -> { return "Timer Paused"; }
             case Finished -> { return "Timer Finished"; }
-            case Stopped -> { return "Timer Stopped."; }
+            case Stopped -> { return "Timer Stopped"; }
             case Delayed -> { return Timer_Start.format(Timer_12_Format); }
             default -> throw new IllegalArgumentException("Invalid Time TimerState: " + Timer_State);
         }
