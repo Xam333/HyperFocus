@@ -96,6 +96,9 @@ public class LoginController {
         if (!Objects.equals(regPasswordTextField.getText(), confirmPasswordTextField.getText())) {
             denyRegisterLabel.setText("* Passwords don't match. *");
             return;
+        } else if (regPasswordTextField.getLength() == 0 || regUserNameTextField.getLength() == 0) {
+            denyRegisterLabel.setText("* password and username must not be 0 characters *");
+            return;
         }
 
         /* create userDAO and attempt to create account */
@@ -113,7 +116,7 @@ public class LoginController {
             scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
             stage.setScene(scene);
         } else {
-            denyRegisterLabel.setText("This username is already taken/Passwords don't match.");
+            denyRegisterLabel.setText("This username is already taken");
         }
     }
 
