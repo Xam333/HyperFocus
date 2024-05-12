@@ -176,19 +176,22 @@ public class BlockedController implements Initializable {
 
         if (websiteItem == null) {
             websiteItem = websiteDAO.getWebsite(websiteDAO.getWebsiteID(info[1]));
-        }
 
-        boolean presetAdded = presetDAO.addWebsitePreset(currentPreset.getPresetID(), websiteItem.getID());
-
-        if (presetAdded) {
+            System.out.println("Website already exists adding to preset.");
+        } else {
             /* logging */
             System.out.println("Image URL: " + info[0]);
             System.out.println("Name: " + info[1]);
             System.out.println("Web/File Link: " + info[2]);
-
-        } else {
-            System.out.println("Preset already has website: " + info[1]);
         }
+
+        System.out.println("Image URL: " + info[0]);
+        System.out.println("Name: " + info[1]);
+        System.out.println("Web/File Link: " + info[2]);
+
+        blockedItems.add(websiteItem);
+
+        syncBlockedApplications();
     }
 
     @FXML
@@ -203,16 +206,13 @@ public class BlockedController implements Initializable {
             applicationItem = applicationDAO.getApplication(applicationDAO.getApplicationID(info[1]));
         }
 
-        boolean presetAdded = presetDAO.addApplicationPreset(currentPreset.getPresetID(), applicationItem.getID());
+        System.out.println("Image URL: " + info[0]);
+        System.out.println("Name: " + info[1]);
+        System.out.println("Web/File Link: " + info[2]);
 
-        if (presetAdded) {
-            /* logging */
-            System.out.println("Image URL: " + info[0]);
-            System.out.println("Name: " + info[1]);
-            System.out.println("Web/File Link: " + info[2]);
-        } else {
-            System.out.println("Preset already has application: " + info[1]);
-        }
+        blockedItems.add(applicationItem);
+
+        syncBlockedApplications();
     }
 
     /**
@@ -332,7 +332,6 @@ public class BlockedController implements Initializable {
             @Override
             protected void updateItem(String url, boolean empty) {
                 super.updateItem(url, empty);
-                System.out.println(url);
                 if (empty || url == null) {
                     setGraphic(null);
                     setText(null);
@@ -395,6 +394,18 @@ public class BlockedController implements Initializable {
 
 //    Add new websites and applications to database
     public void onSaveButtonClick(ActionEvent actionEvent) throws IOException {
+
+        for (BlockedItem item : blockedItems) {
+            if (item.getClass() == WebsiteItem.class) {
+                System.out.println(item.getName() + " is website");
+                presetDAO.addWebsitePreset(currentPreset.getPresetID(), item.getID());
+            } else if (item.getClass() == ApplicationItem.class) {
+                System.out.println(item.getName() + " is application");
+                presetDAO.addApplicationPreset(currentPreset.getPresetID(), item.getID());
+            }
+
+        }
+
         changesSaved = true;
         Stage stage = (Stage) saveButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
