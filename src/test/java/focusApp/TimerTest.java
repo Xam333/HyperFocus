@@ -1,17 +1,16 @@
-import focusApp.models.Command;
+package focusApp;
+
 import focusApp.models.Timer;
 import focusApp.controllers.TimerController;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 import focusApp.models.TimerState;
 import org.junit.jupiter.api.*;
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
- class TimerTest {
+class TimerTest {
      private Timer timer;
      private TimerController timerController;
 

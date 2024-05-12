@@ -1,3 +1,5 @@
+package focusApp;
+
 import focusApp.models.User;
 
 // Import JUnit
