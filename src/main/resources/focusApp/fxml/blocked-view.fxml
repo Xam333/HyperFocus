@@ -37,7 +37,7 @@
         <!-- This should call a side menu -->
         <Pane minHeight="75.0">
             <VBox layoutY="17">
-                <Button styleClass="navButton" onAction="#toggleMenu">
+                <Button styleClass="navButton">
                     <graphic>
                         <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                             <Image url="@../images/menuIcon.png" />
