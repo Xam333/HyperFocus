@@ -51,6 +51,11 @@
 .blockedPane{
     -fx-border-color: #000000;
     -fx-background-color: -textBoxColor;
+    -fx-cursor: hand;
+}
+
+.blockedPane:hover {
+    -fx-border-color: -secondaryColor;
 }
 
 
