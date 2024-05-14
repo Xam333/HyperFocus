@@ -128,6 +128,8 @@ public class MainController implements Initializable {
         // Display a sound name in combo box
         soundOptionsButton.getSelectionModel().selectFirst();
 
+        colourOptionsButton.getSelectionModel().selectFirst();
+
         // Initialise start and end time sliders
         startTimeSlider();
         endTimeSlider();

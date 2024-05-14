@@ -210,7 +210,7 @@
                                        text="Toggle"
                                        wrapText="true"/>
                                 <Region HBox.hgrow="ALWAYS"/>
-                                <ToggleButton text="yea" styleClass="tinyPrimaryButton"/>
+                                <Button text="yea" styleClass="tinyPrimaryButton"/>
 
                             </HBox>
 
@@ -267,7 +267,7 @@
                                                <Rectangle width="20" height="20" fill="#E6F9FF"/>
                                            </HBox>
                                            <Region prefWidth="10.0"/>
-                                           <Label text="Default" />
+                                           <Label styleClass="listLabel" text="Default" />
                                        </HBox>
                                        <HBox fx:id="greyScalePalette">
                                            <HBox maxWidth="60.0" maxHeight="20.0" style="-fx-border-color: #000000">
@@ -276,7 +276,7 @@
                                                <Rectangle width="20" height="20" fill="#F8F8F8" />
                                            </HBox>
                                            <Region prefWidth="10.0"/>
-                                           <Label text="Grey Scale" />
+                                           <Label styleClass="listLabel" text="Grey Scale" />
                                        </HBox>
                                        <HBox fx:id="redPalette">
                                            <HBox maxWidth="60.0" maxHeight="20.0" style="-fx-border-color: #000000">
@@ -285,7 +285,7 @@
                                                <Rectangle width="20" height="20" fill="#FFE6E6" />
                                            </HBox>
                                            <Region prefWidth="10.0"/>
-                                           <Label text="Red" />
+                                           <Label styleClass="listLabel" text="Red" />
                                        </HBox>
                                    </FXCollections>
                                </items>
