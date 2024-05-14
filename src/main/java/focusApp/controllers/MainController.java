@@ -194,6 +194,9 @@ public class MainController implements Initializable {
         /* create preset if none exist */
         if (presetNames.isEmpty()) {
             presetDAO.addPreset(user.getId(), "Preset");
+            for (Preset preset : presetDAO.getUsersPresets(user.getId())) {
+                presetNames.add(preset.getPresetName());
+            }
         }
 
         presetNames.add("New Preset +");
