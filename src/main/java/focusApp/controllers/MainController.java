@@ -132,44 +132,44 @@ public class MainController implements Initializable {
         updateBlockList();
 
 
-        colourOptionsButton.setCellFactory(new Callback<ListView<HBox>, ListCell<HBox>>() {
-            @Override
-            public ListCell<HBox> call(ListView<HBox> listView) {
-                return new ListCell<HBox>() {
-                    @Override
-                    protected void updateItem(HBox item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty || item == null) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(item);
-                        }
-                    }
-                };
-            }
-        });
+//        colourOptionsButton.setCellFactory(new Callback<ListView<HBox>, ListCell<HBox>>() {
+//            @Override
+//            public ListCell<HBox> call(ListView<HBox> listView) {
+//                return new ListCell<HBox>() {
+//                    @Override
+//                    protected void updateItem(HBox item, boolean empty) {
+//                        super.updateItem(item, empty);
+//                        if (empty || item == null) {
+//                            setGraphic(null);
+//                        } else {
+//                            setGraphic(item);
+//                        }
+//                    }
+//                };
+//            }
+//        });
 
-        colourOptionsButton.setButtonCell(new ListCell<HBox>() {
-            @Override
-            protected void updateItem(HBox item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(item);
-                }
-            }
-        });
-
-        colourOptionsButton.setOnAction(event -> {
-            HBox selectedPalette = (HBox) colourOptionsButton.getValue();
-            applyColorPalette(selectedPalette);
-        });
+//        colourOptionsButton.setButtonCell(new ListCell<HBox>() {
+//            @Override
+//            protected void updateItem(HBox item, boolean empty) {
+//                super.updateItem(item, empty);
+//                if (empty || item == null) {
+//                    setGraphic(null);
+//                } else {
+//                    setGraphic(item);
+//                }
+//            }
+//        });
+//
+//        colourOptionsButton.setOnAction(event -> {
+//            HBox selectedPalette = (HBox) colourOptionsButton.getValue();
+//            applyColorPalette(selectedPalette);
+//        });
     }
     
-    public void applyColorPalette(HBox palette){
-        
-    }
+//    public void applyColorPalette(HBox palette){
+//        
+//    }
 
     public void startTimeSlider() {
         // Listen for changes to the slider and update the label
