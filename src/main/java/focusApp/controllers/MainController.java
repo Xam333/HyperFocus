@@ -17,10 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import javax.swing.event.ChangeEvent;
@@ -40,6 +37,7 @@ import java.util.ResourceBundle;
 
 import focusApp.database.Preset;
 import focusApp.database.PresetDAO;
+import javafx.util.Callback;
 
 import java.util.ArrayList;
 
@@ -56,9 +54,16 @@ public class MainController implements Initializable {
     public VBox soundSettingsSection;
     public VBox colourSettingsSection;
     public Slider volumeSlider;
+    public ComboBox soundOptionsButton;
+    public HBox palette3;
+    public HBox defaultPalette;
+    public HBox palette2;
+    public ComboBox colourOptionsButton;
     private Boolean isMenuOpen = false;
 
     private Boolean isPCOpen = false;
+    private Boolean isSSOpen = false;
+    private Boolean isCSOpen = false;
 
     @FXML
     private Label startTimeLabel;
@@ -116,12 +121,54 @@ public class MainController implements Initializable {
 
         presetsButton.getSelectionModel().selectFirst();
 
+        // Display a sound name in combo box
+        soundOptionsButton.getSelectionModel().selectFirst();
+
         // Initialise start and end time sliders
         startTimeSlider();
         endTimeSlider();
 
         /* update the blocked list */
         updateBlockList();
+
+
+        colourOptionsButton.setCellFactory(new Callback<ListView<HBox>, ListCell<HBox>>() {
+            @Override
+            public ListCell<HBox> call(ListView<HBox> listView) {
+                return new ListCell<HBox>() {
+                    @Override
+                    protected void updateItem(HBox item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(item);
+                        }
+                    }
+                };
+            }
+        });
+
+        colourOptionsButton.setButtonCell(new ListCell<HBox>() {
+            @Override
+            protected void updateItem(HBox item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(item);
+                }
+            }
+        });
+
+        colourOptionsButton.setOnAction(event -> {
+            HBox selectedPalette = (HBox) colourOptionsButton.getValue();
+            applyColorPalette(selectedPalette);
+        });
+    }
+    
+    public void applyColorPalette(HBox palette){
+        
     }
 
     public void startTimeSlider() {
@@ -323,7 +370,6 @@ public class MainController implements Initializable {
 
     public void onParentalControlsButtonClick(ActionEvent actionEvent) throws IOException {
 
-
         if (isPCOpen) {
             // Close the menu
             parentalControlsSection.setManaged(false);
@@ -337,8 +383,23 @@ public class MainController implements Initializable {
         }
 //        parentalControlsSection.setVisible(parentalControlsSection.isVisible());
 
-//
-//        Stage stage = (Stage) parentalControlsButton.getScene().getWindow();
+    }
+
+    public void onColourSettingsButtonClick(ActionEvent actionEvent) throws IOException {
+
+        if (isCSOpen) {
+            // Close the menu
+            colourSettingsSection.setManaged(false);
+            colourSettingsSection.setVisible(false);
+            isCSOpen = false;
+        } else {
+            // Open the menu
+            colourSettingsSection.setManaged(true);
+            colourSettingsSection.setVisible(true);
+            isCSOpen = true;
+        }
+
+//        Stage stage = (Stage) colourSettingsButton.getScene().getWindow();
 //        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
 //        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
 //
@@ -346,22 +407,26 @@ public class MainController implements Initializable {
 //        stage.setScene(scene);
     }
 
-    public void onColourSettingsButtonClick(ActionEvent actionEvent) throws IOException {
-        Stage stage = (Stage) colourSettingsButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
-
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
-        stage.setScene(scene);
-    }
-
     public void onSoundSettingsButtonClick(ActionEvent actionEvent) throws IOException {
-        Stage stage = (Stage) soundSettingsButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
 
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
-        stage.setScene(scene);
+        if (isSSOpen) {
+            // Close the menu
+            soundSettingsSection.setManaged(false);
+            soundSettingsSection.setVisible(false);
+            isSSOpen = false;
+        } else {
+            // Open the menu
+            soundSettingsSection.setManaged(true);
+            soundSettingsSection.setVisible(true);
+            isSSOpen = true;
+        }
+
+//        Stage stage = (Stage) soundSettingsButton.getScene().getWindow();
+//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
+//        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+//
+//        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+//        stage.setScene(scene);
     }
 
 }

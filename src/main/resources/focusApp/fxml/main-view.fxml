@@ -24,6 +24,9 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.collections.FXCollections?>
 <?import com.sun.javafx.charts.Legend?>
+<?import java.lang.String?>
+<?import javafx.scene.control.skin.ColorPalette.ColorSquare?>
+<?import javafx.scene.shape.Rectangle?>
 <AnchorPane maxHeight="-Infinity"
             maxWidth="-Infinity"
             minHeight="-Infinity"
@@ -243,10 +246,46 @@
                        </HBox>
                    </graphic>
                </Button>
+
+               <!-- Drop down colour settings -->
                <VBox fx:id="colourSettingsSection"
                      style="-fx-background-color: #FF00FF"
                      visible="false"
                      managed="false">
+                   <HBox>
+                       <Region prefWidth="55.0"/>
+
+                       <VBox>
+                           <ComboBox fx:id="colourOptionsButton"
+                                     styleClass="defaultButton"
+                                     minWidth="210.0">
+                               <items>
+                                   <FXCollections fx:factory="observableArrayList">
+                                       <HBox fx:id="defaultPalette">
+                                           <Rectangle width="7" height="7" fill="red" />
+                                           <Rectangle width="7" height="7" fill="green" />
+                                           <Rectangle width="7" height="7" fill="blue" />
+                                           <Label text=" Palette 1" />
+                                       </HBox>
+                                       <HBox fx:id="palette2">
+                                           <Rectangle width="7" height="7" fill="red" />
+                                           <Rectangle width="7" height="7" fill="green" />
+                                           <Rectangle width="7" height="7" fill="blue" />
+                                           <Label text=" Palette 2" />
+                                       </HBox>
+                                       <HBox fx:id="palette3">
+                                           <Rectangle width="7" height="7" fill="red" />
+                                           <Rectangle width="7" height="7" fill="green" />
+                                           <Rectangle width="7" height="7" fill="blue" />
+                                           <Label text=" Palette 3" />
+                                       </HBox>
+                                   </FXCollections>
+                               </items>
+                           </ComboBox>
+                           <Region prefWidth="15.0"/>
+                       </VBox>
+                   </HBox>
+
 
                </VBox>
            </VBox>
@@ -264,38 +303,40 @@
                         </HBox>
                     </graphic>
                 </Button>
+
+                <!-- Drop down sound settings -->
                 <VBox fx:id="soundSettingsSection"
                       style="-fx-background-colour: #00FFFF"
-                      managed="true"
-                      visible="true">
+                      managed="false"
+                      visible="false">
                     <HBox>
                         <Region prefWidth="55.0"/>
                         <VBox>
                             <Label text="Alarm sound"
                                    styleClass="bodyLabel"/>
-                            <MenuButton mnemonicParsing="false"
-                                        styleClass="defaultButton"
-                                        maxWidth="70.0"
-                                        text="Select Preset">
+
+                            <ComboBox fx:id="soundOptionsButton"
+                                    styleClass="defaultButton"
+                                      minWidth="210.0">
                                 <items>
-                                    <MenuItem mnemonicParsing="false"
-                                              text="Default"/>
-                                    <MenuItem mnemonicParsing="false"
-                                              text="Audio 2"/>
+                                    <FXCollections fx:factory="observableArrayList">
+                                        <String fx:value="Default"/>
+                                        <String fx:value="Audio 2"/>
+                                    </FXCollections>
                                 </items>
-                            </MenuButton>
-                        </VBox>
+                            </ComboBox>
+                            <Region prefHeight="10.0"/>
 
-                        <Region prefWidth="10.0"/>
 
-                        <VBox>
                             <Label text="Volume"
                                    styleClass="bodyLabel"/>
                             <Slider fx:id="volumeSlider"
                                     majorTickUnit="50.0"
-                                    prefWidth="130.0"
+                                    prefWidth="210.0"
                                     styleClass="timerSlider" />
+
                         </VBox>
+
 
                         <Region prefWidth="15.0"/>
                     </HBox>
