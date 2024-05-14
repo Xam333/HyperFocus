@@ -108,7 +108,15 @@ public class MainController implements Initializable {
 
         presetsButton.getSelectionModel().selectFirst();
 
+        // Initialise start and end time sliders
+        startTimeSlider();
+        endTimeSlider();
 
+        /* update the blocked list */
+        updateBlockList();
+    }
+
+    public void startTimeSlider() {
         // Listen for changes to the slider and update the label
         startTimeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             int totalMinutes = newVal.intValue();  // Convert slider value to int
@@ -130,7 +138,17 @@ public class MainController implements Initializable {
             }
 
             startTimeLabel.setText(formattedTime);  // Update the label with the formatted time
+
+            // Calculate percentage of the slider position
+            double percentage = newVal.doubleValue() / startTimeSlider.getMax();
+
+            // Set inline CSS for the track color
+            String trackColor = String.format("-fx-background-color: linear-gradient(to right, #59ADFF %f%%, white %f%%);", percentage * 100, percentage * 100);
+            startTimeSlider.lookup(".track").setStyle(trackColor);
         });
+    }
+
+    public void endTimeSlider() {
         endTimeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             int totalMinutes = newVal.intValue();  // Convert slider value to int
             this.endTime = totalMinutes;
@@ -148,10 +166,14 @@ public class MainController implements Initializable {
             }
 
             endTimeLabel.setText(formattedTime);  // Update the label with the formatted time
-        });
 
-        /* update the blocked list */
-        updateBlockList();
+            // Calculate percentage of the slider position
+            double percentage = newVal.doubleValue() / endTimeSlider.getMax();
+
+            // Set inline CSS for the track color
+            String trackColor = String.format("-fx-background-color: linear-gradient(to right, #59ADFF %f%%, white %f%%);", percentage * 100, percentage * 100);
+            endTimeSlider.lookup(".track").setStyle(trackColor);
+        });
     }
 
     /**
