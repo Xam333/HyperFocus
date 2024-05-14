@@ -27,6 +27,8 @@ import javax.swing.event.ChangeListener;
 import java.io.Console;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.value.ObservableValue;
@@ -98,9 +100,10 @@ public class MainController implements Initializable {
 
         /* create preset if none exist */
         if (presetNames.isEmpty()) {
-            presetNames.add(presetDAO.generateNewPreset(user.getId()).getPresetName());
+            presetDAO.addPreset(user.getId(), "Preset");
         }
 
+        presetNames.add("New Preset +");
 
         ObservableList<String> presetsList = FXCollections.observableList(presetNames);
 
@@ -113,9 +116,15 @@ public class MainController implements Initializable {
         endTimeSlider();
 
         /* update the blocked list */
-        updateBlockList();
+        // Get preset name
+        String presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
+        System.out.println(presetName);
+        updateBlockList(presetName);
     }
 
+    /**
+     * Initialises start time slider and listens for updates
+     */
     public void startTimeSlider() {
         // Listen for changes to the slider and update the label
         startTimeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
@@ -148,6 +157,9 @@ public class MainController implements Initializable {
         });
     }
 
+    /**
+     * Initialises end time slider and listens for updates
+     */
     public void endTimeSlider() {
         endTimeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             int totalMinutes = newVal.intValue();  // Convert slider value to int
@@ -177,41 +189,78 @@ public class MainController implements Initializable {
     }
 
     /**
-     * create new preset and open preset edditor view
-     */
-    public void onAddPresetClick(ActionEvent actionEvent) throws IOException {
-
-        /* create new preset and add it to holder */
-        Preset preset = presetDAO.generateNewPreset(user.getId());
-        if (preset == null) {
-            throw new Error("generated preset is null");
-        }
-        presetHolder.setPreset(preset);
-
-        Stage stage = (Stage) blockedApplicationPane.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/blocked-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
-
-        // Set scene stylesheet
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
-        stage.setScene(scene);
-    }
-
-    /**
      * when clicking preset in dropdown menu
      */
     public void onPresetsButtonClick() {
-        updateBlockList();
+        // Get preset name
+        String presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
+        System.out.println(presetName);
+
+        // Check if new preset or existing
+        if (presetName.equals("New Preset +")) {
+            String newName = "Preset";
+            Preset newPreset = presetDAO.addPreset(user.getId(), newName);    // Update name of preset
+
+            if (newPreset != null) {
+                // Get the current list of preset names
+                ObservableList<String> presetNames = presetsButton.getItems();
+
+                // Remove "New Preset +" from the list
+                presetNames.remove("New Preset +");
+
+                // Add the new preset name to the list
+                presetNames.add(newPreset.getPresetName());
+
+                // Sort the list alphabetically (optional)
+                FXCollections.sort(presetNames);
+
+                // Add "New Preset +" back to the end of the list
+                presetNames.add("New Preset +");
+
+                // Update the ComboBox items
+                presetsButton.setItems(presetNames);
+
+                // Select the newly created preset
+                presetsButton.getSelectionModel().select(newPreset.getPresetName());
+            }
+        }
+
+        // Update block list
+        updateBlockList(presetName);
+    }
+
+    public void onDeleteButtonClick() {
+        // Get the currently selected preset name
+        String presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
+
+        // Ensure the selected preset is not "New Preset +"
+        if (!presetName.equals("New Preset +")) {
+            // Delete the selected preset from the database
+            presetDAO.deletePresetByName(user.getId(), presetName);
+
+            // Get the updated list of presets from the database
+            ArrayList<Preset> userPresets = presetDAO.getUsersPresets(user.getId());
+
+            // Clear the ComboBox items
+            presetsButton.getItems().clear();
+
+            // Populate the ComboBox with the updated list of presets
+            for (Preset preset : userPresets) {
+                presetsButton.getItems().add(preset.getPresetName());
+            }
+
+            // Add "New Preset +" back to the end of the ComboBox items
+            presetsButton.getItems().add("New Preset +");
+
+            // Select the first preset by default or perform any other desired action
+            presetsButton.getSelectionModel().selectFirst();
+        }
     }
 
     /**
      * update the blocked items display
      */
-    public void updateBlockList() {
-        String presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
-
-        System.out.println(presetName);
-
+    public void updateBlockList(String presetName) {
         Preset currentPreset = null;
 
         for (Preset preset : presetDAO.getUsersPresets(user.getId())) {
@@ -264,6 +313,9 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     * Opens blocked applications page
+     */
     public void onBlockedApplicationsPaneClick(MouseEvent mouseEvent) throws IOException {
         Stage stage = (Stage) blockedApplicationPane.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/blocked-view.fxml"));
@@ -274,6 +326,9 @@ public class MainController implements Initializable {
         stage.setScene(scene);
     }
 
+    /**
+     * Starts timer with specified start and end times
+     */
     public void onStartButtonClick(ActionEvent actionEvent) throws IOException {
         Stage stage = (Stage) startButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/timer-view.fxml"));
@@ -290,6 +345,9 @@ public class MainController implements Initializable {
         stage.setScene(scene);
     }
 
+    /**
+     * Toggle side menu (visible or not visible)
+     */
     @FXML
     private void toggleMenu() {
         if (isMenuOpen) {

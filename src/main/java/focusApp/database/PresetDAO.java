@@ -44,67 +44,74 @@ public class PresetDAO implements IPresetDAO {
         return null;
     }
 
-    public Preset addPreset(int userID, String presetsName) {
+    public Preset addPreset(int userID, String presetName) {
         try {
-            String query = "INSERT INTO presets(userID, presetName) VALUES(?, ?)";
-            PreparedStatement statement = connection.prepareStatement(query);
+            // Check if the preset name already exists
+            String query = "SELECT COUNT(*) FROM presets WHERE userID = ? AND presetName = ?";
+            PreparedStatement checkStatement = connection.prepareStatement(query);
+            checkStatement.setInt(1, userID);
+            checkStatement.setString(2, presetName);
+            ResultSet resultSet = checkStatement.executeQuery();
 
-            statement.setInt(1, userID);
-            statement.setString(2, presetsName);
+            if (resultSet.next()) {
+                // If the preset name already exists, append an integer suffix until a unique name is found
+                int suffix = 1;
+                String originalName = presetName;
+                while (resultSet.getInt(1) > 0) {
+                    presetName = originalName + " " + suffix;
+                    resultSet.close();
 
-            statement.execute();
-
-            int id = getLastPrest(userID);
-
-            return new Preset(id, presetsName);
-        } catch (SQLiteException sqlex) {
-            if (sqlex.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE) {
-                return null;
+                    // Check again if the new name exists
+                    checkStatement.setInt(1, userID);
+                    checkStatement.setString(2, presetName);
+                    resultSet = checkStatement.executeQuery();
+                    suffix++;
+                }
             }
-            sqlex.printStackTrace();
+
+            // Insert the preset with the unique name into the database
+            query = "INSERT INTO presets(userID, presetName) VALUES (?, ?)";
+            PreparedStatement insertStatement = connection.prepareStatement(query);
+            insertStatement.setInt(1, userID);
+            insertStatement.setString(2, presetName);
+            insertStatement.execute();
+
+            // Get the ID of the inserted preset
+            int id = getLastPreset(userID);
+
+            return new Preset(id, presetName);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    @Override
-    public Preset generateNewPreset(int userID) {
+    public void editPresetName(int userID, String currentName, String newName) {
         try {
-            String query = "SELECT count(presetID) FROM presets WHERE userID = ?";
+            String query = "UPDATE presets SET presetName = ? WHERE presetName = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
-            statement.setInt(1, userID);
+            statement.setString(1, newName);
+            statement.setString(2, currentName);
 
-            ResultSet res = statement.executeQuery();
-
-            int newId = 0;
-            if (res != null) {
-                newId = res.getInt("count(presetID)") + 1;
-            } else {
-                return null;
-            }
-
-            String newName = "Preset " + Integer.toString(newId);
-
-            query = "INSERT INTO presets(userID, presetName) VALUES(?,?)";
-
-            statement = connection.prepareStatement(query);
-
-            statement.setInt(1, userID);
-            statement.setString(2, newName);
-
-
-            if (0 == statement.executeUpdate()) {
-                return null;
-            }
-
-            return new Preset(getLastPrest(userID), newName);
-
+            statement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+    }
+
+    public void deletePresetByName(int userID, String presetName) {
+        try {
+            String query = "DELETE FROM presets WHERE userID = ? AND presetName = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setInt(1, userID);
+            statement.setString(2, presetName);
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean addWebsitePreset(int presetID, int websiteID) {
@@ -213,7 +220,7 @@ public class PresetDAO implements IPresetDAO {
         return null;
     }
 
-    int getLastPrest(int userID) {
+    public int getLastPreset(int userID) {
         try {
             String query = "SELECT presetID FROM presets WHERE userID = ? ORDER BY presetID desc";
             PreparedStatement statement = connection.prepareStatement(query);
