@@ -19,17 +19,38 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.control.ComboBox?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="390.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.MainController">
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.collections.FXCollections?>
+<?import com.sun.javafx.charts.Legend?>
+<AnchorPane maxHeight="-Infinity"
+            maxWidth="-Infinity"
+            minHeight="-Infinity"
+            minWidth="-Infinity"
+            prefHeight="600.0"
+            prefWidth="390.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="focusApp.controllers.MainController">
 
    <!-- NAV BAR -->
-   <HBox alignment="CENTER" prefHeight="75.0" prefWidth="390.0" spacing="5.0" styleClass="navBox">
+   <HBox alignment="CENTER"
+         prefHeight="75.0"
+         prefWidth="390.0"
+         spacing="5.0"
+         styleClass="navBox">
 
       <!-- Should open side menu -->
        <Pane minHeight="75.0">
            <VBox layoutY="17">
-               <Button onAction="#toggleMenu" styleClass="navButton">
+               <Button onAction="#toggleMenu"
+                       styleClass="navButton">
                    <graphic>
-                       <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                       <ImageView fitHeight="40.0"
+                                  fitWidth="40.0"
+                                  pickOnBounds="true"
+                                  preserveRatio="true">
                            <Image url="@../images/menuIcon.png" />
                        </ImageView>
                    </graphic>
@@ -40,15 +61,22 @@
       <Region HBox.hgrow="ALWAYS" />
 
       <!-- Page Title -->
-      <Label styleClass="navLabel" text="Focus Period" textAlignment="CENTER" />
+      <Label styleClass="navLabel"
+             text="Focus Period"
+             textAlignment="CENTER" />
 
       <Region HBox.hgrow="ALWAYS" />
 
-      <!--        add functionality, go to account page-->
+      <!--        get rid of account thingy-->
       <!-- To Account Page -->
-      <Button fx:id="accountButton" onAction="#onAccountButtonClick" styleClass="navButton">
+      <Button fx:id="accountButton"
+              onAction="#onAccountButtonClick"
+              styleClass="navButton">
          <graphic>
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="40.0"
+                       fitWidth="40.0"
+                       pickOnBounds="true"
+                       preserveRatio="true">
                <Image url="@../images/userIcon.png" />
             </ImageView>
          </graphic>
@@ -124,55 +152,157 @@
 
 
     <!-- SIDE MENU -->
-    <StackPane fx:id="menuStackPane" layoutY="74.9" prefHeight="525.0" prefWidth="280.0" styleClass="menuPane" visible="false">
+    <StackPane fx:id="menuStackPane"
+               layoutY="74.9"
+               prefHeight="525.0"
+               prefWidth="280.0"
+               styleClass="menuPane"
+               visible="false">
         <VBox>
             <!--Account Information-->
-            <Button onAction="#onAccountButtonClick" styleClass="menuButton">
+            <Button onAction="#onAccountButtonClick"
+                    styleClass="menuButton">
                 <graphic>
                     <HBox alignment="CENTER_LEFT">
+
                         <Region prefWidth="15.0" />
-                        <Label prefWidth="30.0" styleClass="navLabel" text="👤" textAlignment="CENTER" />
+
+                        <Label prefWidth="30.0"
+                               styleClass="navLabel"
+                               text="👤"
+                               textAlignment="CENTER" />
+
                         <Region prefWidth="10.0" />
-                        <Label styleClass="navLabel" text="Account Information" textAlignment="CENTER" />
+
+                        <Label styleClass="navLabel"
+                               text="Account Information"
+                               textAlignment="CENTER" />
                     </HBox>
                 </graphic>
             </Button>
 
             <!--Parental Controls-->
-            <Button fx:id="parentalControlsButton" onAction="#onParentalControlsButtonClick" styleClass="menuButton">
-                <graphic>
-                    <HBox alignment="CENTER_LEFT">
-                        <Region prefWidth="15.0" />
-                        <Label prefWidth="30.0" styleClass="navLabel" text="👨‍👩‍👦" textAlignment="CENTER" />
-                        <Region prefWidth="10.0" />
-                        <Label styleClass="navLabel" text="Parental Controls" textAlignment="CENTER" />
-                    </HBox>
-                </graphic>
-            </Button>
+            <VBox>
+                <Button fx:id="parentalControlsButton"
+                        onAction="#onParentalControlsButtonClick"
+                        styleClass="menuButton">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT">
 
-            <!--Colour Settings-->
-            <Button fx:id="colourSettingsButton" onAction="#onColourSettingsButtonClick" styleClass="menuButton">
-                <graphic>
-                    <HBox alignment="CENTER_LEFT">
-                        <Region prefWidth="15.0" />
-                        <Label prefWidth="30.0" styleClass="navLabel" text="🎨" textAlignment="CENTER" />
-                        <Region prefWidth="10.0" />
-                        <Label styleClass="navLabel" text="Colour Settings" textAlignment="CENTER" />
-                    </HBox>
-                </graphic>
-            </Button>
+                            <Region prefWidth="15.0" />
 
-            <!--Sound Settings-->
-            <Button fx:id="soundSettingsButton" onAction="#onSoundSettingsButtonClick" styleClass="menuButton">
-                <graphic>
-                    <HBox alignment="CENTER_LEFT">
-                        <Region prefWidth="15.0" />
-                        <Label prefWidth="30.0" styleClass="navLabel" text="🔊" textAlignment="CENTER" />
+                            <Label prefWidth="30.0"
+                                   styleClass="navLabel"
+                                   text="👨‍👩‍👦"
+                                   textAlignment="CENTER" />
+
+                            <Region prefWidth="10.0" />
+
+                            <Label styleClass="navLabel"
+                                   text="Parental Controls"
+                                   textAlignment="CENTER" />
+                        </HBox>
+                    </graphic>
+                </Button>
+                <VBox fx:id="parentalControlsSection"
+                      style="-fx-background-color: #FFFF00"
+                      visible="false"
+                      managed="false">
+                    <HBox alignment="CENTER">
                         <Region prefWidth="10.0" />
-                        <Label styleClass="navLabel" text="Sound Settings" textAlignment="CENTER" />
+                        <VBox>
+                            <HBox alignment="CENTER_RIGHT">
+<!--                                Needs to be made switch toggle, css -->
+                                <Label text="Toggle parental controls"
+                                       styleClass="bodyLabel"/>
+                                <ToggleButton text="yea"
+                                              styleClass="tinyPrimaryButton"/>
+                            </HBox>
+                            <Label text="Enter passcode to disable parental controls"
+                                   styleClass="bodyLabel"/>
+                            <PasswordField fx:id="parentalControlPasswordField"
+                                           styleClass="textBox"
+                                           promptText="Password"/>
+                        </VBox>
+                        <Region prefWidth="10.0" />
                     </HBox>
-                </graphic>
-            </Button>
+
+                </VBox>
+            </VBox>
+
+
+           <VBox>
+               <!--Colour Settings-->
+               <Button fx:id="colourSettingsButton" onAction="#onColourSettingsButtonClick" styleClass="menuButton">
+                   <graphic>
+                       <HBox alignment="CENTER_LEFT">
+                           <Region prefWidth="15.0" />
+                           <Label prefWidth="30.0" styleClass="navLabel" text="🎨" textAlignment="CENTER" />
+                           <Region prefWidth="10.0" />
+                           <Label styleClass="navLabel" text="Colour Settings" textAlignment="CENTER" />
+                       </HBox>
+                   </graphic>
+               </Button>
+               <VBox fx:id="colourSettingsSection"
+                     style="-fx-background-color: #FF00FF"
+                     visible="false"
+                     managed="false">
+
+               </VBox>
+           </VBox>
+
+
+            <VBox>
+                <!--Sound Settings-->
+                <Button fx:id="soundSettingsButton" onAction="#onSoundSettingsButtonClick" styleClass="menuButton">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT">
+                            <Region prefWidth="15.0" />
+                            <Label prefWidth="30.0" styleClass="navLabel" text="🔊" textAlignment="CENTER" />
+                            <Region prefWidth="10.0" />
+                            <Label styleClass="navLabel" text="Sound Settings" textAlignment="CENTER" />
+                        </HBox>
+                    </graphic>
+                </Button>
+                <VBox fx:id="soundSettingsSection"
+                      style="-fx-background-colour: #00FFFF"
+                      managed="true"
+                      visible="true">
+                    <HBox>
+                        <Region prefWidth="55.0"/>
+                        <VBox>
+                            <Label text="Alarm sound"
+                                   styleClass="bodyLabel"/>
+                            <MenuButton mnemonicParsing="false"
+                                        styleClass="defaultButton"
+                                        maxWidth="70.0"
+                                        text="Select Preset">
+                                <items>
+                                    <MenuItem mnemonicParsing="false"
+                                              text="Default"/>
+                                    <MenuItem mnemonicParsing="false"
+                                              text="Audio 2"/>
+                                </items>
+                            </MenuButton>
+                        </VBox>
+
+                        <Region prefWidth="10.0"/>
+
+                        <VBox>
+                            <Label text="Volume"
+                                   styleClass="bodyLabel"/>
+                            <Slider fx:id="volumeSlider"
+                                    majorTickUnit="50.0"
+                                    prefWidth="130.0"
+                                    styleClass="timerSlider" />
+                        </VBox>
+
+                        <Region prefWidth="15.0"/>
+                    </HBox>
+
+                </VBox>
+            </VBox>
+
         </VBox>
     </StackPane>
 </AnchorPane>

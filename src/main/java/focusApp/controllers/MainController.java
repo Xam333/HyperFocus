@@ -20,6 +20,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import javax.swing.event.ChangeEvent;
@@ -50,7 +51,14 @@ public class MainController implements Initializable {
     public Button parentalControlsButton;
     public Button colourSettingsButton;
     public Button soundSettingsButton;
+    public VBox parentalControlsSection;
+    public PasswordField parentalControlPasswordField;
+    public VBox soundSettingsSection;
+    public VBox colourSettingsSection;
+    public Slider volumeSlider;
     private Boolean isMenuOpen = false;
+
+    private Boolean isPCOpen = false;
 
     @FXML
     private Label startTimeLabel;
@@ -281,6 +289,7 @@ public class MainController implements Initializable {
         }
     }
 
+
     public void onAccountButtonClick(ActionEvent actionEvent) throws IOException {
         Stage stage = (Stage) accountButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/account-view.fxml"));
@@ -291,12 +300,28 @@ public class MainController implements Initializable {
     }
 
     public void onParentalControlsButtonClick(ActionEvent actionEvent) throws IOException {
-        Stage stage = (Stage) parentalControlsButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
 
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
-        stage.setScene(scene);
+
+        if (isPCOpen) {
+            // Close the menu
+            parentalControlsSection.setManaged(false);
+            parentalControlsSection.setVisible(false);
+            isPCOpen = false;
+        } else {
+            // Open the menu
+            parentalControlsSection.setManaged(true);
+            parentalControlsSection.setVisible(true);
+            isPCOpen = true;
+        }
+//        parentalControlsSection.setVisible(parentalControlsSection.isVisible());
+
+//
+//        Stage stage = (Stage) parentalControlsButton.getScene().getWindow();
+//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
+//        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+//
+//        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+//        stage.setScene(scene);
     }
 
     public void onColourSettingsButtonClick(ActionEvent actionEvent) throws IOException {
