@@ -16,6 +16,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -81,6 +83,9 @@ public class MainController implements Initializable {
     private PresetHolder presetHolder;
     private ArrayList<Preset> presets;
 
+    private String originalPresetName;
+    private String newPresetName;
+
 
     public MainController() {
         userHolder = UserHolder.getInstance();
@@ -92,24 +97,15 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        ArrayList<String> presetNames = new ArrayList<>();
-
-        for (Preset preset : presetDAO.getUsersPresets(user.getId())) {
-            presetNames.add(preset.getPresetName());
-        }
-
-        /* create preset if none exist */
-        if (presetNames.isEmpty()) {
-            presetDAO.addPreset(user.getId(), "Preset");
-        }
-
-        presetNames.add("New Preset +");
-
-        ObservableList<String> presetsList = FXCollections.observableList(presetNames);
-
-        presetsButton.setItems(presetsList);
-
+        loadPresets();
         presetsButton.getSelectionModel().selectFirst();
+        originalPresetName = presetsButton.getValue().toString();
+
+        // Add listener to ComboBox editor property
+        presetsButton.getEditor().textProperty().addListener((obs, oldVal, newVal) -> {
+            // Update newPresetName whenever the ComboBox editor text changes
+            newPresetName = newVal;
+        });
 
         // Initialise start and end time sliders
         startTimeSlider();
@@ -188,6 +184,25 @@ public class MainController implements Initializable {
         });
     }
 
+    public void loadPresets() {
+        ArrayList<String> presetNames = new ArrayList<>();
+
+        for (Preset preset : presetDAO.getUsersPresets(user.getId())) {
+            presetNames.add(preset.getPresetName());
+        }
+
+        /* create preset if none exist */
+        if (presetNames.isEmpty()) {
+            presetDAO.addPreset(user.getId(), "Preset");
+        }
+
+        presetNames.add("New Preset +");
+
+        ObservableList<String> presetsList = FXCollections.observableList(presetNames);
+
+        presetsButton.setItems(presetsList);
+    }
+
     /**
      * when clicking preset in dropdown menu
      */
@@ -195,6 +210,8 @@ public class MainController implements Initializable {
         // Get preset name
         String presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
         System.out.println(presetName);
+
+        originalPresetName = presetName;
 
         // Check if new preset or existing
         if (presetName.equals("New Preset +")) {
@@ -238,24 +255,52 @@ public class MainController implements Initializable {
             // Delete the selected preset from the database
             presetDAO.deletePresetByName(user.getId(), presetName);
 
-            // Get the updated list of presets from the database
-            ArrayList<Preset> userPresets = presetDAO.getUsersPresets(user.getId());
-
-            // Clear the ComboBox items
-            presetsButton.getItems().clear();
-
-            // Populate the ComboBox with the updated list of presets
-            for (Preset preset : userPresets) {
-                presetsButton.getItems().add(preset.getPresetName());
-            }
-
-            // Add "New Preset +" back to the end of the ComboBox items
-            presetsButton.getItems().add("New Preset +");
-
-            // Select the first preset by default or perform any other desired action
+            // Remove the selected preset from the ComboBox items
+            loadPresets();
             presetsButton.getSelectionModel().selectFirst();
         }
     }
+
+    public void onEditButtonClick() {
+        // Check if ComboBox is not already editable
+        if (!presetsButton.isEditable()) {
+            // Enable editing in the ComboBox
+            presetsButton.setEditable(true);
+
+            // Request focus to the dropdown button
+            presetsButton.requestFocus();
+        }
+    }
+
+    public void saveEditedPresetName() {
+        // Check if ComboBox is editable
+        if (presetsButton.isEditable()) {
+            // Disable editing in the ComboBox
+            presetsButton.setEditable(false);
+
+            // Update the database with the edited preset name
+            presetDAO.editPresetName(user.getId(), originalPresetName, newPresetName);
+
+            // Reload presets
+            loadPresets();
+            presetsButton.setValue(newPresetName);
+        }
+    }
+
+    @FXML
+    private void onComboBoxKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            // Call the save method
+            saveEditedPresetName();
+
+            // Remove focus from the ComboBox
+            presetsButton.getParent().requestFocus();
+
+            // Consume the event to prevent further processing
+            event.consume();
+        }
+    }
+
 
     /**
      * update the blocked items display

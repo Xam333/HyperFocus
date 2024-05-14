@@ -88,11 +88,12 @@ public class PresetDAO implements IPresetDAO {
 
     public void editPresetName(int userID, String currentName, String newName) {
         try {
-            String query = "UPDATE presets SET presetName = ? WHERE presetName = ?";
+            String query = "UPDATE presets SET presetName = ? WHERE userID = ? AND presetName = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
             statement.setString(1, newName);
-            statement.setString(2, currentName);
+            statement.setInt(2, userID);
+            statement.setString(3, currentName);
 
             statement.executeUpdate();
         } catch (Exception e) {
