@@ -186,50 +186,49 @@
 
             <!--Parental Controls-->
             <VBox>
-                <Button fx:id="parentalControlsButton"
-                        onAction="#onParentalControlsButtonClick"
-                        styleClass="menuButton">
+                <Button fx:id="parentalControlsButton" onAction="#onParentalControlsButtonClick" styleClass="menuButton">
                     <graphic>
                         <HBox alignment="CENTER_LEFT">
-
                             <Region prefWidth="15.0" />
-
-                            <Label prefWidth="30.0"
-                                   styleClass="navLabel"
-                                   text="👨‍👩‍👦"
-                                   textAlignment="CENTER" />
-
+                            <Label prefWidth="30.0" styleClass="navLabel" text="👨‍👩‍👦" textAlignment="CENTER" />
                             <Region prefWidth="10.0" />
-
-                            <Label styleClass="navLabel"
-                                   text="Parental Controls"
-                                   textAlignment="CENTER" />
+                            <Label styleClass="navLabel" text="Parental Controls" textAlignment="CENTER" />
                         </HBox>
                     </graphic>
                 </Button>
+
                 <VBox fx:id="parentalControlsSection"
-                      style="-fx-background-color: #FFFF00"
                       visible="false"
                       managed="false">
-                    <HBox alignment="CENTER">
-                        <Region prefWidth="10.0" />
-                        <VBox>
-                            <HBox alignment="CENTER_RIGHT">
-<!--                                Needs to be made switch toggle, css -->
-                                <Label text="Toggle parental controls"
-                                       styleClass="bodyLabel"/>
-                                <ToggleButton text="yea"
-                                              styleClass="tinyPrimaryButton"/>
-                            </HBox>
-                            <Label text="Enter passcode to disable parental controls"
-                                   styleClass="bodyLabel"/>
-                            <PasswordField fx:id="parentalControlPasswordField"
-                                           styleClass="textBox"
-                                           promptText="Password"/>
-                        </VBox>
-                        <Region prefWidth="10.0" />
-                    </HBox>
+                    <HBox>
+                        <Region prefWidth="55.0"/>
 
+                        <VBox>
+                            <HBox>
+<!--                                Needs to be made switch toggle, css -->
+                                <Label styleClass="settingLabel"
+                                       text="Toggle"
+                                       wrapText="true"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <ToggleButton text="yea" styleClass="tinyPrimaryButton"/>
+
+                            </HBox>
+
+                            <Region prefHeight="10.0"/>
+
+                            <VBox>
+                                <Label maxWidth="210.0" styleClass="settingLabel" text="Enter passcode to disable parental controls" wrapText="true"/>
+                                <PasswordField fx:id="parentalControlPasswordField"
+                                               maxWidth="210.0"
+                                               styleClass="textBox"
+                                               promptText="Password"/>
+                            </VBox>
+
+                        </VBox>
+
+                        <Region prefWidth="15.0" />
+                    </HBox>
+                    <Region prefHeight="10.0"/>
                 </VBox>
             </VBox>
 
@@ -249,35 +248,44 @@
 
                <!-- Drop down colour settings -->
                <VBox fx:id="colourSettingsSection"
-                     style="-fx-background-color: #FF00FF"
                      visible="false"
                      managed="false">
                    <HBox>
                        <Region prefWidth="55.0"/>
 
                        <VBox>
+                           <Label styleClass="settingLabel" text="Current palette:"/>
                            <ComboBox fx:id="colourOptionsButton"
                                      styleClass="defaultButton"
                                      minWidth="210.0">
                                <items>
                                    <FXCollections fx:factory="observableArrayList">
                                        <HBox fx:id="defaultPalette">
-                                           <Rectangle width="7" height="7" fill="red" />
-                                           <Rectangle width="7" height="7" fill="green" />
-                                           <Rectangle width="7" height="7" fill="blue" />
-                                           <Label text=" Palette 1" />
+                                           <HBox maxWidth="60.0" maxHeight="20.0" style="-fx-border-color: #000000">
+                                               <Rectangle width="20" height="20" fill="#4382BF"/>
+                                               <Rectangle width="20" height="20" fill="#59ADFF"/>
+                                               <Rectangle width="20" height="20" fill="#E6F9FF"/>
+                                           </HBox>
+                                           <Region prefWidth="10.0"/>
+                                           <Label text="Default" />
                                        </HBox>
-                                       <HBox fx:id="palette2">
-                                           <Rectangle width="7" height="7" fill="red" />
-                                           <Rectangle width="7" height="7" fill="green" />
-                                           <Rectangle width="7" height="7" fill="blue" />
-                                           <Label text=" Palette 2" />
+                                       <HBox fx:id="greyScalePalette">
+                                           <HBox maxWidth="60.0" maxHeight="20.0" style="-fx-border-color: #000000">
+                                               <Rectangle width="20" height="20" fill="#202020" />
+                                               <Rectangle width="20" height="20" fill="#808080" />
+                                               <Rectangle width="20" height="20" fill="#F8F8F8" />
+                                           </HBox>
+                                           <Region prefWidth="10.0"/>
+                                           <Label text="Grey Scale" />
                                        </HBox>
-                                       <HBox fx:id="palette3">
-                                           <Rectangle width="7" height="7" fill="red" />
-                                           <Rectangle width="7" height="7" fill="green" />
-                                           <Rectangle width="7" height="7" fill="blue" />
-                                           <Label text=" Palette 3" />
+                                       <HBox fx:id="redPalette">
+                                           <HBox maxWidth="60.0" maxHeight="20.0" style="-fx-border-color: #000000">
+                                               <Rectangle width="20" height="20" fill="#BF4343" />
+                                               <Rectangle width="20" height="20" fill="#FF5959" />
+                                               <Rectangle width="20" height="20" fill="#FFE6E6" />
+                                           </HBox>
+                                           <Region prefWidth="10.0"/>
+                                           <Label text="Red" />
                                        </HBox>
                                    </FXCollections>
                                </items>
@@ -286,7 +294,7 @@
                        </VBox>
                    </HBox>
 
-
+                   <Region prefHeight="10.0"/>
                </VBox>
            </VBox>
 
@@ -306,14 +314,12 @@
 
                 <!-- Drop down sound settings -->
                 <VBox fx:id="soundSettingsSection"
-                      style="-fx-background-colour: #00FFFF"
                       managed="false"
                       visible="false">
                     <HBox>
                         <Region prefWidth="55.0"/>
                         <VBox>
-                            <Label text="Alarm sound"
-                                   styleClass="bodyLabel"/>
+                            <Label styleClass="settingLabel" text="Alarm sound"/>
 
                             <ComboBox fx:id="soundOptionsButton"
                                     styleClass="defaultButton"
@@ -328,8 +334,7 @@
                             <Region prefHeight="10.0"/>
 
 
-                            <Label text="Volume"
-                                   styleClass="bodyLabel"/>
+                            <Label styleClass="settingLabel" text="Volume"/>
                             <Slider fx:id="volumeSlider"
                                     majorTickUnit="50.0"
                                     prefWidth="210.0"
@@ -340,7 +345,7 @@
 
                         <Region prefWidth="15.0"/>
                     </HBox>
-
+                    <Region prefHeight="10.0"/>
                 </VBox>
             </VBox>
 

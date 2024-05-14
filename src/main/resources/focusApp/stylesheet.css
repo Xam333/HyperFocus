@@ -106,6 +106,14 @@
     -fx-text-fill: #FFFFFF;
 }
 
+.settingLabel{
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-line-spacing: -5px;
+    -fx-text-fill: #FFFFFF;
+}
+
+
 /* Hyper Link Label */
 .linkLabel{
     -fx-font-size: 14px;

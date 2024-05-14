@@ -59,6 +59,10 @@ public class MainController implements Initializable {
     public HBox defaultPalette;
     public HBox palette2;
     public ComboBox colourOptionsButton;
+    public HBox colourBlind1;
+    public HBox colourBlind2;
+    public HBox greyScalePalette;
+    public HBox redPalette;
     private Boolean isMenuOpen = false;
 
     private Boolean isPCOpen = false;
@@ -380,6 +384,14 @@ public class MainController implements Initializable {
             parentalControlsSection.setManaged(true);
             parentalControlsSection.setVisible(true);
             isPCOpen = true;
+            
+            colourSettingsSection.setManaged(false);
+            colourSettingsSection.setVisible(false);
+            isCSOpen = false;
+
+            soundSettingsSection.setManaged(false);
+            soundSettingsSection.setVisible(false);
+            isSSOpen = false;
         }
 //        parentalControlsSection.setVisible(parentalControlsSection.isVisible());
 
@@ -390,21 +402,23 @@ public class MainController implements Initializable {
         if (isCSOpen) {
             // Close the menu
             colourSettingsSection.setManaged(false);
-            colourSettingsSection.setVisible(false);
+            colourSettingsSection.setVisible(false); 
             isCSOpen = false;
         } else {
             // Open the menu
             colourSettingsSection.setManaged(true);
             colourSettingsSection.setVisible(true);
             isCSOpen = true;
-        }
 
-//        Stage stage = (Stage) colourSettingsButton.getScene().getWindow();
-//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
-//        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
-//
-//        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
-//        stage.setScene(scene);
+            parentalControlsSection.setManaged(false);
+            parentalControlsSection.setVisible(false);
+            isPCOpen = false;
+
+            soundSettingsSection.setManaged(false);
+            soundSettingsSection.setVisible(false);
+            isSSOpen = false;
+        }
+        
     }
 
     public void onSoundSettingsButtonClick(ActionEvent actionEvent) throws IOException {
@@ -419,14 +433,16 @@ public class MainController implements Initializable {
             soundSettingsSection.setManaged(true);
             soundSettingsSection.setVisible(true);
             isSSOpen = true;
-        }
+            
+            colourSettingsSection.setManaged(false);
+            colourSettingsSection.setVisible(false);
+            isCSOpen = false;
 
-//        Stage stage = (Stage) soundSettingsButton.getScene().getWindow();
-//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
-//        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
-//
-//        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
-//        stage.setScene(scene);
+            parentalControlsSection.setManaged(false);
+            parentalControlsSection.setVisible(false);
+            isPCOpen = false;
+        }
+        
     }
 
 }
