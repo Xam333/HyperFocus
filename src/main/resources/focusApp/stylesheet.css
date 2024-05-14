@@ -453,6 +453,23 @@
 }
 
 
+.toggleButton .thumb{
+    -fx-border-radius: 1.0em;
+    -fx-border-color: -textBoxColor;
+    -fx-body-color: -primaryColor;
+}
+
+.toggleButton .thumb-area {
+  -fx-background-color: -textBoxColor;
+}
+
+.toggleButton:selected .thumb-area {
+     -fx-background-color: -primaryColor;
+ }
+
+
+
+
 
 
 

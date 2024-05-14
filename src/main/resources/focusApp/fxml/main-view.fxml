@@ -27,6 +27,8 @@
 <?import java.lang.String?>
 <?import javafx.scene.control.skin.ColorPalette.ColorSquare?>
 <?import javafx.scene.shape.Rectangle?>
+<?import org.controlsfx.control.ToggleSwitch?>
+
 <AnchorPane maxHeight="-Infinity"
             maxWidth="-Infinity"
             minHeight="-Infinity"
@@ -210,7 +212,7 @@
                                        text="Toggle"
                                        wrapText="true"/>
                                 <Region HBox.hgrow="ALWAYS"/>
-                                <Button text="yea" styleClass="tinyPrimaryButton"/>
+                                <ToggleSwitch fx:id="parentalControlToggleButton" styleClass="toggleButton" onMouseClicked="#onParentalControlToggleButtonClick"/>
 
                             </HBox>
 

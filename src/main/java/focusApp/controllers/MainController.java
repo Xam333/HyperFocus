@@ -38,6 +38,7 @@ import java.util.ResourceBundle;
 import focusApp.database.Preset;
 import focusApp.database.PresetDAO;
 import javafx.util.Callback;
+import org.controlsfx.control.ToggleSwitch;
 
 import java.util.ArrayList;
 
@@ -63,6 +64,7 @@ public class MainController implements Initializable {
     public HBox colourBlind2;
     public HBox greyScalePalette;
     public HBox redPalette;
+    public ToggleSwitch parentalControlToggleButton;
     private Boolean isMenuOpen = false;
 
     private Boolean isPCOpen = false;
@@ -154,7 +156,7 @@ public class MainController implements Initializable {
 //                };
 //            }
 //        });
-
+//
 //        colourOptionsButton.setButtonCell(new ListCell<HBox>() {
 //            @Override
 //            protected void updateItem(HBox item, boolean empty) {
@@ -174,7 +176,7 @@ public class MainController implements Initializable {
     }
     
 //    public void applyColorPalette(HBox palette){
-//        
+//
 //    }
 
     public void startTimeSlider() {
@@ -447,4 +449,6 @@ public class MainController implements Initializable {
         
     }
 
+    public void onParentalControlToggleButtonClick(MouseEvent mouseEvent) {
+    }
 }
