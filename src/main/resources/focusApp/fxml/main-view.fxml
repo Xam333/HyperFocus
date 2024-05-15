@@ -165,26 +165,99 @@
                visible="false">
         <VBox>
             <!--Account Information-->
-            <Button onAction="#onAccountButtonClick"
-                    styleClass="menuButton">
-                <graphic>
-                    <HBox alignment="CENTER_LEFT">
+            <VBox>
+                <Button onAction="#onAccountButtonClick"
+                        styleClass="menuButton">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT">
+                            <Region prefWidth="15.0" />
+                            <Label prefWidth="30.0" styleClass="navLabel" text="👤" textAlignment="CENTER" />
+                            <Region prefWidth="10.0" />
+                            <Label styleClass="navLabel" text="Account Information" textAlignment="CENTER" />
+                        </HBox>
+                    </graphic>
+                </Button>
+                <VBox fx:id="accountInformationSection"
+                      visible="true"
+                      managed="true">
+                    <HBox>
+                        <Region prefWidth="55.0"/>
+                        <VBox>
+                            <!-- Total time focused -->
+                            <HBox>
+                                <Label styleClass="settingLabel"
+                                       text="Total Time Focused:  "
+                                       textAlignment="CENTER"
+                                       wrapText="true">
+                                </Label>
 
-                        <Region prefWidth="15.0" />
+                                <!-- This label should be changed depending on time focused stored in db-->
+                                <Label fx:id="totalTimeFocused"
+                                       styleClass="settingLabel"
+                                       text="temp"
+                                       textAlignment="CENTER"
+                                       wrapText="true">
+                                </Label>
+                            </HBox>
+                            <Region prefHeight="10.0"/>
+                            <!-- USERNAME -->
+                            <Label fx:id="userNameLabel"
+                                   styleClass="settingLabel"
+                                   text="User Name:"
+                                   textAlignment="CENTER"
+                                   wrapText="true"/>
 
-                        <Label prefWidth="30.0"
-                               styleClass="navLabel"
-                               text="👤"
-                               textAlignment="CENTER" />
+                            <TextField fx:id="userNameTextField"
+                                       styleClass="textBox"
+                                       text="Place Holder"
+                                       editable="false"
+                                       prefWidth="210.0"/>
 
-                        <Region prefWidth="10.0" />
+                            <Region prefHeight="10.0"/>
 
-                        <Label styleClass="navLabel"
-                               text="Account Information"
-                               textAlignment="CENTER" />
+                            <Button fx:id="editUserNameButton"
+                                    mnemonicParsing="false"
+                                    onAction="#onEditUserNameButtonClick"
+                                    minWidth="210.0"
+                                    styleClass="settingButton"
+                                    text="EDIT"
+                                    textAlignment="CENTER"/>
+
+                            <Region prefHeight="10.0"/>
+                            <!-- PASSWORD -->
+                            <Label fx:id="passwordLabel"
+                                   styleClass="settingLabel"
+                                   text="Password:"
+                                   textAlignment="CENTER"
+                                   wrapText="true">
+
+                            </Label>
+
+                            <PasswordField fx:id="passwordTextField"
+                                           styleClass="textBox"
+                                           text="Place Holder"
+                                           editable="false"
+                                           prefWidth="210.0"/>
+
+                            <Region prefHeight="10.0"/>
+
+                            <Button fx:id="editPasswordButton"
+                                    mnemonicParsing="false"
+                                    onAction="#onEditPasswordButtonClick"
+                                    minWidth="210.0"
+                                    styleClass="settingButton"
+                                    text="EDIT"
+                                    textAlignment="CENTER"/>
+
+                        </VBox>
+                        <Region prefWidth="15.0"/>
                     </HBox>
-                </graphic>
-            </Button>
+                    <Region prefHeight="10.0"/>
+                </VBox>
+
+            </VBox>
+
+
 
             <!--Parental Controls-->
             <VBox>

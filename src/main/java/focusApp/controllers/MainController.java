@@ -57,6 +57,14 @@ public class MainController implements Initializable {
     public StackPane turnOffParentalControlsStackPane;
     public StackPane blackOutStackPane;
     public Label denyParentalControlsDisableLabel;
+    public VBox accountInformationSection;
+    public Label totalTimeFocused;
+    public Label userNameLabel;
+    public TextField userNameTextField;
+    public Button editUserNameButton;
+    public Button editPasswordButton;
+    public PasswordField passwordTextField;
+    public Label passwordLabel;
     private Boolean isMenuOpen = false;
 
     private Boolean isPCOpen = false;
@@ -459,5 +467,11 @@ public class MainController implements Initializable {
             denyParentalControlsDisableLabel.setText("* Incorrect password. *");
         }
         
+    }
+
+    public void onEditUserNameButtonClick(ActionEvent actionEvent) {
+    }
+
+    public void onEditPasswordButtonClick(ActionEvent actionEvent) {
     }
 }

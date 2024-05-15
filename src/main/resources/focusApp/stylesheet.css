@@ -108,7 +108,6 @@
 
 .settingLabel{
     -fx-font-size: 16px;
-    -fx-font-weight: bold;
     -fx-line-spacing: -5px;
     -fx-text-fill: #FFFFFF;
 }
@@ -171,6 +170,8 @@
     -fx-pref-width: 140px;
     -fx-pref-height: 40px;
     -fx-background-color: #FFF;
+    -fx-background-radius: 8px;
+    -fx-background-insets: 1px;
 
     -fx-border-radius: 8px;
     -fx-border-color: #000000;
@@ -203,6 +204,7 @@
     -fx-pref-height: 50px;
     -fx-background-color: -primaryColor;
     -fx-background-radius: 8px;
+    -fx-background-insets: 1px;
 
     -fx-text-fill: #FFF;
     -fx-font-weight: bold;
@@ -219,6 +221,8 @@
     -fx-pref-width: 256px;
     -fx-pref-height: 50px;
     -fx-background-color: #FFF;
+    -fx-background-radius: 8px;
+    -fx-background-insets: 1px;
 
     -fx-border-radius: 8px;
     -fx-border-width: 3px;
@@ -244,6 +248,8 @@
     -fx-pref-width: 100px;
     -fx-pref-height: 40px;
     -fx-background-color: #FFF;
+    -fx-background-radius: 8px;
+    -fx-background-insets: 1px;
 
     -fx-border-radius: 8px;
     -fx-border-color: #000000;
@@ -264,6 +270,7 @@
     -fx-pref-height: 40px;
     -fx-background-color: -primaryColor;
     -fx-background-radius: 8px;
+    -fx-background-insets: 1px;
 
     -fx-text-fill: #FFF;
     -fx-font-weight: bold;
@@ -280,6 +287,8 @@
     -fx-pref-width: 140px;
     -fx-pref-height: 40px;
     -fx-background-color: #FFF;
+    -fx-background-radius: 8px;
+    -fx-background-insets: 1px;
 
     -fx-border-radius: 8px;
     -fx-border-width: 2px;
@@ -384,6 +393,7 @@
     -fx-pref-width: 60px;
     -fx-background-color: -primaryColor;
     -fx-background-radius: 8px;
+    -fx-background-insets: 1px;
 
     -fx-text-fill: #FFF;
     -fx-font-weight: bold;
@@ -400,6 +410,8 @@
 .tinySecondaryButton {
     -fx-pref-width: 60px;
     -fx-background-color: #FFF;
+    -fx-background-radius: 8px;
+    -fx-background-insets: 1px;
 
     -fx-border-radius: 8px;
     -fx-border-width: 2px;
@@ -421,6 +433,8 @@
 .tinyXButton {
     -fx-pref-width: 20px;
     -fx-background-color: #FFF;
+    -fx-background-radius: 8px;
+    -fx-background-insets: 1px;
 
     -fx-border-radius: 8px;
 
@@ -438,6 +452,8 @@
 .tinyDefaultButton {
     -fx-pref-width: 60px;
     -fx-background-color: #FFF;
+    -fx-background-radius: 8px;
+    -fx-background-insets: 1px;
 
     -fx-border-radius: 8px;
     -fx-border-color: #000000;
@@ -453,6 +469,7 @@
 }
 
 
+/* Toggle Buttons */
 .toggleButton .thumb{
     -fx-border-radius: 1.0em;
     -fx-border-color: -textBoxColor;
@@ -467,7 +484,32 @@
      -fx-background-color: -primaryColor;
  }
 
+/* Settings Buttons */
 
+
+
+.settingButton {
+    -fx-pref-width: 210px;
+    -fx-background-color: #FFF;
+    -fx-background-radius: 8px;
+    -fx-background-insets: 1px;
+
+    -fx-border-radius: 8px;
+    -fx-border-width: 2px;
+    -fx-border-color: -primaryColor;
+
+    -fx-text-fill: -primaryColor;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+
+
+    -fx-cursor: hand;
+}
+
+.settingButton:hover {
+    -fx-border-color: -secondaryColor;
+    -fx-text-fill: -secondaryColor;
+}
 
 
 
