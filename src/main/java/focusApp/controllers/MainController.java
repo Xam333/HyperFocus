@@ -23,6 +23,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.geometry.Insets;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -332,7 +333,7 @@ public class MainController implements Initializable {
         int column = 0;
         int row = 0;
         int maxColumn = 6;
-        int imageSize = 30;
+        int imageSize = 25;
 
         blockedIcons.getChildren().clear();
 
@@ -352,7 +353,13 @@ public class MainController implements Initializable {
             ImageView icon = new ImageView(img);
             icon.setFitWidth(imageSize);
             icon.setFitHeight(imageSize);
-            blockedIcons.add(icon, column, row);
+
+            // Create a StackPane to add padding around the image
+            StackPane stackPane = new StackPane();
+            stackPane.setPadding(new Insets(5)); // You can adjust the value as needed
+            stackPane.getChildren().add(icon);
+
+            blockedIcons.add(stackPane, column, row);
             column++;
             if (column >= maxColumn) {
                 row++;
