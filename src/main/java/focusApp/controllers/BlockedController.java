@@ -29,7 +29,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -38,6 +40,7 @@ import java.net.URL;
 import java.util.*;
 
 //Jsoup
+import org.controlsfx.control.ToggleSwitch;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -51,6 +54,32 @@ import java.util.regex.Matcher;
 
 public class BlockedController implements Initializable {
 
+    public VBox accountInformationSection;
+    public Label totalTimeFocused;
+    public Label userNameLabel;
+    public TextField userNameTextField;
+    public Button editUserNameButton;
+    public Label passwordLabel;
+    public PasswordField passwordTextField;
+    public Button editPasswordButton;
+    public Label accountError;
+    public VBox parentalControlsSection;
+    public ToggleSwitch parentalControlToggleButton;
+    public VBox colourSettingsSection;
+    public ComboBox colourOptionsButton;
+    public HBox defaultPalette;
+    public HBox greyScalePalette;
+    public HBox redPalette;
+    public VBox soundSettingsSection;
+    public ComboBox soundOptionsButton;
+    public Slider volumeSlider;
+    public StackPane confirmLogOutStackPane;
+    public Button abortLogOutButton;
+    public Button confirmLogOutButton;
+    public StackPane turnOffParentalControlsStackPane;
+    public PasswordField parentalControlsPasswordField;
+    public Label denyParentalControlsDisableLabel;
+    public Button confirmPasswordButton;
     private String fileLocation;
     public StackPane addWebsiteStackPane;
     public TextField addWebsiteTextField;
@@ -71,15 +100,11 @@ public class BlockedController implements Initializable {
     public Button abortButton;
     public Button confirmButton;
     private Boolean isMenuOpen = false;
+    private Boolean isPCOpen = false;
+    private Boolean isSSOpen = false;
+    private Boolean isCSOpen = false;
+    private Boolean isAIOpen = false;
 
-    @FXML
-    private TextField getAddWebsiteTextField;
-    @FXML
-    private ImageView userIcon;
-    @FXML
-    private ImageView youtubeIcon;
-    @FXML
-    private ImageView redditIcon;
 
     @FXML
     private TableColumn<BlockedItem, String> iconColumn;
@@ -97,6 +122,7 @@ public class BlockedController implements Initializable {
     private PresetDAO presetDAO;
     private ApplicationDAO applicationDAO;
     private WebsiteDAO websiteDAO;
+    private UserDAO userDAO;
     private PresetHolder presetHolder;
     private Preset currentPreset;
     private UserHolder userHolder;
@@ -111,6 +137,7 @@ public class BlockedController implements Initializable {
         userHolder = UserHolder.getInstance();
         presetHolder = PresetHolder.getInstance();
         blockedItems = new ArrayList<BlockedItem>();
+        userDAO = new UserDAO();
 
         /* only using one preset per user for now */
 
@@ -134,39 +161,6 @@ public class BlockedController implements Initializable {
         blockedItems.addAll(presetDAO.getPresetApplication(currentPreset.getPresetID()));
     }
 
-    /*REDUNDANT
-    @FXML
-    private void onAddWebsite() //REDUNDANT
-    {
-        String newWebsite = showUrlDialog();
-        System.out.println("This is a test: " + newWebsite);
-        System.out.println(newWebsite);
-        String[] info = getWebPageTitleAndImage(newWebsite);
-        System.out.println("Title: " + info[0]);
-        System.out.println("Image URL: " + info[1]);
-    }
-
-    private String showUrlDialog() { //REDUNDANT
-        Dialog<String> dialog = new Dialog<>();
-        dialog.setTitle("Enter URL");
-
-        TextField urlField = new TextField();
-        urlField.setPromptText("https://example.com");
-        dialog.getDialogPane().setContent(urlField);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == ButtonType.OK) {
-                return urlField.getText();
-            }
-            return null;
-        });
-
-        // The blocking call that will wait for the dialog to close
-        Optional<String> result = dialog.showAndWait();
-        return result.orElse(null); // Returns the URL if OK was pressed, otherwise returns null
-    } //REDUNDANT
-    */
 
     @FXML
     private void addNewWebsite(String newWebsiteURL)
@@ -348,26 +342,7 @@ public class BlockedController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        // Assuming image.png is directly in src/main/resources/
-//        Image userImage = new Image(getClass().getResourceAsStream("/focusApp/images/UserIcon.png"));
-//        userIcon.setImage(userImage);
-//        userIcon.setFitWidth(20);  // Set the width of the ImageView
-//        //userIcon.setFitHeight(150); // Set the height of the ImageView
-//        userIcon.setPreserveRatio(true);
 
-
-
-//        Image youtubeImage = new Image(getClass().getResourceAsStream("/focusApp/images/youtubeIcon.png"));
-//        youtubeIcon.setImage(youtubeImage);
-//        youtubeIcon.setFitWidth(20);  // Set the width of the ImageView
-//        //youtubeIcon.setFitHeight(150); // Set the height of the ImageView
-//        youtubeIcon.setPreserveRatio(true);
-//
-//        Image redditImage = new Image(getClass().getResourceAsStream("/focusApp/images/redditIcon.png"));
-//        redditIcon.setImage(redditImage);
-//        redditIcon.setFitWidth(20);  // Set the width of the ImageView
-//        //redditIcon.setFitHeight(150); // Set the height of the ImageView
-//        redditIcon.setPreserveRatio(true);
 
 
         iconColumn.setCellValueFactory(new PropertyValueFactory<BlockedItem, String>("iconURI"));
@@ -376,9 +351,26 @@ public class BlockedController implements Initializable {
 
         syncBlockedApplications();
 
-//        Automatically set as true until change is made
+        // Automatically set as true until change is made
         changesSaved = true;
 
+        // Display a sound name in combo box
+        soundOptionsButton.getSelectionModel().selectFirst();
+
+        // Display a colour in combo box
+        colourOptionsButton.getSelectionModel().selectFirst();
+
+        // Only show enter passcode if parental controls is being turned off
+        parentalControlToggleButton.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
+            if (!isNowSelected) {
+                // Show password dialog
+                blackOutStackPane.setVisible(true);
+                turnOffParentalControlsStackPane.setVisible(true);
+            } else{
+                blackOutStackPane.setVisible(false);
+                turnOffParentalControlsStackPane.setVisible(false);
+            }
+        });
     }
 
     @FXML
@@ -434,61 +426,110 @@ public class BlockedController implements Initializable {
 //    #onAccountButtonClick is shared by the nav bar account button,
 //    and the side menu account button.
     public void onAccountButtonClick(ActionEvent actionEvent) throws IOException {
-        if(!changesSaved){
-            blackOutStackPane.setVisible(true);
-            confirmCancelStackPane.setVisible(true);
+        if (isAIOpen) {
+            // Close the menu
+            accountInformationSection.setManaged(false);
+            accountInformationSection.setVisible(false);
+            isAIOpen = false;
         } else {
-            Stage stage = (Stage) accountButton.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/account-view.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+            // Open the menu
+            accountInformationSection.setManaged(true);
+            accountInformationSection.setVisible(true);
+            isAIOpen = true;
 
-            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
-            stage.setScene(scene);
-        }
-    }
+            // Close all other menus
+            parentalControlsSection.setManaged(false);
+            parentalControlsSection.setVisible(false);
+            isPCOpen = false;
 
-    public void onSoundSettingsButtonClick(ActionEvent actionEvent) throws IOException {
-        if(!changesSaved){
-            blackOutStackPane.setVisible(true);
-            confirmCancelStackPane.setVisible(true);
-        } else {
-//            MAKE SETTINGS PAGE
-            Stage stage = (Stage) soundSettingsButton.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+            colourSettingsSection.setManaged(false);
+            colourSettingsSection.setVisible(false);
+            isCSOpen = false;
 
-            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
-            stage.setScene(scene);
-        }
-    }
-
-    public void onColourSettingsButtonClick(ActionEvent actionEvent) throws IOException {
-        if(!changesSaved){
-            blackOutStackPane.setVisible(true);
-            confirmCancelStackPane.setVisible(true);
-        } else {
-//            MAKE SETTINGS PAGE
-            Stage stage = (Stage) colourSettingsButton.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
-
-            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
-            stage.setScene(scene);
+            soundSettingsSection.setManaged(false);
+            soundSettingsSection.setVisible(false);
+            isSSOpen = false;
         }
     }
 
     public void onParentalControlsButtonClick(ActionEvent actionEvent) throws IOException {
-        if(!changesSaved){
-            blackOutStackPane.setVisible(true);
-            confirmCancelStackPane.setVisible(true);
+        if (isPCOpen) {
+            // Close the menu
+            parentalControlsSection.setManaged(false);
+            parentalControlsSection.setVisible(false);
+            isPCOpen = false;
         } else {
-//            MAKE SETTINGS PAGE
-            Stage stage = (Stage) parentalControlsButton.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+            // Open the menu
+            parentalControlsSection.setManaged(true);
+            parentalControlsSection.setVisible(true);
+            isPCOpen = true;
 
-            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
-            stage.setScene(scene);
+            // Close all other menus
+            accountInformationSection.setManaged(false);
+            accountInformationSection.setVisible(false);
+            isAIOpen = false;
+
+            colourSettingsSection.setManaged(false);
+            colourSettingsSection.setVisible(false);
+            isCSOpen = false;
+
+            soundSettingsSection.setManaged(false);
+            soundSettingsSection.setVisible(false);
+            isSSOpen = false;
+        }
+    }
+
+    public void onColourSettingsButtonClick(ActionEvent actionEvent) throws IOException {
+        if (isCSOpen) {
+            // Close the menu
+            colourSettingsSection.setManaged(false);
+            colourSettingsSection.setVisible(false);
+            isCSOpen = false;
+        } else {
+            // Open the menu
+            colourSettingsSection.setManaged(true);
+            colourSettingsSection.setVisible(true);
+            isCSOpen = true;
+
+            // Close all other menus
+            accountInformationSection.setManaged(false);
+            accountInformationSection.setVisible(false);
+            isAIOpen = false;
+
+            parentalControlsSection.setManaged(false);
+            parentalControlsSection.setVisible(false);
+            isPCOpen = false;
+
+            soundSettingsSection.setManaged(false);
+            soundSettingsSection.setVisible(false);
+            isSSOpen = false;
+        }
+    }
+
+    public void onSoundSettingsButtonClick(ActionEvent actionEvent) throws IOException {
+        if (isSSOpen) {
+            // Close the menu
+            soundSettingsSection.setManaged(false);
+            soundSettingsSection.setVisible(false);
+            isSSOpen = false;
+        } else {
+            // Open the menu
+            soundSettingsSection.setManaged(true);
+            soundSettingsSection.setVisible(true);
+            isSSOpen = true;
+
+            // Close all other menus
+            accountInformationSection.setManaged(false);
+            accountInformationSection.setVisible(false);
+            isAIOpen = false;
+
+            parentalControlsSection.setManaged(false);
+            parentalControlsSection.setVisible(false);
+            isPCOpen = false;
+
+            colourSettingsSection.setManaged(false);
+            colourSettingsSection.setVisible(false);
+            isCSOpen = false;
         }
     }
 
@@ -510,6 +551,11 @@ public class BlockedController implements Initializable {
         blackOutStackPane.setVisible(false);
         addWebsiteStackPane.setVisible(false);
         addApplicationStackPane.setVisible(false);
+        parentalControlToggleButton.setSelected(true);
+        turnOffParentalControlsStackPane.setVisible(false);
+        denyParentalControlsDisableLabel.setText("");
+        parentalControlsPasswordField.clear();
+
     }
 
 //    Store to temp database things, wait for save button to be clicked
@@ -539,5 +585,69 @@ public class BlockedController implements Initializable {
         fileLocation = fileSearch();
         addApplicationTextField.setText(fileLocation);
         addAppButton.setDisable(false);
+    }
+
+    public void onEditUserNameButtonClick(ActionEvent actionEvent) {
+        if (userNameTextField.isEditable()) {
+            if (userDAO.updateName(user.getId(), userNameTextField.getText())) {
+                user.setUserName(userNameTextField.getText());
+                userHolder.setUser(user);
+                accountError.setText("");
+                accountError.setManaged(false);
+            } else {
+                accountError.setText("Username is already taken");
+                accountError.setManaged(true);
+                return;
+            }
+            editUserNameButton.setText("EDIT");
+        } else {
+            editUserNameButton.setText("SAVE");
+        }
+        userNameTextField.setEditable(!userNameTextField.isEditable());
+    }
+
+    public void onEditPasswordButtonClick(ActionEvent actionEvent) {
+        passwordTextField.setEditable(!passwordTextField.isEditable());
+    }
+
+    public void onLogOutButton(ActionEvent actionEvent) {
+        blackOutStackPane.setVisible(true);
+        confirmLogOutStackPane.setVisible(true);
+    }
+
+    public void onConfirmLogOutButtonClick(ActionEvent actionEvent) throws IOException {
+        Stage stage = (Stage) confirmButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/login-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        stage.setScene(scene);
+    }
+
+    public void passwordEntered(KeyEvent keyEvent) {
+        confirmPasswordButton.setDisable(false);
+    }
+
+    public void onConfirmParentalControlsButtonClick(ActionEvent actionEvent) {
+        // Check if password is correct
+
+//        UserDAO userDAO = new UserDAO();
+//        User user = userDAO.login(userNameTextField.getText(), passwordTextField.getText());
+
+        /* if user != null then login successful and user class returned */
+        if (Objects.equals(parentalControlsPasswordField.getText(), "1234")){
+            parentalControlToggleButton.setSelected(false);
+            blackOutStackPane.setVisible(false);
+            turnOffParentalControlsStackPane.setVisible(false);
+            denyParentalControlsDisableLabel.setText("");
+            parentalControlsPasswordField.clear();
+        } else {
+            denyParentalControlsDisableLabel.setText("* Incorrect password. *");
+        }
+    }
+
+    public void onAbortLogOutButtonClick(ActionEvent actionEvent) {
+        blackOutStackPane.setVisible(false);
+        confirmLogOutStackPane.setVisible(false);
     }
 }

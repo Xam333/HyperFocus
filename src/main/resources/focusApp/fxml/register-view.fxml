@@ -40,73 +40,39 @@
             <Image url="@../images/logoLarge.png"/>
         </ImageView>
 
-
-
         <!-- REGISTER HEADINGS -->
-        <Label styleClass="headLabel"
-               text="Create your account:"
-               textAlignment="CENTER"
-               wrapText="true"/>
-
-        <Label styleClass="subheadLabel"
-               text="Enter your details below to create an account and get started."
-               textAlignment="CENTER"
-               wrapText="true" >
+        <Label styleClass="headLabel" text="Create your account:" textAlignment="CENTER" wrapText="true"/>
+        <Label styleClass="subheadLabel" text="Enter your details below to create an account and get started." textAlignment="CENTER" wrapText="true" >
             <padding>
                 <Insets bottom="30.0"/>
             </padding>
         </Label>
 
-
         <!-- REGISTER FIELDS -->
         <VBox spacing="10.0" alignment="CENTER">
-            <TextField fx:id="regUserNameTextField"
-                       styleClass="textBox"
-                       promptText="Username"
-            />
-            <PasswordField fx:id="regPasswordTextField"
-                           styleClass="textBox"
-                           promptText="Password"
-            />
-            <PasswordField fx:id="confirmPasswordTextField"
-                           styleClass="textBox"
-                           promptText="Confirm Password"
-            />
 
-            <Label fx:id="denyRegisterLabel"
-                   styleClass="warningLabel"
-                   textAlignment="RIGHT"
-                   wrapText="true"/>
+            <!-- USERNAME -->
+            <TextField fx:id="regUserNameTextField" styleClass="textBox" promptText="Username"/>
+
+            <!-- PASSWORD -->
+            <PasswordField fx:id="regPasswordTextField" styleClass="textBox" promptText="Password"/>
+            <PasswordField fx:id="confirmPasswordTextField" styleClass="textBox" promptText="Confirm Password"/>
+
+            <!-- DENY REGISTER -->
+            <Label fx:id="denyRegisterLabel" styleClass="warningLabel" textAlignment="RIGHT" wrapText="true"/>
 
             <!-- REGISTER BUTTONS -->
             <HBox spacing="10.0" alignment="BOTTOM_CENTER">
-                <Button fx:id="backButton"
-                        mnemonicParsing="false"
-                        onAction="#onBackButtonClick"
-                        styleClass="smallSecondaryButton"
-                        text="BACK"
-                        textAlignment="CENTER"/>
-
-                <Button fx:id="confirmButton"
-                        mnemonicParsing="false"
-                        onAction="#onConfirmButtonClick"
-                        styleClass="smallPrimaryButton"
-                        text="CONFIRM"
-                        textAlignment="CENTER"/>
+                <Button fx:id="backButton" mnemonicParsing="false" onAction="#onBackButtonClick" styleClass="smallSecondaryButton" text="BACK" textAlignment="CENTER"/>
+                <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#onConfirmButtonClick" styleClass="smallPrimaryButton" text="CONFIRM" textAlignment="CENTER"/>
             </HBox>
 
             <!-- LINK TO LOGIN -->
-            <Hyperlink fx:id="loginLink"
-                       onAction="#onLoginLinkClick"
-                       styleClass="linkLabel"
-                       text="Already have an account? Click here to login."
-                       textAlignment="CENTER"
-                       wrapText="true">
+            <Hyperlink fx:id="loginLink" onAction="#onLoginLinkClick" styleClass="linkLabel" text="Already have an account? Click here to login." textAlignment="CENTER" wrapText="true">
                 <padding>
                     <Insets top="30.0"/>
                 </padding>
             </Hyperlink>
-
          </VBox>
     </VBox>
 </AnchorPane>

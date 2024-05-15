@@ -485,30 +485,25 @@
  }
 
 /* Settings Buttons */
-
-
-
 .settingButton {
     -fx-pref-width: 210px;
-    -fx-background-color: #FFF;
+    -fx-background-color: -primaryColor;
     -fx-background-radius: 8px;
     -fx-background-insets: 1px;
 
+    -fx-border-color: -primaryColor;
     -fx-border-radius: 8px;
     -fx-border-width: 2px;
-    -fx-border-color: -primaryColor;
 
-    -fx-text-fill: -primaryColor;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
-
+    -fx-text-fill: #FFFFFF;
 
     -fx-cursor: hand;
 }
 
 .settingButton:hover {
-    -fx-border-color: -secondaryColor;
-    -fx-text-fill: -secondaryColor;
+    -fx-border-color: -backgroundColor;
 }
 
 
