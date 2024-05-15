@@ -1,43 +1,33 @@
 package focusApp.controllers;
 
 import focusApp.HelloApplication;
-import focusApp.database.IBlockedItemDAO;
-import focusApp.database.MockedBlockedItemDAO;
+import focusApp.database.UserDAO;
 import focusApp.models.*;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.io.Console;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
-import javafx.beans.value.ObservableValue;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
 import focusApp.database.Preset;
 import focusApp.database.PresetDAO;
-import javafx.util.Callback;
 import org.controlsfx.control.ToggleSwitch;
 
 import java.util.ArrayList;
@@ -56,20 +46,24 @@ public class MainController implements Initializable {
     public VBox colourSettingsSection;
     public Slider volumeSlider;
     public ComboBox soundOptionsButton;
-    public HBox palette3;
     public HBox defaultPalette;
-    public HBox palette2;
     public ComboBox colourOptionsButton;
-    public HBox colourBlind1;
-    public HBox colourBlind2;
     public HBox greyScalePalette;
     public HBox redPalette;
     public ToggleSwitch parentalControlToggleButton;
+    public VBox passwordSection;
+    public PasswordField parentalControlsPasswordField;
+    public Button confirmPasswordButton;
+    public StackPane turnOffParentalControlsStackPane;
+    public StackPane blackOutStackPane;
+    public Label denyParentalControlsDisableLabel;
     private Boolean isMenuOpen = false;
 
     private Boolean isPCOpen = false;
     private Boolean isSSOpen = false;
     private Boolean isCSOpen = false;
+
+    private Boolean turningOffPC = false;
 
     @FXML
     private Label startTimeLabel;
@@ -139,45 +133,20 @@ public class MainController implements Initializable {
         /* update the blocked list */
         updateBlockList();
 
-
-//        colourOptionsButton.setCellFactory(new Callback<ListView<HBox>, ListCell<HBox>>() {
-//            @Override
-//            public ListCell<HBox> call(ListView<HBox> listView) {
-//                return new ListCell<HBox>() {
-//                    @Override
-//                    protected void updateItem(HBox item, boolean empty) {
-//                        super.updateItem(item, empty);
-//                        if (empty || item == null) {
-//                            setGraphic(null);
-//                        } else {
-//                            setGraphic(item);
-//                        }
-//                    }
-//                };
-//            }
-//        });
-//
-//        colourOptionsButton.setButtonCell(new ListCell<HBox>() {
-//            @Override
-//            protected void updateItem(HBox item, boolean empty) {
-//                super.updateItem(item, empty);
-//                if (empty || item == null) {
-//                    setGraphic(null);
-//                } else {
-//                    setGraphic(item);
-//                }
-//            }
-//        });
-//
-//        colourOptionsButton.setOnAction(event -> {
-//            HBox selectedPalette = (HBox) colourOptionsButton.getValue();
-//            applyColorPalette(selectedPalette);
-//        });
+        // Only show enter passcode if parental controls is being turned off
+        parentalControlToggleButton.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
+            if (!isNowSelected) {
+                // Show password dialog
+                blackOutStackPane.setVisible(true);
+                turnOffParentalControlsStackPane.setVisible(true);
+            } else{
+                blackOutStackPane.setVisible(false);
+                turnOffParentalControlsStackPane.setVisible(false);
+            }
+        });
     }
+
     
-//    public void applyColorPalette(HBox palette){
-//
-//    }
 
     public void startTimeSlider() {
         // Listen for changes to the slider and update the label
@@ -450,5 +419,45 @@ public class MainController implements Initializable {
     }
 
     public void onParentalControlToggleButtonClick(MouseEvent mouseEvent) {
+//        if (parentalControlToggleButton.isSelected()){
+//            passwordSection.setManaged(true);
+//            passwordSection.setVisible(true);
+//            turningOffPC = true;
+//        }
+//        else{
+//            passwordSection.setManaged(false);
+//            passwordSection.setVisible(false);
+//        }
+    }
+
+    public void passwordEntered(KeyEvent keyEvent) {
+        confirmPasswordButton.setDisable(false);
+    }
+
+    public void onXLabelClick(ActionEvent actionEvent) {
+        parentalControlToggleButton.setSelected(true);
+        blackOutStackPane.setVisible(false);
+        turnOffParentalControlsStackPane.setVisible(false);
+        denyParentalControlsDisableLabel.setText("");
+        parentalControlsPasswordField.clear();
+    }
+
+    public void onConfirmButtonClick(ActionEvent actionEvent) {
+    // Check if password is correct
+        
+//        UserDAO userDAO = new UserDAO();
+//        User user = userDAO.login(userNameTextField.getText(), passwordTextField.getText());
+
+        /* if user != null then login successful and user class returned */
+        if (Objects.equals(parentalControlsPasswordField.getText(), "1234")){
+            parentalControlToggleButton.setSelected(false);
+            blackOutStackPane.setVisible(false);
+            turnOffParentalControlsStackPane.setVisible(false);
+            denyParentalControlsDisableLabel.setText("");
+            parentalControlsPasswordField.clear();
+        } else {
+            denyParentalControlsDisableLabel.setText("* Incorrect password. *");
+        }
+        
     }
 }

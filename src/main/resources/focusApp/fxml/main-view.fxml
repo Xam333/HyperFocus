@@ -206,26 +206,14 @@
                         <Region prefWidth="55.0"/>
 
                         <VBox>
-                            <HBox>
-<!--                                Needs to be made switch toggle, css -->
+                            <HBox alignment="CENTER"
+                                  prefWidth="210.0">
                                 <Label styleClass="settingLabel"
-                                       text="Toggle"
+                                       text="Toggle controls"
                                        wrapText="true"/>
                                 <Region HBox.hgrow="ALWAYS"/>
                                 <ToggleSwitch fx:id="parentalControlToggleButton" styleClass="toggleButton" onMouseClicked="#onParentalControlToggleButtonClick"/>
-
                             </HBox>
-
-                            <Region prefHeight="10.0"/>
-
-                            <VBox>
-                                <Label maxWidth="210.0" styleClass="settingLabel" text="Enter passcode to disable parental controls" wrapText="true"/>
-                                <PasswordField fx:id="parentalControlPasswordField"
-                                               maxWidth="210.0"
-                                               styleClass="textBox"
-                                               promptText="Password"/>
-                            </VBox>
-
                         </VBox>
 
                         <Region prefWidth="15.0" />
@@ -353,4 +341,72 @@
 
         </VBox>
     </StackPane>
+
+    <!-- BLACK OUT PANE -->
+    <StackPane fx:id="blackOutStackPane"
+               prefHeight="600.0"
+               prefWidth="390.0"
+               styleClass="blackOutPane"
+               visible="false">
+    </StackPane>
+
+    <!-- PARENTAL CONTROLS PASSWORD ENTRY -->
+    <StackPane fx:id="turnOffParentalControlsStackPane"
+               layoutY="225.0"
+               layoutX="55.0"
+               minHeight="200.0"
+               styleClass="confirmPane"
+               visible="false">
+        <VBox>
+            <HBox alignment="TOP_RIGHT">
+                <Button mnemonicParsing="false"
+                        text="X"
+                        onAction="#onXLabelClick"
+                        styleClass="tinyXButton"/>
+            </HBox>
+            <VBox alignment="CENTER">
+                <Label styleClass="bodyLabel"
+                       text="Enter passcode to disable parental controls"
+                       textAlignment="CENTER"
+                       wrapText="true"/>
+
+                <HBox alignment="CENTER">
+                    <padding>
+                        <Insets top="15.0"/>
+                    </padding>
+                    <PasswordField fx:id="parentalControlsPasswordField"
+                               minWidth="230.0"
+                               styleClass="addBox"
+                               onKeyTyped="#passwordEntered"
+                               promptText="Password"/>
+
+                </HBox>
+                <padding>
+                    <Insets bottom="10.0"/>
+                </padding>
+<!--                 text="* Incorrect password *"-->
+                <Label fx:id="denyParentalControlsDisableLabel"
+                       styleClass="warningLabel"
+                       textAlignment="RIGHT"
+                       wrapText="true"/>
+            </VBox>
+            <HBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="confirmPasswordButton"
+                        mnemonicParsing="false"
+                        onAction="#onConfirmButtonClick"
+                        styleClass="tinyPrimaryButton"
+                        minWidth="100.0"
+                        text="CONFIRM"
+                        textAlignment="CENTER"
+                        disable="true"/>
+                <Region prefWidth="20.0" />
+                <padding>
+                    <Insets bottom="10.0"/>
+                </padding>
+            </HBox>
+        </VBox>
+    </StackPane>
+
+
 </AnchorPane>
