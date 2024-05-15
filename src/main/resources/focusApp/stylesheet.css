@@ -154,8 +154,8 @@
     -fx-cursor: hand;
 }
 
-.defaultButton {
-    -fx-pref-width: 140px;
+.dropdownButton {
+    -fx-pref-width: 200px;
     -fx-pref-height: 40px;
     -fx-background-color: #FFF;
 
@@ -169,6 +169,21 @@
 }
 
 .defaultButton:hover {
+    -fx-background-color: #F5F5F5;
+}
+
+.iconButton {
+    -fx-pref-width: 40px;
+    -fx-pref-height: 40px;
+    -fx-background-color: #FFF;
+
+    -fx-border-radius: 8px;
+    -fx-border-color: #000000;
+
+    -fx-cursor: hand;
+}
+
+.iconButton:hover {
     -fx-background-color: #F5F5F5;
 }
 

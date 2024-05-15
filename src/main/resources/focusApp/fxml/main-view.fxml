@@ -2,23 +2,19 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.control.ComboBox?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="390.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.MainController">
 
    <!-- NAV BAR -->
@@ -59,15 +55,27 @@
    <VBox alignment="CENTER" layoutX="55.0" layoutY="96.0" prefHeight="477.0" prefWidth="280.0">
 
       <!-- Select Present and save button -->
-      <HBox alignment="CENTER" prefHeight="58.0" prefWidth="280.0" spacing="50.0">
+      <HBox alignment="CENTER" prefHeight="58.0" prefWidth="280.0" spacing="5.0">
 
 <!-- Select Preset Drop down-->
-          <ComboBox fx:id="presetsButton" styleClass="defaultButton" onAction="#onPresetsButtonClick">
-
+          <ComboBox fx:id="presetsButton" editable="false" onAction="#onPresetsButtonClick" onKeyPressed="#onComboBoxKeyPressed" styleClass="dropdownButton" visibleRowCount="5">
           </ComboBox>
 
 <!--         Save Button-->
-         <Button fx:id="addPresetButton" onAction="#onAddPresetClick" mnemonicParsing="false" styleClass="smallDefaultButton" text="+ preset" />
+          <Button fx:id="editButton" onAction="#onEditButtonClick" styleClass="iconButton">
+              <graphic>
+                  <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
+                      <Image url="@../images/editIcon.png" />
+                  </ImageView>
+              </graphic>
+          </Button>
+          <Button onAction="#onDeleteButtonClick" styleClass="iconButton">
+              <graphic>
+                  <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
+                      <Image url="@../images/deleteIcon.png" />
+                  </ImageView>
+              </graphic>
+          </Button>
       </HBox>
 
 
@@ -81,7 +89,9 @@
        </VBox>
 
       <Pane fx:id="blockedApplicationPane" onMouseClicked="#onBlockedApplicationsPaneClick" prefHeight="114.0" prefWidth="280.0" styleClass="blockedPane">
-          <GridPane fx:id="blockedIcons" prefHeight="114.0" prefWidth="280.0"/>
+          <GridPane fx:id="blockedIcons" prefHeight="114.0" prefWidth="280.0">
+
+          </GridPane>
       </Pane>
 
       <!-- Timers -->
