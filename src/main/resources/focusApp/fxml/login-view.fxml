@@ -22,18 +22,10 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="focusApp.controllers.LoginController">
 
-    <VBox alignment="TOP_CENTER"
-          layoutX="53.0"
-          prefHeight="600.0"
-          prefWidth="284.0">
+    <VBox alignment="TOP_CENTER" layoutX="53.0" prefHeight="600.0" prefWidth="284.0">
 
         <!-- LOGO -->
-        <ImageView id="logoLarge"
-                   fitHeight="200.0"
-                   fitWidth="200.0"
-                   pickOnBounds="true"
-                   preserveRatio="true"
-                   VBox.vgrow="ALWAYS">
+        <ImageView id="logoLarge" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
             <VBox.margin>
                 <Insets top="10.0"/>
             </VBox.margin>
@@ -41,69 +33,36 @@
         </ImageView>
 
         <!-- LOGIN HEADINGS -->
-        <Label styleClass="headLabel"
-               text="Login to your account:"
-               textAlignment="CENTER"
-               wrapText="true"/>
-
-        <Label styleClass="subheadLabel"
-               text="Enter your details below to log back into your account."
-               textAlignment="CENTER"
-               wrapText="true">
+        <Label styleClass="headLabel" text="Login to your account:" textAlignment="CENTER" wrapText="true"/>
+        <Label styleClass="subheadLabel" text="Enter your details below to log back into your account." textAlignment="CENTER" wrapText="true">
             <padding>
                 <Insets bottom="30.0"/>
             </padding>
         </Label>
 
-
         <!-- LOGIN FIELDS -->
         <VBox spacing="10.0" alignment="CENTER">
-            <TextField fx:id="userNameTextField"
-                       styleClass="textBox"
-                       promptText="Username"
-            />
+            <!-- USERNAME -->
+            <TextField fx:id="userNameTextField" styleClass="textBox" promptText="Username"/>
 
-            <PasswordField fx:id="passwordTextField"
-                           styleClass="textBox"
-                           promptText="Password"
-            />
+            <!-- PASSWORD -->
+            <PasswordField fx:id="passwordTextField" styleClass="textBox" promptText="Password"/>
 
-            <Label fx:id="denyLoginLabel"
-                   styleClass="warningLabel"
-                   textAlignment="RIGHT"
-                   wrapText="true"/>
+            <!-- DENY LOGIN -->
+            <Label fx:id="denyLoginLabel" styleClass="warningLabel" textAlignment="RIGHT" wrapText="true"/>
 
             <!-- LOGIN BUTTONS -->
             <HBox spacing="10.0" alignment="BOTTOM_CENTER">
-                <Button fx:id="backButton"
-                        mnemonicParsing="false"
-                        onAction="#onBackButtonClick"
-                        styleClass="smallSecondaryButton"
-                        text="BACK"
-                        textAlignment="CENTER"
-                />
-                <Button fx:id="loginButton"
-                        mnemonicParsing="false"
-                        onAction="#onLoginButtonClick"
-                        styleClass="smallPrimaryButton"
-                        text="CONFIRM"
-                        textAlignment="CENTER"
-                />
+                <Button fx:id="backButton" mnemonicParsing="false" onAction="#onBackButtonClick" styleClass="smallSecondaryButton" text="BACK" textAlignment="CENTER"/>
+                <Button fx:id="loginButton" mnemonicParsing="false" onAction="#onLoginButtonClick" styleClass="smallPrimaryButton" text="CONFIRM" textAlignment="CENTER"/>
             </HBox>
 
             <!-- LINK TO REGISTER -->
-            <Hyperlink fx:id="regLink"
-                       onAction="#onRegisterLinkClick"
-                       styleClass="linkLabel"
-                       text="Don't have an account? Click here to signup."
-                       textAlignment="CENTER"
-                       wrapText="true">
+            <Hyperlink fx:id="regLink" onAction="#onRegisterLinkClick" styleClass="linkLabel" text="Don't have an account? Click here to signup." textAlignment="CENTER" wrapText="true">
                 <padding>
                     <Insets top="30.0"/>
                 </padding>
             </Hyperlink>
-
         </VBox>
     </VBox>
-
 </AnchorPane>

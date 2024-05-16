@@ -17,11 +17,9 @@
             xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="focusApp.controllers.HomeController">
-   <VBox alignment="TOP_CENTER"
-         layoutX="53.0"
-         prefHeight="600.0"
-         prefWidth="284.0">
+   <VBox alignment="TOP_CENTER" layoutX="53.0" prefHeight="600.0" prefWidth="284.0">
 
+      <!-- LOGO -->
       <ImageView id="logoLarge"
                  fitHeight="200.0"
                  fitWidth="200.0"
@@ -34,42 +32,24 @@
          <Image url="@../images/logoLarge.png"/>
       </ImageView>
 
-      <Label styleClass="headLabel"
-             text="Welcome to the Hyper Focus App, your personal productivity partner!"
-             textAlignment="CENTER"
-             wrapText="true"/>
+      <!-- HEADING -->
+      <Label styleClass="headLabel" text="Welcome to the Hyper Focus App, your personal productivity partner!" textAlignment="CENTER" wrapText="true"/>
+      <Label styleClass="subheadLabel" text="Our tool helps you block distracting applications, allowing you to concentrate fully on your tasks and achieve your goals efficiently." textAlignment="CENTER" wrapText="true"/>
 
-      <Label styleClass="subheadLabel"
-             text="Our tool helps you block distracting applications, allowing you to concentrate fully on your tasks and achieve your goals efficiently."
-             textAlignment="CENTER"
-             wrapText="true"/>
-
-      <Label styleClass="bodyLabel"
-             text="Don't have an account? Sign up here:"
-             textAlignment="CENTER">
-
+      <!-- REGISTER -->
+      <Label styleClass="bodyLabel" text="Don't have an account? Sign up here:" textAlignment="CENTER">
          <padding>
             <Insets top="30.0"/>
          </padding>
       </Label>
+      <Button fx:id="registerButton" mnemonicParsing="false" onAction="#onRegisterButtonClick" styleClass="largePrimaryButton" text="GET STARTED" textAlignment="CENTER"/>
 
-      <Button fx:id="registerButton"
-              mnemonicParsing="false"
-              onAction="#onRegisterButtonClick"
-              styleClass="largePrimaryButton"
-              text="GET STARTED"
-              textAlignment="CENTER"/>
-
-      <Label styleClass="bodyLabel"
-             text="Already signed up? Log in here:">
+      <!-- LOG IN -->
+      <Label styleClass="bodyLabel" text="Already signed up? Log in here:">
          <padding>
             <Insets top="30.0"/>
          </padding>
       </Label>
-      <Button fx:id="loginButton"
-              mnemonicParsing="false"
-              onAction="#onLoginButtonClick"
-              styleClass="largeSecondaryButton"
-              text="LOG IN"/>
+      <Button fx:id="loginButton" mnemonicParsing="false" onAction="#onLoginButtonClick" styleClass="largeSecondaryButton" text="LOG IN"/>
    </VBox>
 </AnchorPane>
