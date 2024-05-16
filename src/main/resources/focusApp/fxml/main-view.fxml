@@ -58,20 +58,18 @@
       <HBox alignment="CENTER" prefHeight="58.0" prefWidth="280.0" spacing="5.0">
 
 <!-- Select Preset Drop down-->
-          <ComboBox fx:id="presetsButton" editable="false" onAction="#onPresetsButtonClick" onKeyPressed="#onComboBoxKeyPressed" styleClass="dropdownButton" visibleRowCount="5">
+          <ComboBox fx:id="presetsButton" editable="false" onAction="#onPresetsButtonClick" onKeyPressed="#onComboBoxKeyPressed" styleClass="defaultButton" visibleRowCount="5">
           </ComboBox>
 
 <!--         Save Button-->
-          <Button fx:id="editButton" onAction="#onEditButtonClick" styleClass="iconButton">
+          <Button fx:id="editButton" onAction="#onEditButtonClick" styleClass="iconButton" prefHeight="40.0" prefWidth="40.0">
               <graphic>
-                  <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
-                      <Image url="@../images/editIcon.png" />
-                  </ImageView>
+                  <ImageView fx:id="editImage" preserveRatio="true" fitHeight="30.0" fitWidth="30.0"/>
               </graphic>
           </Button>
-          <Button onAction="#onDeleteButtonClick" styleClass="iconButton">
+          <Button onAction="#onDeleteButtonClick" styleClass="iconButton" prefHeight="40.0" prefWidth="40.0">
               <graphic>
-                  <ImageView fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView preserveRatio="true" fitHeight="30.0" fitWidth="30.0">
                       <Image url="@../images/deleteIcon.png" />
                   </ImageView>
               </graphic>

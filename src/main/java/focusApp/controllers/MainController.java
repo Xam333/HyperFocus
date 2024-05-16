@@ -1,17 +1,13 @@
 package focusApp.controllers;
 
 import focusApp.HelloApplication;
-import focusApp.database.IBlockedItemDAO;
-import focusApp.database.MockedBlockedItemDAO;
 import focusApp.models.*;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -25,22 +21,13 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.io.Console;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.List;
 import java.util.ResourceBundle;
-import javafx.beans.value.ObservableValue;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
 import focusApp.database.Preset;
 import focusApp.database.PresetDAO;
@@ -87,6 +74,16 @@ public class MainController implements Initializable {
     private String originalPresetName;
     private String newPresetName;
 
+    @FXML
+    private Button editButton;
+
+    @FXML
+    private ImageView editImage;
+
+    private Image editIcon;
+    private Image tickIcon;
+    private boolean isEditing = false;
+
 
     public MainController() {
         userHolder = UserHolder.getInstance();
@@ -98,6 +95,13 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Load images
+        editIcon = new Image(getClass().getResourceAsStream("/focusApp/images/editIcon.png"));
+        tickIcon = new Image(getClass().getResourceAsStream("/focusApp/images/tickIcon.png"));
+
+        // Set initial image for edit button
+        setButtonGraphic(editButton, editIcon, 30, 30);
+
         loadPresets();
         presetsButton.getSelectionModel().selectFirst();
         originalPresetName = presetsButton.getValue().toString();
@@ -265,20 +269,28 @@ public class MainController implements Initializable {
         }
     }
 
-    public void onEditButtonClick() {
-        // Check if ComboBox is not already editable
-        if (!presetsButton.isEditable()) {
-            // Enable editing in the ComboBox
+    @FXML
+    private void onEditButtonClick() {
+        if (presetsButton.isEditable()) {
+            // Save changes
+            saveEditedPresetName();
+            // Revert to edit icon
+            setButtonGraphic(editButton, editIcon, 30, 30);
+        } else {
+            // Enable editing
             presetsButton.setEditable(true);
-
-            // Request focus to the dropdown button
             presetsButton.requestFocus();
+            // Change to tick icon
+            setButtonGraphic(editButton, tickIcon, 30, 30);
         }
     }
 
     public void saveEditedPresetName() {
         // Check if ComboBox is editable
         if (presetsButton.isEditable()) {
+            // Get the index of the currently selected item
+            int selectedIndex = presetsButton.getSelectionModel().getSelectedIndex();
+
             // Disable editing in the ComboBox
             presetsButton.setEditable(false);
 
@@ -287,22 +299,25 @@ public class MainController implements Initializable {
 
             // Reload presets
             loadPresets();
-            presetsButton.setValue(newPresetName);
+            presetsButton.getSelectionModel().select(selectedIndex);
         }
     }
 
     @FXML
     private void onComboBoxKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
-            // Call the save method
+            // Save changes when Enter is pressed
             saveEditedPresetName();
-
-            // Remove focus from the ComboBox
-            presetsButton.getParent().requestFocus();
-
-            // Consume the event to prevent further processing
-            event.consume();
+            // Revert to edit icon
+            setButtonGraphic(editButton, editIcon, 30, 30);
         }
+    }
+
+    private void setButtonGraphic(Button button, Image image, double width, double height) {
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
+        button.setGraphic(imageView);
     }
 
 
