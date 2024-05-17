@@ -162,7 +162,6 @@ public class MainController implements Initializable {
         /* update the blocked list */
         // Get preset name
         String presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
-        System.out.println(presetName);
         updateBlockList(presetName);
 
         // Display a sound name in combo box
@@ -279,10 +278,10 @@ public class MainController implements Initializable {
      */
     public void onPresetsButtonClick() {
         // Get preset name
-        String presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
-
-        System.out.println(presetName);
-
+        String presetName = "";
+        if (presetsButton.getSelectionModel().getSelectedItem() != null) {
+            presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
+        }
         originalPresetName = presetName;
 
         // Check if new preset or existing
