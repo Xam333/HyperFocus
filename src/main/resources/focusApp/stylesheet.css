@@ -13,6 +13,9 @@
 }
 
 /* Layout */
+.navBarMenuButton: hover{
+    -fx-background-color: -secondaryColor
+}
 .navBox{
     -fx-background-color: -primaryColor;
 }

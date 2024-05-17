@@ -52,12 +52,7 @@ public class TimerController {
     protected void  onToggleListenClick() {
         timer.TurnOnTTS(ToggleListen.isSelected());
     }
-    @FXML
-    protected void mouseInToggleListen(){ ToggleListen.setContentDisplay(ContentDisplay.LEFT); }
-    @FXML
-    protected void mouseOutToggleListen(){ ToggleListen.setContentDisplay(ContentDisplay.GRAPHIC_ONLY); }
 
-    
     @FXML
     protected void onStopButtonClick(){ timer.Control(Command.Stop); }
     @FXML
@@ -178,10 +173,7 @@ public class TimerController {
     }
 
     public void initialize(double startTime, double endTime) {
-        // Get offset and duration from main (Get offset and Get Duration)
-
         timer = new Timer(startTime, endTime, this);
-
         timer.Control(Command.Start);
     }
 

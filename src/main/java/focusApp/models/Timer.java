@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class Timer {
 
     private final boolean DebugMode = false;
-    public boolean Speak;
+    public boolean Speak = false;
 
     /**
      * Need the Current state the timer is in?
@@ -35,25 +35,12 @@ public class Timer {
     /**
      * Stores the value of the timer offset.
      */
-    private final double Timer_Preset_Offset;
+    private final double Timer_Offset;
 
     /**
      * Stores the value of the timer duration.
      */
-    private final double Timer_Preset_Duration;
-
-
-    /**
-     * Gets the timer offset to add to a preset.
-     * @return Timer offset.
-     */
-    public double getTimer_Preset_Offset() { return Timer_Preset_Offset; }
-
-    /**
-     * Gets the timer duration to add to a preset.
-     * @return Timer duration.
-     */
-    public double getTimer_Preset_Duration() { return Timer_Preset_Duration; }
+    private final double Timer_Duration;
 
     /**
      * Global scheduler for the timer.
@@ -63,7 +50,7 @@ public class Timer {
     /**
      * The duration that is left on a timer when the user pauses it.
      */
-    private Duration Paused_C_Duration;
+    private Duration Paused_Counting_Duration;
 
 
     /**
@@ -128,17 +115,15 @@ public class Timer {
      * @param TimerDuration The duration of the timer in minutes (0 to 1439).
      */
     public Timer (Double TimerOffset, Double TimerDuration, TimerController Timer_Controller){
-        Timer_Preset_Offset = TimerOffset == null ? 0.0 : (TimerOffset * 60);
-        Timer_Preset_Duration = TimerDuration == null ? 0.0 : (TimerDuration * 60);
+        Timer_Offset = TimerOffset == null ? 0.0 : (TimerOffset * 60);
+        Timer_Duration = TimerDuration == null ? 0.0 : (TimerDuration * 60);
         this.Timer_Controller = Timer_Controller;
-        // Get a global value????
-        this.Speak = false;
 
         CreateTimer();
 
         if (DebugMode){
-            System.out.println("Timer_Preset_Offset: " + Timer_Preset_Offset + "sec");
-            System.out.println("Timer_Preset_Duration: " + Timer_Preset_Duration + "sec");
+            System.out.println("Timer_Preset_Offset: " + Timer_Offset + "sec");
+            System.out.println("Timer_Preset_Duration: " + Timer_Duration + "sec");
             System.out.println("Timer Start: " + Timer_Start.format(Timer_12_Format));
             System.out.println("Timer End: " + Timer_End.format(Timer_12_Format));
             System.out.println("Counting Duration: " + FormatTime());
@@ -154,10 +139,10 @@ public class Timer {
      * This method acts as a factory method to update the fields with new values effectively restarting the timer.
      */
     private void CreateTimer(){
-        Timer_State = (Timer_Preset_Offset != 0.0) ? TimerState.Delayed : TimerState.Running;
+        Timer_State = (Timer_Offset != 0.0) ? TimerState.Delayed : TimerState.Running;
 
-        this.Timer_Start = LocalTime.now().plusSeconds((long) Timer_Preset_Offset);
-        this.Timer_End = Timer_Start.plusSeconds((long)Timer_Preset_Duration);
+        this.Timer_Start = LocalTime.now().plusSeconds((long) Timer_Offset);
+        this.Timer_End = Timer_Start.plusSeconds((long) Timer_Duration);
 
         boolean TimeCheck = Timer_End.isBefore(Timer_Start);
         Running_Counting_Duration = Duration.between(Timer_Start, Timer_End).plusHours(TimeCheck ? 24 : 0);
@@ -367,8 +352,8 @@ public class Timer {
      */
     private void Resume(){
         // State Enforcement and Pre-State tasks.
-        Timer_End = LocalTime.now().plus(Paused_C_Duration.toMillis(), ChronoUnit.MILLIS);
-        Running_Counting_Duration = Paused_C_Duration;
+        Timer_End = LocalTime.now().plus(Paused_Counting_Duration.toMillis(), ChronoUnit.MILLIS);
+        Running_Counting_Duration = Paused_Counting_Duration;
         EnforceState(TimerState.Running);
 
         // Update GUI elements to their Pre-State for the current state.
@@ -390,7 +375,7 @@ public class Timer {
     private void Pause(){
         // State Enforcement and Pre-State tasks.
         if(TimeScheduler != null && !TimeScheduler.isShutdown() && Timer_State == TimerState.Running){
-            Paused_C_Duration = Duration.between(LocalTime.now(), Timer_End);
+            Paused_Counting_Duration = Duration.between(LocalTime.now(), Timer_End);
             EnforceState(TimerState.Paused);
             TimeScheduler.shutdownNow();
         }
