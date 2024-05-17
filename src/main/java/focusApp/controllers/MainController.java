@@ -145,8 +145,7 @@ public class MainController implements Initializable {
         // Set initial image for edit button
         setButtonGraphic(editButton, editIcon, 30, 30);
 
-        presetsButton.setItems(presetsList);
-
+        loadPresets();
         presetsButton.getSelectionModel().selectFirst();
         originalPresetName = presetsButton.getValue().toString();
 
@@ -155,12 +154,6 @@ public class MainController implements Initializable {
             // Update newPresetName whenever the ComboBox editor text changes
             newPresetName = newVal;
         });
-
-        // Display a sound name in combo box
-        soundOptionsButton.getSelectionModel().selectFirst();
-
-        // Display a colour in combo box
-        colourOptionsButton.getSelectionModel().selectFirst();
 
         // Initialise start and end time sliders
         startTimeSlider();
@@ -171,6 +164,12 @@ public class MainController implements Initializable {
         String presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
         System.out.println(presetName);
         updateBlockList(presetName);
+
+        // Display a sound name in combo box
+        soundOptionsButton.getSelectionModel().selectFirst();
+
+        // Display a colour in combo box
+        colourOptionsButton.getSelectionModel().selectFirst();
 
         // Only show enter passcode if parental controls is being turned off
         parentalControlToggleButton.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
@@ -267,7 +266,6 @@ public class MainController implements Initializable {
                 presetNames.add(preset.getPresetName());
             }
         }
-        presetHolder.setPreset(preset);
 
         presetNames.add("New Preset +");
 

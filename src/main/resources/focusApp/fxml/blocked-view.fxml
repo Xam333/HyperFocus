@@ -68,7 +68,7 @@
         <!-- To Account Page -->
         <Button fx:id="accountButton"
                 onAction="#onAccountButtonClick"
-                styleClass="navButton">
+                styleClass="accountButton">
             <graphic>
                 <ImageView fitHeight="40.0"
                            fitWidth="40.0"
@@ -114,7 +114,7 @@
     <StackPane fx:id="menuStackPane"
                layoutY="74.9"
                prefHeight="525.0"
-               prefWidth="280.0"
+               prefWidth="300.0"
                styleClass="menuPane"
                visible="false">
 
@@ -135,8 +135,9 @@
 
                 <!-- Drop down account information -->
                 <VBox fx:id="accountInformationSection" visible="false" managed="false">
+                    <Region prefHeight="10.0"/>
                     <HBox>
-                        <Region prefWidth="55.0"/>
+                        <Region prefWidth="50.0"/>
                         <VBox>
                             <!-- Total time focused -->
                             <HBox>
@@ -185,8 +186,9 @@
 
                 <!-- Drop down parental controls -->
                 <VBox fx:id="parentalControlsSection" visible="false" managed="false">
+                    <Region prefHeight="10.0"/>
                     <HBox>
-                        <Region prefWidth="55.0"/>
+                        <Region prefWidth="50.0"/>
                         <VBox>
                             <HBox alignment="CENTER"
                                   prefWidth="210.0">
@@ -218,8 +220,9 @@
                 <VBox fx:id="colourSettingsSection"
                       visible="false"
                       managed="false">
+                    <Region prefHeight="10.0"/>
                     <HBox>
-                        <Region prefWidth="55.0"/>
+                        <Region prefWidth="50.0"/>
 
                         <VBox>
                             <Label styleClass="settingLabel" text="Current palette:"/>
@@ -278,8 +281,9 @@
 
                 <!-- Drop down sound settings -->
                 <VBox fx:id="soundSettingsSection" managed="false" visible="false">
+                    <Region prefHeight="10.0"/>
                     <HBox>
-                        <Region prefWidth="55.0"/>
+                        <Region prefWidth="50.0"/>
                         <VBox>
                             <Label styleClass="settingLabel" text="Alarm sound"/>
                             <ComboBox fx:id="soundOptionsButton" styleClass="defaultButton" minWidth="210.0">

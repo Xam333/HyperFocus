@@ -166,6 +166,10 @@
     -fx-cursor: hand;
 }
 
+.accountButton {
+    -fx-background-color: transparent;
+}
+
 .defaultButton {
     -fx-pref-width: 200px;
     -fx-pref-height: 40px;
@@ -202,7 +206,7 @@
 }
 
 .menuButton{
-    -fx-pref-width: 280.0;
+    -fx-pref-width: 300.0;
     -fx-pref-height: 50.0;
     -fx-background-color: transparent;
     -fx-cursor: hand;
