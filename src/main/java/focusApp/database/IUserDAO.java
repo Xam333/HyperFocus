@@ -20,6 +20,8 @@ public interface IUserDAO {
      */
     public boolean updateName(int id, String newName);
 
+    public boolean setParentalLock(int id, boolean lock);
+
     /**
      * gets the parentalLock value for a given id
      * @param id user id

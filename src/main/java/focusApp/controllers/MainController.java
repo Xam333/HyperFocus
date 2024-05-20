@@ -181,6 +181,9 @@ public class MainController implements Initializable {
                 turnOffParentalControlsStackPane.setVisible(false);
             }
         });
+
+        // update user name text
+        userNameTextField.setText(user.getUserName());
     }
 
 
@@ -665,18 +668,18 @@ public class MainController implements Initializable {
 
     public void onConfirmParentalControlsButtonClick(ActionEvent actionEvent) {
         // Check if password is correct
-
-//        UserDAO userDAO = new UserDAO();
-//        User user = userDAO.login(userNameTextField.getText(), passwordTextField.getText());
+        User login_user = userDAO.login(user.getUserName(), parentalControlsPasswordField.getText());
 
         /* if user != null then login successful and user class returned */
-        if (Objects.equals(parentalControlsPasswordField.getText(), "1234")){
+        if (!Objects.equals(login_user, null)){
+            user.setParentalLock(true);
             parentalControlToggleButton.setSelected(false);
             blackOutStackPane.setVisible(false);
             turnOffParentalControlsStackPane.setVisible(false);
             denyParentalControlsDisableLabel.setText("");
             parentalControlsPasswordField.clear();
         } else {
+            user.setParentalLock(false);
             denyParentalControlsDisableLabel.setText("* Incorrect password. *");
         }
     }
