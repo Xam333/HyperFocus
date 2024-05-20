@@ -13,8 +13,6 @@ import java.util.concurrent.TimeUnit;
  * This class creates a timer and the methods to control it.
  */
 public class Timer {
-
-    private final boolean DebugMode = false;
     public boolean Speak = false;
 
     /**
@@ -107,6 +105,8 @@ public class Timer {
      * The format of time as 12 hour time(hh:mm:ss a).
      */
     private final DateTimeFormatter Timer_12_Format = DateTimeFormatter.ofPattern("h:mm:ss a");
+    private final String Alarm;
+    private final float Volume;
 
     /**
      * Basic constructor for the timer class.
@@ -114,21 +114,14 @@ public class Timer {
      * @param TimerOffset   The offset of minutes before the timer starts.
      * @param TimerDuration The duration of the timer in minutes (0 to 1439).
      */
-    public Timer (Double TimerOffset, Double TimerDuration, TimerController Timer_Controller){
+    public Timer (Double TimerOffset, Double TimerDuration, TimerController Timer_Controller, String alarm, float volume){
         Timer_Offset = TimerOffset == null ? 0.0 : (TimerOffset * 60);
         Timer_Duration = TimerDuration == null ? 0.0 : (TimerDuration * 60);
         this.Timer_Controller = Timer_Controller;
+        Alarm = alarm;
+        Volume = volume;
 
         CreateTimer();
-
-        if (DebugMode){
-            System.out.println("Timer_Preset_Offset: " + Timer_Offset + "sec");
-            System.out.println("Timer_Preset_Duration: " + Timer_Duration + "sec");
-            System.out.println("Timer Start: " + Timer_Start.format(Timer_12_Format));
-            System.out.println("Timer End: " + Timer_End.format(Timer_12_Format));
-            System.out.println("Counting Duration: " + FormatTime());
-            System.out.println("Timer TimerState: " + Timer_State);
-        }
     }
 
     public void TurnOnTTS(boolean value){
@@ -207,9 +200,6 @@ public class Timer {
      * @param EnforceThis The state that the timer will enforce.
      */
     private void EnforceState(TimerState EnforceThis){
-        if (DebugMode){
-            System.out.println("Updating State: " + Timer_State + " --> " + EnforceThis);
-        }
         Timer_State = EnforceThis;
     }
 
@@ -253,7 +243,7 @@ public class Timer {
         // Update GUI elements to their Pre-State for the current state.
         Timer_Controller.UpdateGUI();
         Timer_Controller.UpdateTimerStatus();
-        Timer_Controller.UpdateButtons();
+        Timer_Controller.ButtonStateManager();
 
         // If the text to speech is on.
         if(Speak){ Notification.SpeakText("Timer starting at:" + Timer_Start.format(Timer_12_Format)); }
@@ -277,7 +267,7 @@ public class Timer {
         // Update GUI elements to their Pre-State for the current state.
         Timer_Controller.UpdateGUI();
         Timer_Controller.UpdateTimerStatus();
-        Timer_Controller.UpdateButtons();
+        Timer_Controller.ButtonStateManager();
 
         // If the text to speech is on.
         if(Speak){ Notification.SpeakText("Timer running."); }
@@ -301,9 +291,9 @@ public class Timer {
         Timer_Controller.UpdateGUI();
         Timer_Controller.UpdateStopWatch();
         Timer_Controller.UpdateTimerStatus();
-        Timer_Controller.UpdateButtons();
+        Timer_Controller.ButtonStateManager();
 
-        Notification.PlaySound(-10);
+        Notification.PlaySound(Volume, Alarm);
 
         // If the text to speech is on.
         if(Speak){ Notification.SpeakText("Timer finished."); }
@@ -325,7 +315,7 @@ public class Timer {
         Timer_Controller.UpdateGUI();
         Timer_Controller.UpdateTimerStatus();
         Timer_Controller.UpdateStopWatch();
-        Timer_Controller.UpdateButtons();
+        Timer_Controller.ButtonStateManager();
 
         // If the text to speech is on.
         if(Speak){ Notification.SpeakText("Timer stopped."); }
@@ -339,7 +329,7 @@ public class Timer {
         EnforceState(TimerState.Restarting);
 
         Timer_Controller.UpdateGUI();
-        Timer_Controller.UpdateButtons();
+        Timer_Controller.ButtonStateManager();
         Timer_Controller.UpdateTimerStatus();
 
         CreateTimer();
@@ -359,7 +349,7 @@ public class Timer {
         // Update GUI elements to their Pre-State for the current state.
         Timer_Controller.UpdateTimerStatus();
         Timer_Controller.UpdateStopWatch();
-        Timer_Controller.UpdateButtons();
+        Timer_Controller.ButtonStateManager();
 
         // If the text to speech is on.
         if(Speak){ Notification.SpeakText("Timer resumed."); }
@@ -383,7 +373,7 @@ public class Timer {
         // Update GUI elements to their Pre-State for the current state.
         Timer_Controller.UpdateTimerStatus();
         Timer_Controller.UpdateStopWatch();
-        Timer_Controller.UpdateButtons();
+        Timer_Controller.ButtonStateManager();
 
 
         if(Speak){ Notification.SpeakText("Timer paused."); }

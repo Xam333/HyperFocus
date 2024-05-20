@@ -2,23 +2,30 @@ package focusApp.models;
 
 import javax.sound.sampled.*;
 import java.io.File;
+import java.util.HashMap;
+
+import focusApp.controllers.MainController;
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.VoiceManager;
 
 public class Notification {
 
+    public static HashMap<String, File> SoundList = new HashMap<>(){{
+        String soundDir = "src/main/resources/focusApp/Sounds/";
+        put("Alarm 1", new File(soundDir + "alarm1.wav"));
+        put("Alarm 2", new File(soundDir + "alarm2.wav"));
+        put("Alarm 3", new File(soundDir + "alarm3.wav"));
+    }};
     private static final String VoiceDirectory = "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory";
-
     private static Voice SpeakingVoice;
 
     /**
      * Plays a sound of the supported audio format (wav).
      * @param Volume controls the volume of the sound.
      */
-    public static void PlaySound(float Volume){
+    public static void PlaySound(float Volume, String AlarmSelection){
         try {
-            String soundFilePath = "src/main/resources/focusApp/Sounds/alarm1.wav";
-            File AlarmPath = new File(soundFilePath);
+            File AlarmPath = SoundList.get(AlarmSelection);
 
             if (AlarmPath.exists()){
 

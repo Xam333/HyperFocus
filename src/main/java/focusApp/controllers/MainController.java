@@ -165,7 +165,11 @@ public class MainController implements Initializable {
         updateBlockList(presetName);
 
         // Display a sound name in combo box
+        ObservableList<String> SoundOptions = FXCollections.observableArrayList("Alarm 1", "Alarm 2", "Alarm 3");
+        soundOptionsButton.setItems(SoundOptions);
         soundOptionsButton.getSelectionModel().selectFirst();
+        volumeSlider.setMin(-25.0);
+        volumeSlider.setMax(0.0);
 
         // Display a colour in combo box
         colourOptionsButton.getSelectionModel().selectFirst();
@@ -182,11 +186,17 @@ public class MainController implements Initializable {
             }
         });
 
+
         // update user name text
         userNameTextField.setText(user.getUserName());
     }
 
-
+    public String getAlarmSelection(){
+        return soundOptionsButton.getValue().toString();
+    }
+    private float getVolume(){
+        return (float) volumeSlider.getValue();
+    }
 
     /**
      * Initialises start time slider and listens for updates
@@ -474,7 +484,7 @@ public class MainController implements Initializable {
         TimerController timerController = fxmlLoader.getController();
 
         // Pass the start time and end time to the timer controller
-        timerController.initialize(startTime, endTime);
+        timerController.initialize(startTime, endTime, getAlarmSelection(), getVolume()); // Add Volume and path to sound
 
         // Set scene stylesheet
         scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
