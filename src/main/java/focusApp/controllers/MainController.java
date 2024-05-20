@@ -182,8 +182,10 @@ public class MainController implements Initializable {
             }
         });
 
-        // update user name text
+        /* update user name text */
         userNameTextField.setText(user.getUserName());
+        /* update total focus time */
+        totalTimeFocused.setText(Integer.toString(user.getTotalFocusTime()));
     }
 
 

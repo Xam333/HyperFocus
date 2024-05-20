@@ -20,14 +20,20 @@ public interface IUserDAO {
      */
     public boolean updateName(int id, String newName);
 
-    public boolean setParentalLock(int id, boolean lock);
+    /**
+     * add to the total time
+     * @param id the id of the user
+     * @param time time to be added
+     * @return the new total time, -1 if no user found
+     */
+    public int addToTotalTime(int id, int time);
 
     /**
-     * gets the parentalLock value for a given id
-     * @param id user id
-     * @return parental lock value
+     * get the total time from the db
+     * @param id id of the user
+     * @return total time
      */
-    public boolean getParentalLock(int id);
+    public int getTotalTime(int id);
 
     /**
      * return checks if the user id if exists and returns id or -1 if doesnt exits

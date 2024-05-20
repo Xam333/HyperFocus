@@ -6,8 +6,9 @@ public class User {
     private int id;
     private String userName;
     private boolean parentalLock;
+    private int totalFocusTime;
 
-    public User(String userName, boolean parentalLock) {
+    public User(String userName, int totaFocusTime) {
         this.userName = userName;
     }
 
@@ -27,11 +28,19 @@ public class User {
         this.userName = name;
     }
 
+    public boolean getParentalLcok() {
+        return parentalLock;
+    }
+
     public void setParentalLock(boolean parentalLock) {
         this.parentalLock = parentalLock;
     }
 
-    public boolean getParentalLock() {
-        return parentalLock;
+    public int getTotalFocusTime() {
+        return totalFocusTime;
+    }
+
+    public void setTotalFocusTime(int totalFocusTime) {
+        this.totalFocusTime = totalFocusTime;
     }
 }
