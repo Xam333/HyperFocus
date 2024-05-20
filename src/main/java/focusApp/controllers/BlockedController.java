@@ -34,10 +34,17 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+
+import org.apache.commons.imaging.ImageReadException;
+import org.apache.commons.imaging.Imaging;
+import org.apache.commons.io.FileUtils;
+
+
 
 //Jsoup
 import org.controlsfx.control.ToggleSwitch;
@@ -46,6 +53,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import java.util.regex.Pattern;
@@ -328,12 +336,29 @@ public class BlockedController implements Initializable {
                     setGraphic(null);
                     setText(null);
                 } else {
-                    // Set the image URL and properties
-                    imageView.setImage(new Image(url, true));  // true for background loading
-                    imageView.setFitHeight(30); // Adjust size as needed
-                    imageView.setFitWidth(30);
-                    imageView.setPreserveRatio(true);
-                    setGraphic(imageView);
+                    try {
+                        // Download the .ico file
+                        File icoFile = File.createTempFile("favicon", ".ico");
+                        FileUtils.copyURLToFile(new URL(url), icoFile);
+
+                        // Convert the .ico file to a BufferedImage
+                        BufferedImage bufferedImage = Imaging.getBufferedImage(icoFile);
+
+                        // Create a temporary file for the converted image
+                        File tempFile = File.createTempFile("temp_image", ".png");
+                        tempFile.deleteOnExit();
+                        ImageIO.write(bufferedImage, "png", tempFile);
+
+                        // Load the image using the temporary file path
+                        Image fxImage = new Image(tempFile.toURI().toString(), true);  // true for background loading
+                        imageView.setImage(fxImage);
+                        imageView.setFitHeight(30); // Adjust size as needed
+                        imageView.setFitWidth(30);
+                        imageView.setPreserveRatio(true);
+                        setGraphic(imageView);
+                    } catch (IOException | ImageReadException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
