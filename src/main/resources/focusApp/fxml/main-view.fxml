@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.*?>
 <?import org.controlsfx.control.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="390.0" stylesheets="@../stylesheet.css" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="390.0" stylesheets="@../stylesheet.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.MainController">
 
    <!-- NAV BAR -->
    <HBox prefHeight="75.0" prefWidth="390.0" spacing="45.0" styleClass="navBox" AnchorPane.leftAnchor="0.0">
@@ -118,7 +118,7 @@
 
 
     <!-- SIDE MENU -->
-    <StackPane fx:id="menuStackPane" layoutY="74.9" prefHeight="525.0" prefWidth="300.0" visible="false">
+    <StackPane fx:id="menuStackPane" layoutY="74.9" prefHeight="525.0" prefWidth="300.0">
       <Pane>
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000080" height="525.0" onMouseClicked="#toggleMenu" stroke="TRANSPARENT" strokeType="INSIDE" width="390.0" />
@@ -280,7 +280,7 @@
                 </Button>
 
                 <!-- Drop down sound settings -->
-                <VBox fx:id="soundSettingsSection" managed="false" visible="false">
+                <VBox fx:id="soundSettingsSection" managed="true" visible="true">
                     <Region prefHeight="10.0" />
                     <HBox>
                         <Region prefWidth="50.0" />
@@ -297,7 +297,7 @@
                             </ComboBox>
                             <Region prefHeight="10.0" />
                             <Label styleClass="settingLabel" text="Volume" />
-                            <Slider fx:id="volumeSlider" majorTickUnit="50.0" prefWidth="210.0" styleClass="timerSlider" />
+                            <Slider fx:id="volumeSlider" majorTickUnit="50.0" max="0.0" min="-25.0" prefWidth="210.0" snapToTicks="true" styleClass="timerSlider" />
 
                         </VBox>
                         <Region prefWidth="15.0" />

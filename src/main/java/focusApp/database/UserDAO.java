@@ -67,6 +67,23 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
+    public boolean setParentalLock(int id, boolean lock) {
+        try {
+            String query = "UPDATE user SET parentalLock = ? WHERE id = ?";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setBoolean(1, lock);
+            statement.setInt(2, id);
+
+            return (statement.executeUpdate() != 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
     public boolean getParentalLock(int id) {
        try {
            /* get statement based on user id */

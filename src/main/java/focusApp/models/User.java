@@ -5,7 +5,7 @@ import javax.print.attribute.standard.RequestingUserName;
 public class User {
     private int id;
     private String userName;
-    public boolean parentalLock;
+    private boolean parentalLock;
 
     public User(String userName, boolean parentalLock) {
         this.userName = userName;
@@ -29,5 +29,9 @@ public class User {
 
     public void setParentalLock(boolean parentalLock) {
         this.parentalLock = parentalLock;
+    }
+
+    public boolean getParentalLock() {
+        return parentalLock;
     }
 }
