@@ -118,14 +118,14 @@
 
 
     <!-- SIDE MENU -->
-    <StackPane fx:id="menuStackPane" layoutY="74.9" prefHeight="525.0" prefWidth="300.0" visible="false">
+    <StackPane fx:id="menuStackPane" layoutY="74.9" prefHeight="525.0" prefWidth="300.0">
       <Pane>
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000080" height="525.0" onMouseClicked="#toggleMenu" stroke="TRANSPARENT" strokeType="INSIDE" width="390.0" />
          </children>
       </Pane>
 
-        <VBox styleClass="menuPane" stylesheets="@../stylesheet.css">
+        <VBox prefHeight="525.0" prefWidth="262.0" styleClass="menuPane" stylesheets="@../stylesheet.css">
             <!--Account Information-->
             <VBox>
                 <Button onAction="#onAccountButtonClick" styleClass="menuButton">
@@ -270,7 +270,7 @@
             <VBox>
                 <Button fx:id="soundSettingsButton" onAction="#onSoundSettingsButtonClick" styleClass="menuButton">
                     <graphic>
-                        <HBox alignment="CENTER_LEFT">
+                        <HBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="268.0">
                             <Region prefWidth="15.0" />
                             <Label prefWidth="30.0" styleClass="navLabel" text="🔊" textAlignment="CENTER" />
                             <Region prefWidth="10.0" />
@@ -280,31 +280,33 @@
                 </Button>
 
                 <!-- Drop down sound settings -->
-                <VBox fx:id="soundSettingsSection" managed="false" visible="false">
-                    <Region prefHeight="10.0" />
-                    <HBox>
-                        <Region prefWidth="50.0" />
-                        <VBox>
-                            <Label styleClass="settingLabel" text="Alarm sound" />
-
-                            <ComboBox fx:id="soundOptionsButton" minWidth="210.0" styleClass="defaultButton">
-                                <items>
-                                    <FXCollections fx:factory="observableArrayList">
-                                        <String fx:value="Alarm 1" />
-                                        <String fx:value="Alarm 2" />
-                                        <String fx:value="Alarm 3" />
-                                    </FXCollections>
-                                </items>
-                            </ComboBox>
-
-                            <Region prefHeight="10.0" />
-                            <Label styleClass="settingLabel" text="Volume" />
-                            <Slider fx:id="volumeSlider" majorTickUnit="5.0" max="0.0" min="-25.0" prefWidth="210.0" showTickMarks="true" styleClass="timerSlider" />
-
-                        </VBox>
-                        <Region prefWidth="15.0" />
-                    </HBox>
-                    <Region prefHeight="10.0" />
+                <VBox fx:id="soundSettingsSection" managed="false" prefHeight="112.0" prefWidth="276.0" visible="false">
+               <children>
+                       <HBox alignment="CENTER" prefHeight="35.0" prefWidth="222.0">
+                     <children>
+                              <VBox alignment="CENTER" spacing="10.0">
+                           <children>
+                                     <VBox>
+                                         <Label styleClass="settingLabel" text="Alarm sound" />
+                                         <ComboBox fx:id="soundOptionsButton" minWidth="210.0" prefHeight="32.0" prefWidth="341.0" styleClass="defaultButton" visibleRowCount="3">
+                                             <items>
+                                                 <FXCollections fx:factory="observableArrayList">
+                                                     <String fx:value="Alarm 1" />
+                                                     <String fx:value="Alarm 2" />
+                                                     <String fx:value="Alarm 3" />
+                                                 </FXCollections>
+                                             </items>
+                                         </ComboBox>
+                                     </VBox>
+                                     <VBox>
+                                         <Label styleClass="settingLabel" text="Volume" />
+                                         <Slider fx:id="volumeSlider" majorTickUnit="5.0" max="0.0" min="-25.0" prefWidth="210.0" showTickMarks="true" styleClass="timerSlider" />
+                                     </VBox>
+                           </children>
+                              </VBox>
+                     </children>
+                       </HBox>
+               </children>
                 </VBox>
             </VBox>
 

@@ -5,8 +5,6 @@ import focusApp.database.UserDAO;
 import focusApp.models.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,24 +14,18 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.io.Console;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
 import focusApp.database.Preset;
 import focusApp.database.PresetDAO;
@@ -80,10 +72,6 @@ public class MainController implements Initializable {
     public StackPane confirmLogOutStackPane;
     private Boolean isMenuOpen = false;
 
-    private Boolean isPCOpen = false;
-    private Boolean isSSOpen = false;
-    private Boolean isCSOpen = false;
-    private Boolean isAIOpen = false;
 
 
     @FXML
@@ -494,140 +482,66 @@ public class MainController implements Initializable {
         stage.setScene(scene);
     }
 
+    private boolean SideMenuOpen = false;
     /**
      * Toggle side menu (visible or not visible)
      */
     @FXML
     private void toggleMenu() {
-        if (isMenuOpen) {
+        if (SideMenuOpen) {
             // Close the menu
             menuStackPane.setVisible(false);
-            isMenuOpen = false;
+            SideMenuOpen = false;
         } else {
             // Open the menu
             menuStackPane.setVisible(true);
-            isMenuOpen = true;
+            SideMenuOpen = true;
         }
     }
 
-
-    public void onAccountButtonClick(ActionEvent actionEvent) throws IOException {
-        if (isAIOpen) {
-            // Close the menu
-            accountInformationSection.setManaged(false);
-            accountInformationSection.setVisible(false);
-            isAIOpen = false;
-        } else {
-            // Open the menu
-            accountInformationSection.setManaged(true);
-            accountInformationSection.setVisible(true);
-            isAIOpen = true;
-
-            // Close all other menus
-            parentalControlsSection.setManaged(false);
-            parentalControlsSection.setVisible(false);
-            isPCOpen = false;
-
-            colourSettingsSection.setManaged(false);
-            colourSettingsSection.setVisible(false);
-            isCSOpen = false;
-
-            soundSettingsSection.setManaged(false);
-            soundSettingsSection.setVisible(false);
-            isSSOpen = false;
-        }
+    private enum MenuAttribute{
+        AccountInformation, ParentalControls, ColourSettings, SoundSettings
     }
 
-    public void onParentalControlsButtonClick(ActionEvent actionEvent) throws IOException {
-
-        if (isPCOpen) {
-            // Close the menu
-            parentalControlsSection.setManaged(false);
-            parentalControlsSection.setVisible(false);
-            isPCOpen = false;
-        } else {
-            // Open the menu
-            parentalControlsSection.setManaged(true);
-            parentalControlsSection.setVisible(true);
-            isPCOpen = true;
-
-            // Close all other menus
-            accountInformationSection.setManaged(false);
-            accountInformationSection.setVisible(false);
-            isAIOpen = false;
-
-            colourSettingsSection.setManaged(false);
-            colourSettingsSection.setVisible(false);
-            isCSOpen = false;
-
-            soundSettingsSection.setManaged(false);
-            soundSettingsSection.setVisible(false);
-            isSSOpen = false;
-        }
+    /**
+     * Stores what side menu item is open.
+     */
+    private MenuAttribute MenuItemOpened = null;
+    private void MenuControl(VBox Section, boolean Visible){
+        Section.setManaged(Visible);
+        Section.setVisible(Visible);
     }
+    private void MenuAttributeControl(MenuAttribute Attribute){
 
-    public void onColourSettingsButtonClick(ActionEvent actionEvent) throws IOException {
+        MenuControl(accountInformationSection, false);
+        MenuControl(parentalControlsSection, false);
+        MenuControl(colourSettingsSection, false);
+        MenuControl(soundSettingsSection, false);
 
-        if (isCSOpen) {
-            // Close the menu
-            colourSettingsSection.setManaged(false);
-            colourSettingsSection.setVisible(false);
-            isCSOpen = false;
-        } else {
-            // Open the menu
-            colourSettingsSection.setManaged(true);
-            colourSettingsSection.setVisible(true);
-            isCSOpen = true;
-
-            // Close all other menus
-            accountInformationSection.setManaged(false);
-            accountInformationSection.setVisible(false);
-            isAIOpen = false;
-
-            parentalControlsSection.setManaged(false);
-            parentalControlsSection.setVisible(false);
-            isPCOpen = false;
-
-            soundSettingsSection.setManaged(false);
-            soundSettingsSection.setVisible(false);
-            isSSOpen = false;
+        if (MenuItemOpened == Attribute){
+            MenuItemOpened = null;
+            return;
         }
 
-    }
-
-    public void onSoundSettingsButtonClick(ActionEvent actionEvent) throws IOException {
-
-        if (isSSOpen) {
-            // Close the menu
-            soundSettingsSection.setManaged(false);
-            soundSettingsSection.setVisible(false);
-            isSSOpen = false;
-        } else {
-            // Open the menu
-            soundSettingsSection.setManaged(true);
-            soundSettingsSection.setVisible(true);
-            isSSOpen = true;
-
-            // Close all other menus
-            accountInformationSection.setManaged(false);
-            accountInformationSection.setVisible(false);
-            isAIOpen = false;
-
-            parentalControlsSection.setManaged(false);
-            parentalControlsSection.setVisible(false);
-            isPCOpen = false;
-
-            colourSettingsSection.setManaged(false);
-            colourSettingsSection.setVisible(false);
-            isCSOpen = false;
+        MenuItemOpened = Attribute;
+        switch (Attribute) {
+            case AccountInformation -> MenuControl(accountInformationSection, true);
+            case ParentalControls -> MenuControl(parentalControlsSection, true);
+            case ColourSettings -> MenuControl(colourSettingsSection, true);
+            case SoundSettings -> MenuControl(soundSettingsSection, true);
         }
     }
+    public void onAccountButtonClick(){MenuAttributeControl(MenuAttribute.AccountInformation);}
+    public void onParentalControlsButtonClick(){MenuAttributeControl(MenuAttribute.ParentalControls);}
+    public void onColourSettingsButtonClick(){MenuAttributeControl(MenuAttribute.ColourSettings);}
+    public void onSoundSettingsButtonClick(){MenuAttributeControl(MenuAttribute.SoundSettings);}
 
-    public void passwordEntered(KeyEvent keyEvent) {
+
+    public void passwordEntered() {
         confirmPasswordButton.setDisable(false);
     }
 
-    public void onXLabelClick(ActionEvent actionEvent) {
+    public void onXLabelClick() {
         parentalControlToggleButton.setSelected(true);
         blackOutStackPane.setVisible(false);
         turnOffParentalControlsStackPane.setVisible(false);
@@ -637,7 +551,7 @@ public class MainController implements Initializable {
 
 
 
-    public void onEditUserNameButtonClick(ActionEvent actionEvent) {
+    public void onEditUserNameButtonClick() {
         if (userNameTextField.isEditable()) {
             if (userDAO.updateName(user.getId(), userNameTextField.getText())) {
                 user.setUserName(userNameTextField.getText());
@@ -656,21 +570,21 @@ public class MainController implements Initializable {
         userNameTextField.setEditable(!userNameTextField.isEditable());
     }
 
-    public void onEditPasswordButtonClick(ActionEvent actionEvent) {
+    public void onEditPasswordButtonClick() {
         passwordTextField.setEditable(!passwordTextField.isEditable());
     }
 
-    public void onLogOutButton(ActionEvent actionEvent) {
+    public void onLogOutButton() {
         blackOutStackPane.setVisible(true);
         confirmLogOutStackPane.setVisible(true);
     }
 
-    public void onAbortButtonClick(ActionEvent actionEvent) {
+    public void onAbortButtonClick() {
         blackOutStackPane.setVisible(false);
         confirmLogOutStackPane.setVisible(false);
     }
 
-    public void onConfirmLogOutButtonClick(ActionEvent actionEvent) throws IOException {
+    public void onConfirmLogOutButtonClick() throws IOException {
         Stage stage = (Stage) confirmButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
@@ -679,7 +593,7 @@ public class MainController implements Initializable {
         stage.setScene(scene);
     }
 
-    public void onConfirmParentalControlsButtonClick(ActionEvent actionEvent) {
+    public void onConfirmParentalControlsButtonClick() {
         // Check if password is correct
         User login_user = userDAO.login(user.getUserName(), parentalControlsPasswordField.getText());
 
