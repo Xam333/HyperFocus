@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.*?>
 <?import org.controlsfx.control.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="390.0" stylesheets="@../stylesheet.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="390.0" stylesheets="@../stylesheet.css" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.MainController">
 
    <!-- NAV BAR -->
    <HBox prefHeight="75.0" prefWidth="390.0" spacing="45.0" styleClass="navBox" AnchorPane.leftAnchor="0.0">

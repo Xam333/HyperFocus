@@ -9,6 +9,8 @@ module focusApp {
     requires freetts;
     requires org.jsoup;
     requires org.controlsfx.controls;
+    requires org.apache.commons.imaging;
+    requires commons.io;
 
 
     opens focusApp to javafx.fxml;
