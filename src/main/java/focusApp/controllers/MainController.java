@@ -6,6 +6,7 @@ import focusApp.models.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -164,12 +165,16 @@ public class MainController implements Initializable {
         String presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
         updateBlockList(presetName);
 
-        // Display a sound name in combo box
-        ObservableList<String> SoundOptions = FXCollections.observableArrayList("Alarm 1", "Alarm 2", "Alarm 3");
-        soundOptionsButton.setItems(SoundOptions);
-        soundOptionsButton.getSelectionModel().selectFirst();
-        volumeSlider.setMin(-25.0);
-        volumeSlider.setMax(0.0);
+        // Display a sound name in combo box.
+        if (SelectedSound == null){
+            soundOptionsButton.getSelectionModel().selectFirst();
+        } else {
+            soundOptionsButton.getSelectionModel().select(SelectedSound);
+        }
+        // Check if there is a value for the volume.
+        if (SelectedVolume != null){
+            volumeSlider.setValue(SelectedVolume);
+        }
 
         // Display a colour in combo box
         colourOptionsButton.getSelectionModel().selectFirst();
@@ -190,13 +195,9 @@ public class MainController implements Initializable {
         // update user name text
         userNameTextField.setText(user.getUserName());
     }
+    private static Object SelectedSound;
+    private static Double SelectedVolume;
 
-    public String getAlarmSelection(){
-        return soundOptionsButton.getValue().toString();
-    }
-    private float getVolume(){
-        return (float) volumeSlider.getValue();
-    }
 
     /**
      * Initialises start time slider and listens for updates
@@ -475,7 +476,7 @@ public class MainController implements Initializable {
     /**
      * Starts timer with specified start and end times
      */
-    public void onStartButtonClick(ActionEvent actionEvent) throws IOException {
+    public void onStartButtonClick() throws IOException {
         Stage stage = (Stage) startButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/timer-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
@@ -483,8 +484,10 @@ public class MainController implements Initializable {
         // Get the controller of the loaded scene
         TimerController timerController = fxmlLoader.getController();
 
-        // Pass the start time and end time to the timer controller
-        timerController.initialize(startTime, endTime, getAlarmSelection(), getVolume()); // Add Volume and path to sound
+        // Pass the start time and end time to the timer controller and the Notification alarm.
+        timerController.initialize(startTime, endTime, new Notification(soundOptionsButton.getValue().toString(), (float) volumeSlider.getValue()));
+        SelectedSound = soundOptionsButton.getSelectionModel().getSelectedItem(); // Remember the Alarm that was chosen.
+        SelectedVolume = volumeSlider.getValue();
 
         // Set scene stylesheet
         scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());

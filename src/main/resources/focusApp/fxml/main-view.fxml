@@ -118,7 +118,7 @@
 
 
     <!-- SIDE MENU -->
-    <StackPane fx:id="menuStackPane" layoutY="74.9" prefHeight="525.0" prefWidth="300.0">
+    <StackPane fx:id="menuStackPane" layoutY="74.9" prefHeight="525.0" prefWidth="300.0" visible="false">
       <Pane>
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000080" height="525.0" onMouseClicked="#toggleMenu" stroke="TRANSPARENT" strokeType="INSIDE" width="390.0" />
@@ -280,7 +280,7 @@
                 </Button>
 
                 <!-- Drop down sound settings -->
-                <VBox fx:id="soundSettingsSection" managed="true" visible="true">
+                <VBox fx:id="soundSettingsSection" managed="false" visible="false">
                     <Region prefHeight="10.0" />
                     <HBox>
                         <Region prefWidth="50.0" />
@@ -290,14 +290,16 @@
                             <ComboBox fx:id="soundOptionsButton" minWidth="210.0" styleClass="defaultButton">
                                 <items>
                                     <FXCollections fx:factory="observableArrayList">
-                                        <String fx:value="Default" />
-                                        <String fx:value="Audio 2" />
+                                        <String fx:value="Alarm 1" />
+                                        <String fx:value="Alarm 2" />
+                                        <String fx:value="Alarm 3" />
                                     </FXCollections>
                                 </items>
                             </ComboBox>
+
                             <Region prefHeight="10.0" />
                             <Label styleClass="settingLabel" text="Volume" />
-                            <Slider fx:id="volumeSlider" majorTickUnit="50.0" max="0.0" min="-25.0" prefWidth="210.0" snapToTicks="true" styleClass="timerSlider" />
+                            <Slider fx:id="volumeSlider" majorTickUnit="5.0" max="0.0" min="-25.0" prefWidth="210.0" showTickMarks="true" styleClass="timerSlider" />
 
                         </VBox>
                         <Region prefWidth="15.0" />

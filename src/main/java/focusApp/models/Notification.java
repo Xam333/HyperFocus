@@ -4,7 +4,6 @@ import javax.sound.sampled.*;
 import java.io.File;
 import java.util.HashMap;
 
-import focusApp.controllers.MainController;
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.VoiceManager;
 
@@ -16,16 +15,23 @@ public class Notification {
         put("Alarm 2", new File(soundDir + "alarm2.wav"));
         put("Alarm 3", new File(soundDir + "alarm3.wav"));
     }};
+
+    private final String Alarm;
+    private final float Volume;
+
+    public Notification(String Alarm, float Volume){
+        this.Alarm = Alarm;
+        this.Volume = Volume;
+    }
     private static final String VoiceDirectory = "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory";
     private static Voice SpeakingVoice;
 
     /**
      * Plays a sound of the supported audio format (wav).
-     * @param Volume controls the volume of the sound.
      */
-    public static void PlaySound(float Volume, String AlarmSelection){
+    public  void PlaySound(){
         try {
-            File AlarmPath = SoundList.get(AlarmSelection);
+            File AlarmPath = SoundList.get(Alarm);
 
             if (AlarmPath.exists()){
 

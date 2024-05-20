@@ -105,8 +105,8 @@ public class Timer {
      * The format of time as 12 hour time(hh:mm:ss a).
      */
     private final DateTimeFormatter Timer_12_Format = DateTimeFormatter.ofPattern("h:mm:ss a");
-    private final String Alarm;
-    private final float Volume;
+    private final Notification Alarm;
+
 
     /**
      * Basic constructor for the timer class.
@@ -114,12 +114,11 @@ public class Timer {
      * @param TimerOffset   The offset of minutes before the timer starts.
      * @param TimerDuration The duration of the timer in minutes (0 to 1439).
      */
-    public Timer (Double TimerOffset, Double TimerDuration, TimerController Timer_Controller, String alarm, float volume){
+    public Timer (Double TimerOffset, Double TimerDuration, TimerController Timer_Controller, Notification Alarm){
         Timer_Offset = TimerOffset == null ? 0.0 : (TimerOffset * 60);
         Timer_Duration = TimerDuration == null ? 0.0 : (TimerDuration * 60);
         this.Timer_Controller = Timer_Controller;
-        Alarm = alarm;
-        Volume = volume;
+        this.Alarm = Alarm;
 
         CreateTimer();
     }
@@ -293,7 +292,7 @@ public class Timer {
         Timer_Controller.UpdateTimerStatus();
         Timer_Controller.ButtonStateManager();
 
-        Notification.PlaySound(Volume, Alarm);
+        Alarm.PlaySound();
 
         // If the text to speech is on.
         if(Speak){ Notification.SpeakText("Timer finished."); }

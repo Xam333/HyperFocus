@@ -1,6 +1,7 @@
 package focusApp.controllers;
 
 import focusApp.models.Command;
+import focusApp.models.Notification;
 import focusApp.models.Timer;
 import focusApp.HelloApplication;
 
@@ -161,8 +162,8 @@ public class TimerController {
         }
     }
 
-    public void initialize(double startTime, double endTime, String Alarm, float Volume) {
-        timer = new Timer(startTime, endTime, this, Alarm, Volume);
+    public void initialize(double startTime, double endTime, Notification Alarm) {
+        timer = new Timer(startTime, endTime, this, Alarm);
         timer.Control(Command.Start);
     }
 
