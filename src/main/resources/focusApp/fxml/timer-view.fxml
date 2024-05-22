@@ -8,7 +8,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="390.0" styleClass="root" stylesheets="@../stylesheet.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.TimerController">
+<AnchorPane prefHeight="600.0" prefWidth="390.0" styleClass="root" stylesheets="@../stylesheet.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.TimerController">
 
     <VBox fx:id="vBoxContainer" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
@@ -29,7 +29,7 @@
             
                     <HBox alignment="CENTER" layoutX="-127.0" layoutY="61.0" prefHeight="30.0" prefWidth="254.0" styleClass="TimerStatusBox" stylesheets="@../stylesheet.css">
                      <children>
-                           <Label fx:id="TimerStatus" alignment="CENTER" contentDisplay="CENTER" stylesheets="@../stylesheet.css" text="..." textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                           <Label fx:id="TimerStatus" alignment="CENTER" contentDisplay="CENTER" text="..." textAlignment="CENTER" textFill="WHITE" wrapText="true">
                            <font>
                               <Font name="System Bold" size="24.0" />
                            </font>
