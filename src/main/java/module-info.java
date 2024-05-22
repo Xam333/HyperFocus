@@ -11,6 +11,7 @@ module focusApp {
     requires org.controlsfx.controls;
     requires org.apache.commons.imaging;
     requires commons.io;
+    requires fr.brouillard.oss.cssfx;
 
 
     opens focusApp to javafx.fxml;

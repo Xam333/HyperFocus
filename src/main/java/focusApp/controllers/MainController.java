@@ -10,28 +10,27 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import java.util.Objects;
 
 import focusApp.database.Preset;
 import focusApp.database.PresetDAO;
 import org.controlsfx.control.ToggleSwitch;
-
-import java.util.ArrayList;
 
 public class MainController implements Initializable {
     public Button startButton;
@@ -70,8 +69,6 @@ public class MainController implements Initializable {
     public Button abortButton;
     public Button confirmButton;
     public StackPane confirmLogOutStackPane;
-    private Boolean isMenuOpen = false;
-
 
 
     @FXML
@@ -153,7 +150,7 @@ public class MainController implements Initializable {
         String presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
         updateBlockList(presetName);
 
-        // Display a sound name in combo box.
+        // Check if there is a saved value for the alarm, if not display alarm1.
         if (SelectedSound == null){
             soundOptionsButton.getSelectionModel().selectFirst();
         } else {
@@ -164,8 +161,11 @@ public class MainController implements Initializable {
             volumeSlider.setValue(SelectedVolume);
         }
 
-        // Display a colour in combo box
-        colourOptionsButton.getSelectionModel().selectFirst();
+        // Load a new instance of the colour control class.
+        ColourPalette = new ColourControl();
+        getColourPaletteFormat();
+        setColourPalette();
+
 
         // Only show enter passcode if parental controls is being turned off
         parentalControlToggleButton.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
@@ -179,12 +179,56 @@ public class MainController implements Initializable {
             }
         });
 
-
         // update user name text
         userNameTextField.setText(user.getUserName());
     }
     private static Object SelectedSound;
     private static Double SelectedVolume;
+    private static ColourControl ColourPalette;
+
+    @FXML
+    private ColorPicker PrimaryColour;
+    @FXML
+    private ColorPicker SecondaryColour;
+    @FXML
+    private ColorPicker TertiaryColour;
+    @FXML
+    private ColorPicker BackgroundColour;
+    private void setColourPalette(){
+        HashMap<ColourPaletteKeys, ColorPicker> PaletteFormat =  getColourPaletteFormat();
+        for(ColourPaletteKeys PaletteKey : ColourPaletteKeys.values()){
+            if (PaletteFormat.containsKey(PaletteKey) && ColourPalette.getCurrentColourPalette().containsKey(PaletteKey)){
+                Color LoadedColour = ColourPalette.getCurrentColourPalette().get(PaletteKey);
+                PaletteFormat.get(PaletteKey).setValue(LoadedColour);
+            }
+        }
+    }
+    @FXML
+    private void onColourPicker() {
+        ColourPalette.LoadColourPalette(getAllColours());
+        setColourPalette();
+    }
+    @FXML
+    private void onDefaultButton(){
+        ColourPalette.LoadDefaultColourPalette();
+        setColourPalette();
+    }
+    private HashMap<ColourPaletteKeys, ColorPicker> getColourPaletteFormat(){
+        return new HashMap<>() {{
+            put(ColourPaletteKeys.Primary, PrimaryColour);
+            put(ColourPaletteKeys.Secondary, SecondaryColour);
+            put(ColourPaletteKeys.Tertiary, TertiaryColour);
+            put(ColourPaletteKeys.Background, BackgroundColour);
+        }};
+    }
+    private HashMap<ColourPaletteKeys, Color> getAllColours(){
+        return new HashMap<>(){{
+            put(ColourPaletteKeys.Primary, PrimaryColour.getValue());
+            put(ColourPaletteKeys.Secondary, SecondaryColour.getValue());
+            put(ColourPaletteKeys.Tertiary, TertiaryColour.getValue());
+            put(ColourPaletteKeys.Background, BackgroundColour.getValue());
+        }};
+    }
 
 
     /**
@@ -217,7 +261,8 @@ public class MainController implements Initializable {
             double percentage = newVal.doubleValue() / startTimeSlider.getMax();
 
             // Set inline CSS for the track color
-            String trackColor = String.format("-fx-background-color: linear-gradient(to right, #59ADFF %f%%, white %f%%);", percentage * 100, percentage * 100);
+
+            String trackColor = String.format("-fx-background-color: linear-gradient(to right, " + ColourPalette.toHex(ColourPaletteKeys.Primary) + " %f%%, white %f%%);", percentage * 100, percentage * 100);
             startTimeSlider.lookup(".track").setStyle(trackColor);
         });
     }
@@ -248,7 +293,7 @@ public class MainController implements Initializable {
             double percentage = newVal.doubleValue() / endTimeSlider.getMax();
 
             // Set inline CSS for the track color
-            String trackColor = String.format("-fx-background-color: linear-gradient(to right, #59ADFF %f%%, white %f%%);", percentage * 100, percentage * 100);
+            String trackColor = String.format("-fx-background-color: linear-gradient(to right, " + ColourPalette.toHex(ColourPaletteKeys.Primary) + " %f%%, white %f%%);", percentage * 100, percentage * 100);
             endTimeSlider.lookup(".track").setStyle(trackColor);
         });
     }
@@ -451,7 +496,7 @@ public class MainController implements Initializable {
     /**
      * Opens blocked applications page
      */
-    public void onBlockedApplicationsPaneClick(MouseEvent mouseEvent) throws IOException {
+    public void onBlockedApplicationsPaneClick() throws IOException {
         Stage stage = (Stage) blockedApplicationPane.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/blocked-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
@@ -474,7 +519,9 @@ public class MainController implements Initializable {
 
         // Pass the start time and end time to the timer controller and the Notification alarm.
         timerController.initialize(startTime, endTime, new Notification(soundOptionsButton.getValue().toString(), (float) volumeSlider.getValue()));
-        SelectedSound = soundOptionsButton.getSelectionModel().getSelectedItem(); // Remember the Alarm that was chosen.
+
+        // Remember the Alarm and the volume level that was chosen.
+        SelectedSound = soundOptionsButton.getSelectionModel().getSelectedItem();
         SelectedVolume = volumeSlider.getValue();
 
         // Set scene stylesheet
@@ -488,25 +535,21 @@ public class MainController implements Initializable {
      */
     @FXML
     private void toggleMenu() {
-        if (SideMenuOpen) {
-            // Close the menu
-            menuStackPane.setVisible(false);
-            SideMenuOpen = false;
-        } else {
-            // Open the menu
-            menuStackPane.setVisible(true);
-            SideMenuOpen = true;
-        }
+        // Open and Close the menu.
+        UpdateSideMenu(!SideMenuOpen);
     }
-
-    private enum MenuAttribute{
-        AccountInformation, ParentalControls, ColourSettings, SoundSettings
+    private void UpdateSideMenu(boolean Control){
+        menuStackPane.setVisible(Control);
+        SideMenuOpen = Control;
     }
 
     /**
      * Stores what side menu item is open.
      */
     private MenuAttribute MenuItemOpened = null;
+    private enum MenuAttribute{
+        AccountInformation, ParentalControls, ColourSettings, SoundSettings
+    }
     private void MenuControl(VBox Section, boolean Visible){
         Section.setManaged(Visible);
         Section.setVisible(Visible);
@@ -524,6 +567,7 @@ public class MainController implements Initializable {
         }
 
         MenuItemOpened = Attribute;
+
         switch (Attribute) {
             case AccountInformation -> MenuControl(accountInformationSection, true);
             case ParentalControls -> MenuControl(parentalControlsSection, true);
