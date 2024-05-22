@@ -162,9 +162,9 @@ public class MainController implements Initializable {
         }
 
         // Load a new instance of the colour control class.
-        ColourPalette = new ColourControl();
-        getColourPaletteFormat();
-        setColourPalette();
+//        ColourPalette = new ColourControl();
+//        getColourPaletteFormat();
+//        setColourPalette();
 
 
         // Only show enter passcode if parental controls is being turned off
@@ -194,25 +194,25 @@ public class MainController implements Initializable {
     private ColorPicker TertiaryColour;
     @FXML
     private ColorPicker BackgroundColour;
-    private void setColourPalette(){
-        HashMap<ColourPaletteKeys, ColorPicker> PaletteFormat =  getColourPaletteFormat();
-        for(ColourPaletteKeys PaletteKey : ColourPaletteKeys.values()){
-            if (PaletteFormat.containsKey(PaletteKey) && ColourPalette.getCurrentColourPalette().containsKey(PaletteKey)){
-                Color LoadedColour = ColourPalette.getCurrentColourPalette().get(PaletteKey);
-                PaletteFormat.get(PaletteKey).setValue(LoadedColour);
-            }
-        }
-    }
-    @FXML
-    private void onColourPicker() {
-        ColourPalette.LoadColourPalette(getAllColours());
-        setColourPalette();
-    }
-    @FXML
-    private void onDefaultButton(){
-        ColourPalette.LoadDefaultColourPalette();
-        setColourPalette();
-    }
+//    private void setColourPalette(){
+//        HashMap<ColourPaletteKeys, ColorPicker> PaletteFormat =  getColourPaletteFormat();
+//        for(ColourPaletteKeys PaletteKey : ColourPaletteKeys.values()){
+//            if (PaletteFormat.containsKey(PaletteKey) && ColourPalette.getCurrentColourPalette().containsKey(PaletteKey)){
+//                Color LoadedColour = ColourPalette.getCurrentColourPalette().get(PaletteKey);
+//                PaletteFormat.get(PaletteKey).setValue(LoadedColour);
+//            }
+//        }
+//    }
+//    @FXML
+////    private void onColourPicker() {
+////        ColourPalette.LoadColourPalette(getAllColours());
+////        setColourPalette();
+////    }
+//    @FXML
+//    private void onDefaultButton(){
+//        ColourPalette.LoadDefaultColourPalette();
+//        setColourPalette();
+//    }
     private HashMap<ColourPaletteKeys, ColorPicker> getColourPaletteFormat(){
         return new HashMap<>() {{
             put(ColourPaletteKeys.Primary, PrimaryColour);

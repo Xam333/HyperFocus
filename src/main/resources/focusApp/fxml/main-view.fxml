@@ -252,8 +252,8 @@
                            </Group>
                            <HBox alignment="CENTER" spacing="5.0">
                               <children>
-                                 <Button fx:id="UpdateColourButton" mnemonicParsing="false" onAction="#onColourPicker" text="Update Colours" />
-                                 <Button fx:id="DefaultColourVutton" mnemonicParsing="false" onAction="#onDefaultButton" onZoomFinished="#onDefaultButton" text="Defalut Colours" />
+                                 <Button fx:id="UpdateColourButton" mnemonicParsing="false" text="Update Colours" />
+                                 <Button fx:id="DefaultColourVutton" mnemonicParsing="false" text="Default Colours" />
                               </children>
                            </HBox>
                         </children>
