@@ -5,6 +5,7 @@ import focusApp.models.Notification;
 import focusApp.models.Timer;
 import focusApp.HelloApplication;
 
+import focusApp.models.UserConfig;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -103,7 +104,11 @@ public class TimerController {
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
 
         // Set scene stylesheet
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        if (UserConfig.FindCSSFile()){
+            scene.getStylesheets().add(UserConfig.getCSSFilePath().toUri().toString());
+        } else {
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        }
         stage.setScene(scene);
     }
     @FXML

@@ -59,30 +59,41 @@
 
 /* Blocked Pane */
 .blockedPane{
-    -fx-border-color: #000000;
-    -fx-background-color: -textBoxColor;
+    -fx-border-color: -BackgroundTextColour;
+    -fx-border-width: 3px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-background-insets: 1px;
+    -fx-background-color: #FFFFFF;
     -fx-cursor: hand;
 }
 
 .blockedPane:hover {
     -fx-border-color: -SecondaryColour;
+    -fx-border-width: 3px;
 }
 
 
 /* Blocked Table */
 .blockedTableColumn{
     -fx-alignment: center;
+    -fx-text-fill: #000000;
     -fx-background-color: -textBoxColor;
     -fx-border-color: transparent -SecondaryColour transparent -SecondaryColour;
 }
 
 .blockedTableView{
-    -fx-border-color: transparent transparent -SecondaryColour transparent;
-    -fx-background-color: transparent;
+    -fx-background-color: -PrimaryColour;
+}
+.blockedTableView .label{
+    -fx-text-fill: -PrimaryTextColour;
 }
 
 .blockedTableView .column-header {
     -fx-border-color: -SecondaryColour;
+}
+.blockedTableView .column-header .label {
+    -fx-text-fill: #000000;
 }
 
 
@@ -101,8 +112,7 @@
 }
 
 .subheadLabel {
-    -fx-font-size: 14
-    px;
+    -fx-font-size: 14px;
     -fx-text-fill: -BackgroundTextColour;
 }
 
@@ -174,7 +184,6 @@
 /* Menu */
 .navBox{
     -fx-background-color: -PrimaryColour;
-
 }
 .navLabel {
     -fx-font-size: 20px;
@@ -220,10 +229,30 @@
 }
 .menuButton:hover .label{
     -fx-text-fill: -SecondaryTextColour;
-
+}
+.menuDropDownBox{
+    -fx-background-radius: 8px;
+    -fx-background-insets: 0px;
+    -fx-pref-height: 30px;
+    -fx-border-radius: 8px;
+    -fx-border-color: -TertiaryTextColour;
+    -fx-background-color: #FFFFFF;
+}
+.menuDropDownBox .label{
+    -fx-text-fill: #000000;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+.menuSlider .track{
+    -fx-background-color: -TertiaryTextColour;
 }
 
-
+.menuSlider .thumb{
+    -fx-border-radius: 1.0em;
+    -fx-border-width: 3px;
+    -fx-border-color: -TertiaryTextColour;
+    -fx-body-color: -PrimaryColour;
+}
 
 
 .accountButton {
@@ -431,14 +460,12 @@
     -fx-font-size: 14px;
     -fx-cursor: hand;
 }
-.ButtonController {
-    -fx-background-radius: 8px;
-}
+
 
 .ButtonControlIcon {
     -fx-text-fill: -PrimaryTextColour;
     -fx-font-weight: bold;
-    -fx-font-size: 17px;
+    -fx-font-size: 16px;
 }
 
 .TimerStatusBox, .TimerStopwatch{
@@ -591,10 +618,14 @@
     -fx-pref-width: 210px;
     -fx-background-color: -PrimaryColour;
     -fx-background-radius: 8px;
-
+    -fx-border-color: -PrimaryColour;
+    -fx-background-insets: 1px;
+    -fx-border-width: 2px;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
     -fx-text-fill: -PrimaryTextColour;
+    -fx-border-radius: 8px;
+
 
     -fx-cursor: hand;
 }
@@ -613,7 +644,9 @@
 
 .settingButton:hover {
     -fx-background-color: -SecondaryColour;
-    -fx-text-fill: -SecondaryTextColour
+    -fx-text-fill: -SecondaryTextColour;
+    -fx-border-color: -TertiaryTextColour;
+    -fx-border-radius: 8px;
 }
 
 

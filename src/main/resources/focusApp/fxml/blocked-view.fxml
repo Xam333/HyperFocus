@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="390.0" stylesheets="@../stylesheet.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.BlockedController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="390.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.BlockedController">
    <Pane>
       <children>
          <VBox spacing="20.0">
@@ -28,17 +28,17 @@
                           </HBox>
                   
                           <!-- TABLE LAYOUT -->
-                          <VBox prefHeight="300.0" prefWidth="280.0">
+                          <VBox prefHeight="300.0" prefWidth="370.0">
                               <Label styleClass="bodyLabel" text="Blocked Applications:" />
                               <TableView fx:id="tableView" styleClass="blockedTableView">
                                   <columns>
-                                      <TableColumn fx:id="iconColumn" maxWidth="50" minWidth="50" prefWidth="50" resizable="false" styleClass="blockedTableColumn" text="Icon" />
-                                      <TableColumn fx:id="nameColumn" maxWidth="119.0" minWidth="100.0" prefWidth="119.0" resizable="false" styleClass="blockedTableColumn" text="Name" />
-                                      <TableColumn fx:id="locationColumn" maxWidth="197.0" minWidth="150.0" prefWidth="197.0" resizable="false" styleClass="blockedTableColumn" text="Web/File Link" />
+                                      <TableColumn fx:id="iconColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" resizable="false" styleClass="blockedTableColumn" text="Icon" />
+                                      <TableColumn fx:id="nameColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" resizable="false" styleClass="blockedTableColumn" text="Name" />
+                                      <TableColumn fx:id="locationColumn" maxWidth="198.0" minWidth="198.0" prefWidth="198.0" resizable="false" styleClass="blockedTableColumn" text="Web/File Link" />
                                   </columns>
                               </TableView>
                               <VBox.margin>
-                                  <Insets bottom="20.0" />
+                                  <Insets bottom="10.0" />
                               </VBox.margin>
                           </VBox>
                           <!-- CANCEL, SAVE BUTTONS -->

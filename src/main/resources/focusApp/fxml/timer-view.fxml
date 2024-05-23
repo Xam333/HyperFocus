@@ -8,12 +8,12 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="390.0" styleClass="root" stylesheets="@../stylesheet.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.TimerController">
+<AnchorPane prefHeight="600.0" prefWidth="390.0" styleClass="root" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.TimerController">
 
-    <VBox fx:id="vBoxContainer" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <VBox fx:id="vBoxContainer" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
         <!-- NAV BAR -->
-        <HBox alignment="CENTER" prefHeight="75.0" prefWidth="390.0" styleClass="navBox">
+        <HBox alignment="CENTER" prefHeight="60.0" prefWidth="390.0" styleClass="navBox">
             <!-- Page Title -->
             <Label styleClass="navLabel" text="Focus Timer" textAlignment="CENTER" />
         </HBox>
@@ -54,7 +54,7 @@
                   </HBox>
                   <Group fx:id="DelayedGroup" layoutX="-155.0" layoutY="-45.0">
                      <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="75.0" prefWidth="310.0" styleClass="DelayedStatus" stylesheets="@../stylesheet.css" text="Timer will start at:" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="75.0" prefWidth="310.0" styleClass="DelayedStatus" text="Timer will start at:" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                            <font>
                               <Font name="System Bold" size="30.0" />
                            </font>
@@ -69,34 +69,34 @@
          <children>
             <HBox alignment="CENTER" prefHeight="14.0" prefWidth="370.0" spacing="2.0">
                <children>
-                  <Button fx:id="PauseButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="5.0" mnemonicParsing="false" onAction="#onPauseButtonClick" onMouseEntered="#mouseInPauseButton" onMouseExited="#mouseOutPauseButton" style="-fx-background-radius: 8px 0px 0px 0px;" styleClass="ButtonControlUpper" stylesheets="@../stylesheet.css" text="Pause">
+                  <Button fx:id="PauseButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="5.0" mnemonicParsing="false" onAction="#onPauseButtonClick" onMouseEntered="#mouseInPauseButton" onMouseExited="#mouseOutPauseButton" style="-fx-background-radius: 8px 0px 0px 0px;" styleClass="ButtonControlUpper" text="Pause">
                      <graphic>
-                        <Label styleClass="ButtonControlIcon" stylesheets="@../stylesheet.css" text="⏸" textFill="WHITE">
+                        <Label styleClass="ButtonControlIcon" text="⏸" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="1.0" />
                            </font>
                         </Label>
                      </graphic>
                   </Button>
-                  <Button fx:id="ResumeButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="5.0" mnemonicParsing="false" onAction="#onResumeButtonClick" onMouseEntered="#mouseInResumeButton" onMouseExited="#mouseOutResumeButton" styleClass="ButtonControlUpper" stylesheets="@../stylesheet.css" text="Resume">
+                  <Button fx:id="ResumeButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="5.0" mnemonicParsing="false" onAction="#onResumeButtonClick" onMouseEntered="#mouseInResumeButton" onMouseExited="#mouseOutResumeButton" styleClass="ButtonControlUpper" text="Resume">
                      <graphic>
-                        <Label styleClass="ButtonControlIcon" stylesheets="@../stylesheet.css" text="▶">
+                        <Label styleClass="ButtonControlIcon" text="▶" textFill="WHITE">
                            <font>
                               <Font size="1.0" />
                            </font>
                         </Label>
                      </graphic>
                   </Button>
-                  <Button fx:id="StopButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="5.0" mnemonicParsing="false" onAction="#onStopButtonClick" onMouseEntered="#mouseInStopButton" onMouseExited="#mouseOutStopButton" style="-fx-background-radius: 0px 8px 0px 0px;" styleClass="ButtonControlUpper" stylesheets="@../stylesheet.css" text="Stop">
+                  <Button fx:id="StopButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="5.0" mnemonicParsing="false" onAction="#onStopButtonClick" onMouseEntered="#mouseInStopButton" onMouseExited="#mouseOutStopButton" style="-fx-background-radius: 0px 8px 0px 0px;" styleClass="ButtonControlUpper" text="Stop">
                      <graphic>
-                        <Label styleClass="ButtonControlIcon" stylesheets="@../stylesheet.css" text="⏹" />
+                        <Label styleClass="ButtonControlIcon" text="⏹" textFill="WHITE" />
                      </graphic>
                   </Button>
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="0.0" spacing="2.0">
                <children>
-                  <Button fx:id="RestartButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="5.0" mnemonicParsing="false" onAction="#onRestartButtonClick" onMouseEntered="#mouseInRestartButton" onMouseExited="#mouseOutRestartButton" prefHeight="31.0" prefWidth="134.0" style="-fx-background-radius: 0px 0px 0px 8px;" styleClass="ButtonControlLower" stylesheets="@../stylesheet.css" text="Restart">
+                  <Button fx:id="RestartButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="5.0" mnemonicParsing="false" onAction="#onRestartButtonClick" onMouseEntered="#mouseInRestartButton" onMouseExited="#mouseOutRestartButton" prefHeight="31.0" prefWidth="134.0" style="-fx-background-radius: 0px 0px 0px 8px;" styleClass="ButtonControlLower" text="Restart">
                      <graphic>
                         <Label styleClass="ButtonControlIcon" text="🔁" textFill="WHITE">
                            <font>
@@ -105,9 +105,9 @@
                         </Label>
                      </graphic>
                   </Button>
-                  <Button fx:id="ReturnButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="5.0" mnemonicParsing="false" onAction="#onReturnButtonClick" onMouseEntered="#mouseInReturnButton" onMouseExited="#mouseOutReturnButton" prefHeight="31.0" prefWidth="178.0" style="-fx-background-radius: 0px 0px 8px 0px;" styleClass="ButtonControlLower" stylesheets="@../stylesheet.css" text="Return">
+                  <Button fx:id="ReturnButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" graphicTextGap="5.0" mnemonicParsing="false" onAction="#onReturnButtonClick" onMouseEntered="#mouseInReturnButton" onMouseExited="#mouseOutReturnButton" prefHeight="31.0" prefWidth="178.0" style="-fx-background-radius: 0px 0px 8px 0px;" styleClass="ButtonControlLower" text="Return">
                      <graphic>
-                        <Label styleClass="ButtonControlIcon" text="⬅">
+                        <Label styleClass="ButtonControlIcon" text="⬅" textFill="WHITE">
                            <font>
                               <Font size="1.0" />
                            </font>

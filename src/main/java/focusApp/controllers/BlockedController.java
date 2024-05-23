@@ -1,20 +1,14 @@
 package focusApp.controllers;
 
 import focusApp.HelloApplication;
-import focusApp.models.UserHolder;
+import focusApp.models.*;
 
 import focusApp.database.*;
-import focusApp.models.ApplicationItem;
-import focusApp.models.WebsiteItem;
 import focusApp.database.PresetDAO;
 import focusApp.database.WebsiteDAO;
 import focusApp.database.ApplicationDAO;
 import focusApp.database.Preset;
-import focusApp.models.User;
-import focusApp.models.BlockedItem;
-import focusApp.models.PresetHolder;
 
-import focusApp.models.BlockedApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -280,7 +274,12 @@ public class BlockedController implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
 
-            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+            if (UserConfig.FindCSSFile()){
+                scene.getStylesheets().add(UserConfig.getCSSFilePath().toUri().toString());
+            } else {
+                
+                scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+            }
             stage.setScene(scene);
         }
 
@@ -368,7 +367,11 @@ public class BlockedController implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
 
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        if (UserConfig.FindCSSFile()){
+            scene.getStylesheets().add(UserConfig.getCSSFilePath().toUri().toString());
+        } else {
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        }
         stage.setScene(scene);
     }
 

@@ -1,9 +1,16 @@
 package focusApp;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import focusApp.models.Timer;
+import focusApp.models.UserConfig;
 import fr.brouillard.oss.cssfx.CSSFX;
+import fr.brouillard.oss.cssfx.api.URIToPathConverter;
+import fr.brouillard.oss.cssfx.impl.log.CSSFXLogger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,7 +34,18 @@ public class HelloApplication extends Application {
         // Set scene
         Scene scene = new Scene(root.load(), WIDTH, HEIGHT);
         // Set scene stylesheet
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        if (UserConfig.FindCSSFile()){
+            scene.getStylesheets().add(UserConfig.getCSSFilePath().toUri().toString());
+
+        } else {
+            UserConfig.SetUpEnvi();
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        }
+
+        URIToPathConverter myConverter = uri -> UserConfig.getCSSFilePath();
+        CSSFX.addConverter(myConverter).start();
+
+
         // Set application icon
         stage.getIcons().add(new Image(Objects.requireNonNull(HelloApplication.class.getResourceAsStream("images/logoSmall.png"))));
 
@@ -43,7 +61,6 @@ public class HelloApplication extends Application {
         // Show stage
         stage.setOnCloseRequest(windowEvent -> Timer.ForceStopTimer());
         stage.show();
-        CSSFX.start();
     }
 
     public static void main(String[] args) {
