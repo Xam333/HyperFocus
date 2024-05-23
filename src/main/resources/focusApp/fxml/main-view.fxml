@@ -116,7 +116,7 @@
 
 
     <!-- SIDE MENU -->
-    <StackPane fx:id="menuStackPane" layoutY="60.0" prefHeight="540.0" prefWidth="300.0">
+    <StackPane fx:id="menuStackPane" layoutY="60.0" prefHeight="540.0" prefWidth="300.0" visible="false">
       <Pane>
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000080" height="545.0" onMouseClicked="#toggleMenu" stroke="TRANSPARENT" strokeType="INSIDE" width="390.0" />
