@@ -12,9 +12,8 @@ import java.util.Objects;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+
 public class LoginController {
     @FXML
     public Button backButton;
@@ -48,6 +47,12 @@ public class LoginController {
 
     @FXML
     private void initialize(){
+        if (loginButton != null){
+            loginButton.setDefaultButton(true);
+        }
+        if (confirmButton != null){
+            confirmButton.setDefaultButton(true);
+        }
 
     }
 

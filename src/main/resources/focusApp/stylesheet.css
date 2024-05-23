@@ -1,25 +1,38 @@
 .root {
-    -primaryColor: #59ADFF;
-    -secondaryColor: #4382BF;
-    -backgroundColor: #E6F9FF;
 
-    -SubSecondaryColor: #F8F6E9;
-    -SubTertiaryColor: #2C6FDC;
+    -PrimaryColour: #59ADFF;
+    -SecondaryColour: #2C6FDC;
+    -TertiaryColour: #4382BF;
+    -BackgroundColour: #E6F9FF;
 
+/*
+    -PrimaryColour: #59ADFF;
+    -SecondaryColour: #2C6FDC;
+    -TertiaryColour: #4382BF;
+    -BackgroundColour: #E6F9FF;
+*/
+
+
+    -primaryTextColour: #FFFFFF;
+    -secondaryTextColour: #FFFFFF;
+    -backgroundTextColour: #FFFFFF;
+    
     /* Temp */
     -textBoxColor: #FFF;
-
-    -fx-background-color: -backgroundColor;
+    -fx-background-color: -BackgroundColour;
 }
 
 /* Layout */
+.navBarMenuButton: hover{
+    -fx-background-color: -SecondaryColour
+}
 .navBox{
-    -fx-background-color: -primaryColor;
+    -fx-background-color: -PrimaryColour;
 }
 
 /* Menu Pane */
 .menuPane{
-    -fx-background-color: -secondaryColor;
+    -fx-background-color: -TertiaryColour;
 }
 
 /* Confirmation */
@@ -37,9 +50,9 @@
 
     -fx-border-radius: 8px;
     -fx-border-width: 5px;
-    -fx-border-color: -primaryColor;
+    -fx-border-color: -PrimaryColour;
 
-    -fx-text-fill: -primaryColor;
+    -fx-text-fill: -PrimaryColour;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
 }
@@ -53,7 +66,7 @@
 }
 
 .blockedPane:hover {
-    -fx-border-color: -secondaryColor;
+    -fx-border-color: -SecondaryColour;
 }
 
 
@@ -61,16 +74,16 @@
 .blockedTableColumn{
     -fx-alignment: center;
     -fx-background-color: -textBoxColor;
-    -fx-border-color: transparent -secondaryColor transparent -secondaryColor;
+    -fx-border-color: transparent -SecondaryColour transparent -SecondaryColour;
 }
 
 .blockedTableView{
-    -fx-border-color: transparent transparent -secondaryColor transparent;
+    -fx-border-color: transparent transparent -SecondaryColour transparent;
     -fx-background-color: transparent;
 }
 
 .blockedTableView .column-header {
-    -fx-border-color: -secondaryColor;
+    -fx-border-color: -SecondaryColour;
 }
 
 
@@ -156,7 +169,7 @@
     -fx-border-radius: 1.0em;
     -fx-border-width: 3px;
     -fx-border-color: -textBoxColor;
-    -fx-body-color: -primaryColor;
+    -fx-body-color: -PrimaryColour;
 }
 
 
@@ -166,8 +179,12 @@
     -fx-cursor: hand;
 }
 
+.accountButton {
+    -fx-background-color: transparent;
+}
+
 .defaultButton {
-    -fx-pref-width: 140px;
+    -fx-pref-width: 200px;
     -fx-pref-height: 40px;
     -fx-background-color: #FFF;
     -fx-background-radius: 8px;
@@ -186,15 +203,32 @@
     -fx-background-color: #F5F5F5;
 }
 
+.iconButton {
+    -fx-pref-width: 40px;
+    -fx-pref-height: 40px;
+    -fx-background-color: #FFF;
+    -fx-background-radius: 8px;
+    -fx-background-insets: 1px;
+
+    -fx-border-radius: 8px;
+    -fx-border-color: #000000;
+
+    -fx-cursor: hand;
+}
+
+.iconButton:hover {
+    -fx-background-color: #F5F5F5;
+}
+
 .menuButton{
-    -fx-pref-width: 280.0;
+    -fx-pref-width: 300.0;
     -fx-pref-height: 50.0;
     -fx-background-color: transparent;
     -fx-cursor: hand;
 }
 
 .menuButton:hover {
-    -fx-background-color: -primaryColor;
+    -fx-background-color: -PrimaryColour;
 }
 
 
@@ -202,7 +236,7 @@
 .largePrimaryButton {
     -fx-pref-width: 256px;
     -fx-pref-height: 50px;
-    -fx-background-color: -primaryColor;
+    -fx-background-color: -PrimaryColour;
     -fx-background-radius: 8px;
     -fx-background-insets: 1px;
 
@@ -214,7 +248,7 @@
 }
 
 .largePrimaryButton:hover {
-    -fx-background-color: -secondaryColor;
+    -fx-background-color: -SecondaryColour;
 }
 
 .largeSecondaryButton {
@@ -226,9 +260,9 @@
 
     -fx-border-radius: 8px;
     -fx-border-width: 3px;
-    -fx-border-color: -primaryColor;
+    -fx-border-color: -PrimaryColour;
 
-    -fx-text-fill: -primaryColor;
+    -fx-text-fill: -PrimaryColour;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
 
@@ -236,8 +270,8 @@
 }
 
 .largeSecondaryButton:hover {
-    -fx-border-color: -secondaryColor;
-    -fx-text-fill: -secondaryColor;
+    -fx-border-color: -SecondaryColour;
+    -fx-text-fill: -SecondaryColour;
 }
 
 
@@ -268,7 +302,7 @@
 .smallPrimaryButton {
     -fx-pref-width: 140px;
     -fx-pref-height: 40px;
-    -fx-background-color: -primaryColor;
+    -fx-background-color: -PrimaryColour;
     -fx-background-radius: 8px;
     -fx-background-insets: 1px;
 
@@ -280,7 +314,7 @@
 }
 
 .smallPrimaryButton:hover {
-    -fx-background-color: -secondaryColor;
+    -fx-background-color: -SecondaryColour;
 }
 
 .smallSecondaryButton {
@@ -292,9 +326,9 @@
 
     -fx-border-radius: 8px;
     -fx-border-width: 2px;
-    -fx-border-color: -primaryColor;
+    -fx-border-color: -PrimaryColour;
 
-    -fx-text-fill: -primaryColor;
+    -fx-text-fill: -PrimaryColour;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
 
@@ -302,96 +336,108 @@
 }
 
 .smallSecondaryButton:hover {
-    -fx-border-color: -secondaryColor;
-    -fx-text-fill: -secondaryColor;
+    -fx-border-color: -SecondaryColour;
+    -fx-text-fill: -SecondaryColour;
 }
 
+
+
+
 /*Timer Button Styles*/
+.arcBase{
+    -fx-stroke: -SecondaryColour;
+}
+.arcMain{
+    -fx-stroke: -PrimaryColour;
+}
+.clockFace{
+    -fx-fill: -TertiaryColour;
+}
+
 .ButtonControlUpper{
     -fx-pref-height: 60px;
     -fx-pref-width: 140px;
-    -fx-background-color: -SubTertiaryColor;
+    -fx-background-color: -PrimaryColour;
     -fx-background-radius:  0px;
 
-    -fx-text-fill: #FFF;
+    -fx-text-fill: -primaryTextColour;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
     -fx-cursor: hand;
 }
 .ButtonControlUpper:hover, .ButtonControlLower:hover {
-    -fx-background-color: -SubSecondaryColor;
-    -fx-text-fill: -SubTertiaryColor;
+    -fx-background-color: -SecondaryColour;
+    -fx-text-fill: -secondaryTextColour;
 }
 .ButtonControlUpper:hover .label, .ButtonControlLower:hover .label{
-    -fx-text-fill: -SubTertiaryColor;
+    -fx-text-fill: -secondaryTextColour;
 }
 
 .ButtonControlLower {
     -fx-pref-height: 60px;
     -fx-pref-width: 200px;
-    -fx-background-color: -SubTertiaryColor;
+    -fx-background-color: -PrimaryColour;
     -fx-background-radius:  0px;
 
-    -fx-text-fill: #FFF;
+    -fx-text-fill: -primaryTextColour;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
     -fx-cursor: hand;
 }
 .ButtonController {
-    -fx-background-color: -SubSecondaryColor;
     -fx-background-radius: 8px;
 }
 
 .ButtonControlIcon {
-    -fx-text-fill: #FFF;
+    -fx-text-fill: -primaryTextColour;
     -fx-font-weight: bold;
     -fx-font-size: 17px;
 }
 
 .TimerStatusBox, .TimerStopwatch{
-    -fx-background-color: -SubTertiaryColor;
+    -fx-background-color: -PrimaryColour;
     -fx-background-radius:  8px;
 }
 .TimerStopwatch .label{
-    -fx-text-fill: #FFF;
+    -fx-text-fill: -primaryTextColour;
     -fx-font-weight: bold;
     -fx-font-size: 60px;
 }
 
 .DelayedStatus {
-    -fx-text-fill: #FFF;
+    -fx-text-fill: -primaryTextColour;
     -fx-font-weight: bold;
     -fx-font-size: 30px;
 }
 
 .ToggleListen {
-    -fx-background-radius:  8px 8px 8px 8px;
-    -fx-background-color:  -SubTertiaryColor;
+    -fx-background-radius:  8px;
+    -fx-background-color:  -PrimaryColour;
 
-    -fx-text-fill: #FFF;
+    -fx-text-fill: -primaryTextColour;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
 }
 .ToggleListen: hover{
-     -fx-background-color:  -SubSecondaryColor;
-     -fx-text-fill: -SubTertiaryColor;
+     -fx-background-color:  -SecondaryColour;
+     -fx-text-fill: -secondaryTextColour;
 }
 .ToggleListen: hover .label {
-    -fx-text-fill: -SubTertiaryColor;
+    -fx-text-fill: -secondaryTextColour;
 }
 
 .ToggleListen:selected {
-    -fx-background-color:  -SubSecondaryColor;
-    -fx-text-fill: -SubTertiaryColor;
+    -fx-background-color:  -SecondaryColour;
+    -fx-text-fill: -secondaryTextColour;
 }
 .ToggleListen:selected .label {
-    -fx-text-fill: -SubTertiaryColor;
+    -fx-text-fill: -secondaryTextColour;
 }
 
 /* Tiny Buttons */
 .tinyPrimaryButton{
     -fx-pref-width: 60px;
-    -fx-background-color: -primaryColor;
+    -fx-background-color: -PrimaryColour;
     -fx-background-radius: 8px;
     -fx-background-insets: 1px;
 
@@ -403,7 +449,7 @@
 }
 
 .tinyPrimaryButton:hover {
-    -fx-background-color: -secondaryColor;
+    -fx-background-color: -SecondaryColour;
 }
 
 
@@ -415,9 +461,9 @@
 
     -fx-border-radius: 8px;
     -fx-border-width: 2px;
-    -fx-border-color: -primaryColor;
+    -fx-border-color: -PrimaryColour;
 
-    -fx-text-fill: -primaryColor;
+    -fx-text-fill: -PrimaryColour;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
 
@@ -426,8 +472,8 @@
 }
 
 .tinySecondaryButton:hover {
-    -fx-border-color: -secondaryColor;
-    -fx-text-fill: -secondaryColor;
+    -fx-border-color: -SecondaryColour;
+    -fx-text-fill: -SecondaryColour;
 }
 
 .tinyXButton {
@@ -473,7 +519,7 @@
 .toggleButton .thumb{
     -fx-border-radius: 1.0em;
     -fx-border-color: -textBoxColor;
-    -fx-body-color: -primaryColor;
+    -fx-body-color: -PrimaryColour;
 }
 
 .toggleButton .thumb-area {
@@ -481,17 +527,17 @@
 }
 
 .toggleButton:selected .thumb-area {
-     -fx-background-color: -primaryColor;
+     -fx-background-color: -PrimaryColour;
  }
 
 /* Settings Buttons */
 .settingButton {
     -fx-pref-width: 210px;
-    -fx-background-color: -primaryColor;
+    -fx-background-color: -PrimaryColour;
     -fx-background-radius: 8px;
     -fx-background-insets: 1px;
 
-    -fx-border-color: -primaryColor;
+    -fx-border-color: -PrimaryColour;
     -fx-border-radius: 8px;
     -fx-border-width: 2px;
 
@@ -503,7 +549,7 @@
 }
 
 .settingButton:hover {
-    -fx-border-color: -backgroundColor;
+    -fx-border-color: -BackgroundColour;
 }
 
 

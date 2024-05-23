@@ -3,14 +3,13 @@ import java.io.IOException;
 import java.util.Objects;
 
 import focusApp.models.Timer;
+import fr.brouillard.oss.cssfx.CSSFX;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.util.Objects;
+import fr.brouillard.oss.cssfx.CSSFX;
 
 
 public class HelloApplication extends Application {
@@ -44,6 +43,7 @@ public class HelloApplication extends Application {
         // Show stage
         stage.setOnCloseRequest(windowEvent -> Timer.ForceStopTimer());
         stage.show();
+        CSSFX.start();
     }
 
     public static void main(String[] args) {

@@ -1,6 +1,7 @@
 package focusApp.controllers;
 
 import focusApp.models.Command;
+import focusApp.models.Notification;
 import focusApp.models.Timer;
 import focusApp.HelloApplication;
 
@@ -12,10 +13,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Arc;
 
+import java.beans.Visibility;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -23,8 +26,7 @@ public class TimerController {
 
     private Timer timer;
 
-    @FXML
-    private Button ReturnButton;
+
     @FXML
     private Label StopWatch;
     @FXML
@@ -46,18 +48,16 @@ public class TimerController {
     @FXML
     private Button RestartButton;
     @FXML
+    private Button ReturnButton;
+    @FXML
     private ToggleButton ToggleListen;
 
     @FXML
-    protected void  onToggleListenClick() {
+    protected void onToggleListenClick() {
         timer.TurnOnTTS(ToggleListen.isSelected());
     }
-    @FXML
-    protected void mouseInToggleListen(){ ToggleListen.setContentDisplay(ContentDisplay.LEFT); }
-    @FXML
-    protected void mouseOutToggleListen(){ ToggleListen.setContentDisplay(ContentDisplay.GRAPHIC_ONLY); }
 
-    
+
     @FXML
     protected void onStopButtonClick(){ timer.Control(Command.Stop); }
     @FXML
@@ -112,76 +112,58 @@ public class TimerController {
     protected void mouseOutReturnButton(){ ReturnButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
 
 
-    public void UpdateButtons(){
+    private void UpdateButtons(Button[] Buttons, Boolean Attribute){
+        for(Button B : Buttons){
+            if (Attribute != null){
+                B.setDisable(Attribute);
+            } else {
+                B.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            }
+
+        }
+    }
+    public void ButtonStateManager(){
         switch(timer.getTimerState()){
             case Running -> {
-                StopButton.setDisable(false);
-                PauseButton.setDisable(false);
-
-                RestartButton.setDisable(true);
-                ReturnButton.setDisable(true);
-                ResumeButton.setDisable(true);
+                UpdateButtons(new Button[]{StopButton, PauseButton}, false);
+                UpdateButtons(new Button[]{RestartButton, ReturnButton, ResumeButton}, true);
 
                 Platform.runLater(() ->{
-                    RestartButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                    ReturnButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                    ResumeButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                    UpdateButtons(new Button[]{RestartButton, ReturnButton, ResumeButton}, null);
                 });
             }
 
             case Delayed, Restarting -> {
-                StopButton.setDisable(false);
-
-                RestartButton.setDisable(true);
-                ReturnButton.setDisable(true);
-                PauseButton.setDisable(true);
-                ResumeButton.setDisable(true);
+                UpdateButtons(new Button[]{StopButton}, false);
+                UpdateButtons(new Button[]{RestartButton, ReturnButton, PauseButton,ResumeButton}, true);
 
                 Platform.runLater(() ->{
-                    RestartButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                    ReturnButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                    PauseButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                    ResumeButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                    UpdateButtons(new Button[]{RestartButton, ReturnButton, PauseButton, ResumeButton}, null);
                 });
             }
 
             case Paused -> {
-                ResumeButton.setDisable(false);
-
-                StopButton.setDisable(true);
-                RestartButton.setDisable(true);
-                ReturnButton.setDisable(true);
-                PauseButton.setDisable(true);
+                UpdateButtons(new Button[]{ResumeButton}, false);
+                UpdateButtons(new Button[]{StopButton, RestartButton, ReturnButton, PauseButton}, true);
 
                 Platform.runLater(() ->{
-                    RestartButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                    ReturnButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                    PauseButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                    UpdateButtons(new Button[]{RestartButton, ReturnButton, PauseButton}, null);
                 });
             }
 
             case Stopped, Finished -> {
-                RestartButton.setDisable(false);
-                ReturnButton.setDisable(false);
-
-                StopButton.setDisable(true);
-                PauseButton.setDisable(true);
-                ResumeButton.setDisable(true);
+                UpdateButtons(new Button[]{RestartButton, ReturnButton}, false);
+                UpdateButtons(new Button[]{StopButton, PauseButton, ResumeButton}, true);
 
                 Platform.runLater(() ->{
-                    StopButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                    PauseButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                    ResumeButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                    UpdateButtons(new Button[]{StopButton, PauseButton, ResumeButton}, null);
                 });
             }
         }
     }
 
-    public void initialize(double startTime, double endTime) {
-        // Get offset and duration from main (Get offset and Get Duration)
-
-        timer = new Timer(startTime, endTime, this);
-
+    public void initialize(double startTime, double endTime, Notification Alarm) {
+        timer = new Timer(startTime, endTime, this, Alarm);
         timer.Control(Command.Start);
     }
 
@@ -198,28 +180,31 @@ public class TimerController {
         Platform.runLater(() ->  MiniArc.setLength(((timer.getDCDinMS() + 1) / timer.getDTDinMS()) * 360));
     }
 
+    private void UpdateArcAttributes(Arc ThisArc,int Length, Boolean Visibility){
+        ThisArc.setLength(Length);
+        if (Visibility != null){
+            ThisArc.setVisible(Visibility);
+        }
+    }
     public void UpdateGUI(){
         Platform.runLater(() -> {
             switch (timer.getTimerState()){
                 case Delayed, Restarting-> {
                     DelayedGroup.setVisible(true);
-                    MiniArc.setLength(360);
-                    MiniArc.setVisible(true);
-                    arc.setLength(360);
-                    arc.setVisible(true);
+                    UpdateArcAttributes(MiniArc, 360, true);
+                    UpdateArcAttributes(arc, 360, true);
                     StopWatch.setVisible(false);
                 }
+
                 case Running, Stopped -> {
                     DelayedGroup.setVisible(false);
-                    MiniArc.setLength(0);
-                    MiniArc.setVisible(false);
-                    arc.setLength(360);
+                    UpdateArcAttributes(MiniArc, 0, false);
+                    UpdateArcAttributes(arc, 360, null);
                     StopWatch.setVisible(true);
                 }
-                case Finished -> {
-                    arc.setLength(0);
-                    arc.setVisible(false);
-                }
+
+                case Finished -> UpdateArcAttributes(arc, 0, false);
+
             }
         });
     }

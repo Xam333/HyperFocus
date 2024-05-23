@@ -2,32 +2,42 @@ package focusApp.models;
 
 import javax.sound.sampled.*;
 import java.io.File;
+import java.util.HashMap;
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.VoiceManager;
 
 public class Notification {
-
     private static final String VoiceDirectory = "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory";
-
+    private static final String SoundDirectory = "src/main/resources/focusApp/Sounds/";
     private static Voice SpeakingVoice;
+
+    private final File Alarm;
+    private final float Volume;
+
+    public static HashMap<String, File> SoundList = new HashMap<>(){{
+        put("Alarm 1", new File(SoundDirectory + "alarm1.wav"));
+        put("Alarm 2", new File(SoundDirectory + "alarm2.wav"));
+        put("Alarm 3", new File(SoundDirectory + "alarm3.wav"));
+    }};
+
+    public Notification(String Alarm, float Volume){
+        this.Alarm = SoundList.get(Alarm);
+        this.Volume = Volume;
+    }
 
     /**
      * Plays a sound of the supported audio format (wav).
-     * @param Volume controls the volume of the sound.
      */
-    public static void PlaySound(float Volume){
+    public void PlaySound(){
         try {
-            String soundFilePath = "src/main/resources/focusApp/Sounds/alarm1.wav";
-            File AlarmPath = new File(soundFilePath);
-
-            if (AlarmPath.exists()){
+            if (Alarm.exists()){
 
                 // Get the audio from the file.
-                AudioInputStream audioInput = AudioSystem.getAudioInputStream(AlarmPath);
+                AudioInputStream audioInput = AudioSystem.getAudioInputStream(Alarm);
                 Clip alarmClip = AudioSystem.getClip();
                 alarmClip.open(audioInput);
 
-                // Add in volume control.
+                // Volume control.
                 FloatControl VolumeControl = (FloatControl) alarmClip.getControl(FloatControl.Type.MASTER_GAIN);
                 VolumeControl.setValue(Volume);
 

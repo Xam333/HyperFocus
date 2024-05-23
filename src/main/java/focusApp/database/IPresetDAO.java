@@ -22,12 +22,6 @@ public interface IPresetDAO {
      */
     public Preset addPreset(int userID, String presetName);
 
-    /**
-     * generates a new random preset for the user
-     * @param userID the users id
-     * @return the newly generated preset
-     */
-    public Preset generateNewPreset(int userID);
 
     /**
      * add website to a preset
