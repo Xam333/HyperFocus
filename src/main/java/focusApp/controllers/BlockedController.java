@@ -47,7 +47,6 @@ import org.apache.commons.io.FileUtils;
 
 
 //Jsoup
-import org.controlsfx.control.ToggleSwitch;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -61,6 +60,14 @@ import java.util.regex.Matcher;
 
 
 public class BlockedController implements Initializable {
+
+
+
+
+    public StackPane turnOffParentalControlsStackPane;
+    public PasswordField parentalControlsPasswordField;
+    public Label denyParentalControlsDisableLabel;
+
     private String fileLocation;
     public StackPane addWebsiteStackPane;
     public TextField addWebsiteTextField;
@@ -68,13 +75,14 @@ public class BlockedController implements Initializable {
     public TextField addApplicationTextField;
     public Button addWebButton;
     public Button addAppButton;
+
     boolean changesSaved = true;
     public Button saveButton;
     public Button cancelButton;
+
     public StackPane blackOutStackPane;
     public StackPane confirmCancelStackPane;
-    public Button abortButton;
-    public Button confirmButton;
+
 
 
     @FXML
@@ -330,9 +338,6 @@ public class BlockedController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-
-
-
         iconColumn.setCellValueFactory(new PropertyValueFactory<BlockedItem, String>("iconURI"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<BlockedItem, String>("name"));
         locationColumn.setCellValueFactory(new PropertyValueFactory<BlockedItem, String>("URI"));
@@ -341,9 +346,8 @@ public class BlockedController implements Initializable {
 
         // Automatically set as true until change is made
         changesSaved = true;
+
     }
-
-
 
 //    Add new websites and applications to database
     public void onSaveButtonClick(ActionEvent actionEvent) throws IOException {
@@ -378,21 +382,6 @@ public class BlockedController implements Initializable {
     public void onApplicationButtonClick(ActionEvent actionEvent) {
         blackOutStackPane.setVisible(true);
         addApplicationStackPane.setVisible(true);
-    }
-
-
-    public void onConfirmButtonClick(ActionEvent actionEvent) throws IOException {
-        Stage stage = (Stage) confirmButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
-
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
-        stage.setScene(scene);
-    }
-
-    public void onAbortButtonClick(ActionEvent actionEvent) {
-        blackOutStackPane.setVisible(false);
-        confirmCancelStackPane.setVisible(false);
     }
 
     public void onXLabelClick(ActionEvent mouseEvent) {

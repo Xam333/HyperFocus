@@ -36,22 +36,16 @@ public class MainController implements Initializable {
     public Button startButton;
     public Pane blockedApplicationPane;
     public StackPane menuStackPane;
-    public Button accountButton;
     public Button parentalControlsButton;
     public Button colourSettingsButton;
     public Button soundSettingsButton;
     public VBox parentalControlsSection;
-    public PasswordField parentalControlPasswordField;
     public VBox soundSettingsSection;
     public VBox colourSettingsSection;
     public Slider volumeSlider;
     public ComboBox soundOptionsButton;
-    public HBox defaultPalette;
-    public ComboBox colourOptionsButton;
-    public HBox greyScalePalette;
-    public HBox redPalette;
+
     public ToggleSwitch parentalControlToggleButton;
-    public VBox passwordSection;
     public PasswordField parentalControlsPasswordField;
     public Button confirmPasswordButton;
     public StackPane turnOffParentalControlsStackPane;
@@ -71,17 +65,7 @@ public class MainController implements Initializable {
     public StackPane confirmLogOutStackPane;
 
 
-    @FXML
-    private Label startTimeLabel;
 
-    @FXML
-    private Label endTimeLabel;
-
-    @FXML
-    private Slider startTimeSlider;
-
-    @FXML
-    private Slider endTimeSlider;
 
     @FXML
     private ComboBox presetsButton;
@@ -89,8 +73,7 @@ public class MainController implements Initializable {
     @FXML
     private GridPane blockedIcons;
 
-    public int startTime;
-    public int endTime;
+
 
     private UserHolder userHolder;
     private User user;
@@ -142,8 +125,8 @@ public class MainController implements Initializable {
         });
 
         // Initialise start and end time sliders
-        startTimeSlider();
-        endTimeSlider();
+        setSlider(OffsetSlider, OffsetLabel, TimeID.StartTime);
+        setSlider(DurationSlider, DurationLabel, TimeID.EndTime);
 
         /* update the blocked list */
         // Get preset name
@@ -162,9 +145,8 @@ public class MainController implements Initializable {
         }
 
         // Load a new instance of the colour control class.
-//        ColourPalette = new ColourControl();
-//        getColourPaletteFormat();
-//        setColourPalette();
+        ColourPalette = new ColourControl();
+        setColourPalette();
 
 
         // Only show enter passcode if parental controls is being turned off
@@ -194,25 +176,25 @@ public class MainController implements Initializable {
     private ColorPicker TertiaryColour;
     @FXML
     private ColorPicker BackgroundColour;
-//    private void setColourPalette(){
-//        HashMap<ColourPaletteKeys, ColorPicker> PaletteFormat =  getColourPaletteFormat();
-//        for(ColourPaletteKeys PaletteKey : ColourPaletteKeys.values()){
-//            if (PaletteFormat.containsKey(PaletteKey) && ColourPalette.getCurrentColourPalette().containsKey(PaletteKey)){
-//                Color LoadedColour = ColourPalette.getCurrentColourPalette().get(PaletteKey);
-//                PaletteFormat.get(PaletteKey).setValue(LoadedColour);
-//            }
-//        }
-//    }
-//    @FXML
-////    private void onColourPicker() {
-////        ColourPalette.LoadColourPalette(getAllColours());
-////        setColourPalette();
-////    }
-//    @FXML
-//    private void onDefaultButton(){
-//        ColourPalette.LoadDefaultColourPalette();
-//        setColourPalette();
-//    }
+    private void setColourPalette(){
+        HashMap<ColourPaletteKeys, ColorPicker> PaletteFormat =  getColourPaletteFormat();
+        for(ColourPaletteKeys PaletteKey : ColourPaletteKeys.values()){
+            if (PaletteFormat.containsKey(PaletteKey) && ColourPalette.getCurrentColourPalette().containsKey(PaletteKey)){
+                Color LoadedColour = ColourPalette.getCurrentColourPalette().get(PaletteKey);
+                PaletteFormat.get(PaletteKey).setValue(LoadedColour);
+            }
+        }
+    }
+    @FXML
+    private void onColourPicker() {
+        ColourPalette.LoadColourPalette(getAllColours());
+        setColourPalette();
+    }
+    @FXML
+    private void onDefaultButton(){
+        ColourPalette.LoadDefaultColourPalette();
+        setColourPalette();
+    }
     private HashMap<ColourPaletteKeys, ColorPicker> getColourPaletteFormat(){
         return new HashMap<>() {{
             put(ColourPaletteKeys.Primary, PrimaryColour);
@@ -230,21 +212,40 @@ public class MainController implements Initializable {
         }};
     }
 
+    private enum TimeID{
+        StartTime, EndTime
+    }
+    public int startTime;
+    public int endTime;
 
-    /**
-     * Initialises start time slider and listens for updates
-     */
-    public void startTimeSlider() {
+    @FXML
+    private Label OffsetLabel;
+
+    @FXML
+    private Label DurationLabel;
+
+    @FXML
+    private Slider OffsetSlider;
+
+    @FXML
+    private Slider DurationSlider;
+
+    public void setSlider(Slider TimerSlider, Label SliderLabel, TimeID TID) {
         // Listen for changes to the slider and update the label
-        startTimeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+        TimerSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             int totalMinutes = newVal.intValue();  // Convert slider value to int
-            this.startTime = totalMinutes;
+
+            switch (TID){
+                case StartTime -> startTime = totalMinutes;
+                case EndTime -> endTime = totalMinutes;
+            }
+
             int hours = totalMinutes / 60;  // Get full hours
             int minutes = totalMinutes % 60;  // Get remaining minutes
 
             // Build the formatted time string
             String formattedTime;
-            if (totalMinutes == 0) {
+            if (totalMinutes == 0 && TimerSlider == OffsetSlider) {
                 formattedTime = "Now";
             }
             else if (hours > 0) {
@@ -255,48 +256,19 @@ public class MainController implements Initializable {
                 formattedTime = String.format("%d Minute%s", minutes, minutes > 1 ? "s" : "");
             }
 
-            startTimeLabel.setText(formattedTime);  // Update the label with the formatted time
+            SliderLabel.setText(formattedTime);  // Update the label with the formatted time
 
             // Calculate percentage of the slider position
-            double percentage = newVal.doubleValue() / startTimeSlider.getMax();
+            double percentage = newVal.doubleValue() / TimerSlider.getMax();
 
             // Set inline CSS for the track color
-
-            String trackColor = String.format("-fx-background-color: linear-gradient(to right, " + ColourPalette.toHex(ColourPaletteKeys.Primary) + " %f%%, white %f%%);", percentage * 100, percentage * 100);
-            startTimeSlider.lookup(".track").setStyle(trackColor);
+            String[] CalledColours = ColourPalette.getHexFromPalette(ColourPaletteKeys.Primary, ColourPaletteKeys.Background);
+            String trackColor = String.format("-fx-background-color: linear-gradient(to right, " + CalledColours[0] + " %f%%, " + CalledColours[1] + " %f%%);", percentage * 100, percentage * 100);
+            TimerSlider.lookup(".track").setStyle(trackColor);
         });
     }
 
-    /**
-     * Initialises end time slider and listens for updates
-     */
-    public void endTimeSlider() {
-        endTimeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-            int totalMinutes = newVal.intValue();  // Convert slider value to int
-            this.endTime = totalMinutes;
-            int hours = totalMinutes / 60;  // Get full hours
-            int minutes = totalMinutes % 60;  // Get remaining minutes
 
-            // Build the formatted time string
-            String formattedTime;
-            if (hours > 0) {
-                formattedTime = String.format("%d Hour%s %d Minute%s",
-                        hours, hours > 1 ? "s" : "",
-                        minutes, minutes > 1 ? "s" : "");
-            } else {
-                formattedTime = String.format("%d Minute%s", minutes, minutes > 1 ? "s" : "");
-            }
-
-            endTimeLabel.setText(formattedTime);  // Update the label with the formatted time
-
-            // Calculate percentage of the slider position
-            double percentage = newVal.doubleValue() / endTimeSlider.getMax();
-
-            // Set inline CSS for the track color
-            String trackColor = String.format("-fx-background-color: linear-gradient(to right, " + ColourPalette.toHex(ColourPaletteKeys.Primary) + " %f%%, white %f%%);", percentage * 100, percentage * 100);
-            endTimeSlider.lookup(".track").setStyle(trackColor);
-        });
-    }
 
     public void loadPresets() {
         ArrayList<String> presetNames = new ArrayList<>();
@@ -618,15 +590,12 @@ public class MainController implements Initializable {
         passwordTextField.setEditable(!passwordTextField.isEditable());
     }
 
-    public void onLogOutButton() {
-        blackOutStackPane.setVisible(true);
-        confirmLogOutStackPane.setVisible(true);
+    private void ShowPane(boolean Display){
+        blackOutStackPane.setVisible(Display);
+        confirmLogOutStackPane.setVisible(Display);
     }
-
-    public void onAbortButtonClick() {
-        blackOutStackPane.setVisible(false);
-        confirmLogOutStackPane.setVisible(false);
-    }
+    public void onLogOutButton() { ShowPane(true); }
+    public void onAbortButtonClick(){ ShowPane(false); }
 
     public void onConfirmLogOutButtonClick() throws IOException {
         Stage stage = (Stage) confirmButton.getScene().getWindow();
@@ -645,6 +614,7 @@ public class MainController implements Initializable {
         if (!Objects.equals(login_user, null)){
             user.setParentalLock(true);
             parentalControlToggleButton.setSelected(false);
+
             blackOutStackPane.setVisible(false);
             turnOffParentalControlsStackPane.setVisible(false);
             denyParentalControlsDisableLabel.setText("");

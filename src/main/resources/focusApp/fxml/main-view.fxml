@@ -8,32 +8,29 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 <?import org.controlsfx.control.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="390.0" stylesheets="@../stylesheet.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.MainController">
 
    <!-- NAV BAR -->
-   <HBox prefHeight="75.0" prefWidth="390.0" spacing="45.0" styleClass="navBox" AnchorPane.leftAnchor="0.0">
+   <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="390.0" spacing="80.0" styleClass="navBox">
+         <Button alignment="CENTER" graphicTextGap="0.0" onAction="#toggleMenu" prefHeight="32.0" prefWidth="51.0" styleClass="navButton" stylesheets="@../stylesheet.css">
+         <graphic>
+            <Label alignment="CENTER" text="☰">
+               <font>
+                  <Font size="35.0" />
+               </font>
+            </Label>
+         </graphic>
+         </Button>
 
-      <!-- Should open side menu -->
-       <Pane minHeight="75.0" styleClass="navBarMenuButton">
-           <VBox layoutY="17" stylesheets="@../stylesheet.css">
-               <Button onAction="#toggleMenu" styleClass="navButton" stylesheets="@../stylesheet.css">
-                   <graphic>
-                       <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                           <Image url="@../images/menuIcon.png" />
-                       </ImageView>
-                   </graphic>
-               </Button>
-           </VBox>
-       </Pane>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-         <children>
-
-            <!-- Page Title -->
-            <Label contentDisplay="CENTER" styleClass="navLabel" text="Focus Period" textAlignment="CENTER" />
-         </children>
-      </HBox>
+      <!-- Page Title -->
+      <Label contentDisplay="CENTER" styleClass="navLabel" text="Focus Period" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
       <opaqueInsets>
          <Insets />
       </opaqueInsets>
@@ -87,11 +84,11 @@
 
         <!-- Get slider time and change label according,
                see login and register page for example -->
-         <Label fx:id="startTimeLabel" alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="210.0" styleClass="bodyLabel" text="Now" textAlignment="RIGHT" />
+         <Label fx:id="OffsetLabel" alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="210.0" styleClass="bodyLabel" text="Now" textAlignment="RIGHT" />
       </HBox>
 
        <!-- Start timer -->
-      <Slider fx:id="startTimeSlider" blockIncrement="15.0" majorTickUnit="60.0" max="180.0" showTickLabels="true" showTickMarks="true" styleClass="timerSlider" />
+      <Slider fx:id="OffsetSlider" blockIncrement="15.0" majorTickUnit="60.0" max="180.0" showTickLabels="true" showTickMarks="true" styleClass="timerSlider" />
 
       <!-- End labels -->
       <HBox alignment="BOTTOM_LEFT" layoutX="10.0" layoutY="228.0" prefHeight="35.0" prefWidth="280.0" spacing="10.0">
@@ -100,11 +97,11 @@
 
          <!--         Get slider time and change label according,
                         see login and register page for example -->
-         <Label fx:id="endTimeLabel" alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="215.0" styleClass="bodyLabel" text="0 Minutes" textAlignment="RIGHT" />
+         <Label fx:id="DurationLabel" alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="215.0" styleClass="bodyLabel" text="0 Minutes" textAlignment="RIGHT" />
       </HBox>
 
         <!-- End slider -->
-       <Slider fx:id="endTimeSlider" blockIncrement="15.0" majorTickUnit="60.0" max="180.0" showTickLabels="true" showTickMarks="true" styleClass="timerSlider" />
+       <Slider fx:id="DurationSlider" blockIncrement="15.0" majorTickUnit="60.0" max="180.0" showTickLabels="true" showTickMarks="true" styleClass="timerSlider" />
 
         <!-- Start timer -->
        <Label styleClass="bodyLabel" text="Press start to activate focus mode:" textAlignment="CENTER">
@@ -113,31 +110,26 @@
            </padding>
        </Label>
       <HBox alignment="CENTER">
-         <Button fx:id="startButton" mnemonicParsing="false" onAction="#onStartButtonClick" styleClass="largePrimaryButton" text="START" textAlignment="CENTER" />
+         <Button fx:id="startButton" mnemonicParsing="false" onAction="#onStartButtonClick" styleClass="largePrimaryButton" text="Start" textAlignment="CENTER" />
       </HBox>
    </VBox>
 
 
     <!-- SIDE MENU -->
-    <StackPane fx:id="menuStackPane" layoutY="74.9" prefHeight="525.0" prefWidth="300.0" visible="false">
+    <StackPane fx:id="menuStackPane" layoutY="60.0" prefHeight="540.0" prefWidth="300.0" visible="false">
       <Pane>
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000080" height="525.0" onMouseClicked="#toggleMenu" stroke="TRANSPARENT" strokeType="INSIDE" width="390.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000080" height="545.0" onMouseClicked="#toggleMenu" stroke="TRANSPARENT" strokeType="INSIDE" width="390.0" />
          </children>
       </Pane>
 
-        <VBox prefHeight="525.0" prefWidth="262.0" styleClass="menuPane" stylesheets="@../stylesheet.css">
+        <VBox prefHeight="507.0" prefWidth="300.0" spacing="5.0" styleClass="menuPane" stylesheets="@../stylesheet.css">
             <!--Account Information-->
             <VBox>
-                <Button onAction="#onAccountButtonClick" styleClass="menuButton">
-                    <graphic>
-                        <HBox alignment="CENTER_LEFT">
-                            <Region prefWidth="15.0" />
-                            <Label prefWidth="30.0" styleClass="navLabel" text="👤" textAlignment="CENTER" />
-                            <Region prefWidth="10.0" />
-                            <Label styleClass="navLabel" text="Account Information" textAlignment="CENTER" />
-                        </HBox>
-                    </graphic>
+                <Button alignment="TOP_LEFT" onAction="#onAccountButtonClick" prefHeight="10.0" prefWidth="300.0" styleClass="menuButton" text="Account Information">
+               <graphic>
+                         <Label styleClass="menuLabel" text="👤" textAlignment="CENTER" />
+               </graphic>
                 </Button>
 
                 <!-- Drop down account information -->
@@ -157,14 +149,14 @@
 
                             <!-- USERNAME -->
                             <Label fx:id="userNameLabel" styleClass="settingLabel" text="User Name:" textAlignment="CENTER" wrapText="true" />
-                            <TextField fx:id="userNameTextField" editable="false" prefWidth="210.0" styleClass="textBox" text="Place Holder" />
+                            <TextField fx:id="userNameTextField" editable="false" prefWidth="210.0" styleClass="settingTextBox" text="Place Holder" />
                             <Region prefHeight="10.0" />
                             <Button fx:id="editUserNameButton" minWidth="210.0" mnemonicParsing="false" onAction="#onEditUserNameButtonClick" styleClass="settingButton" text="EDIT" textAlignment="CENTER" />
                             <Region prefHeight="10.0" />
 
                             <!-- PASSWORD -->
                             <Label fx:id="passwordLabel" styleClass="settingLabel" text="Password:" textAlignment="CENTER" wrapText="true" />
-                            <PasswordField fx:id="passwordTextField" editable="false" prefWidth="210.0" styleClass="textBox" text="Place Holder" />
+                            <PasswordField fx:id="passwordTextField" editable="false" prefWidth="210.0" styleClass="settingTextBox" text="Place Holder" />
                             <Region prefHeight="10.0" />
                             <Button fx:id="editPasswordButton" minWidth="210.0" mnemonicParsing="false" onAction="#onEditPasswordButtonClick" styleClass="settingButton" text="EDIT" textAlignment="CENTER" />
                             <Region prefHeight="10.0" />
@@ -178,15 +170,10 @@
 
             <!--Parental Controls-->
             <VBox>
-                <Button fx:id="parentalControlsButton" onAction="#onParentalControlsButtonClick" styleClass="menuButton">
-                    <graphic>
-                        <HBox alignment="CENTER_LEFT">
-                            <Region prefWidth="15.0" />
-                            <Label prefWidth="30.0" styleClass="navLabel" text="👨‍👩‍👦" textAlignment="CENTER" />
-                            <Region prefWidth="10.0" />
-                            <Label styleClass="navLabel" text="Parental Controls" textAlignment="CENTER" />
-                        </HBox>
-                    </graphic>
+                <Button fx:id="parentalControlsButton" alignment="TOP_LEFT" onAction="#onParentalControlsButtonClick" prefHeight="1.0" prefWidth="300.0" styleClass="menuButton" text="Parental Controls">
+               <graphic>
+                         <Label prefWidth="30.0" styleClass="menuLabel" text="👨‍👩‍👦" textAlignment="CENTER" />
+               </graphic>
                 </Button>
 
                 <!-- Drop down parental controls -->
@@ -209,15 +196,10 @@
 
             <!--Colour Settings-->
            <VBox>
-               <Button fx:id="colourSettingsButton" onAction="#onColourSettingsButtonClick" styleClass="menuButton">
-                   <graphic>
-                       <HBox alignment="CENTER_LEFT">
-                           <Region prefWidth="15.0" />
-                           <Label prefWidth="30.0" styleClass="navLabel" text="🎨" textAlignment="CENTER" />
-                           <Region prefWidth="10.0" />
-                           <Label styleClass="navLabel" text="Colour Settings" textAlignment="CENTER" />
-                       </HBox>
-                   </graphic>
+               <Button fx:id="colourSettingsButton" alignment="TOP_LEFT" onAction="#onColourSettingsButtonClick" prefHeight="6.0" prefWidth="300.0" styleClass="menuButton" text="Colour Settings">
+               <graphic>
+                        <Label prefWidth="30.0" styleClass="menuLabel" text="🎨" textAlignment="CENTER" />
+               </graphic>
                </Button>
 
                <!-- Drop down colour settings -->
@@ -264,15 +246,10 @@
 
             <!--Sound Settings-->
             <VBox>
-                <Button fx:id="soundSettingsButton" onAction="#onSoundSettingsButtonClick" styleClass="menuButton">
-                    <graphic>
-                        <HBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="268.0">
-                            <Region prefWidth="15.0" />
-                            <Label prefWidth="30.0" styleClass="navLabel" text="🔊" textAlignment="CENTER" />
-                            <Region prefWidth="10.0" />
-                            <Label styleClass="navLabel" text="Sound Settings" textAlignment="CENTER" />
-                        </HBox>
-                    </graphic>
+                <Button fx:id="soundSettingsButton" alignment="TOP_LEFT" onAction="#onSoundSettingsButtonClick" prefHeight="7.0" prefWidth="300.0" styleClass="menuButton" text="Sound Settings">
+               <graphic>
+                         <Label prefWidth="30.0" styleClass="menuLabel" text="🔊" textAlignment="CENTER" />
+               </graphic>
                 </Button>
 
                 <!-- Drop down sound settings -->
@@ -308,15 +285,10 @@
 
             <!-- Log Out Section -->
             <VBox>
-                <Button onAction="#onLogOutButton" styleClass="menuButton">
-                    <graphic>
-                        <HBox alignment="CENTER_LEFT">
-                            <Region prefWidth="15.0" />
-                            <Label prefWidth="30.0" styleClass="navLabel" text="⬅" textAlignment="CENTER" />
-                            <Region prefWidth="10.0" />
-                            <Label styleClass="navLabel" text="Log Out" textAlignment="CENTER" />
-                        </HBox>
-                    </graphic>
+                <Button alignment="TOP_LEFT" onAction="#onLogOutButton" prefHeight="0.0" prefWidth="300.0" styleClass="menuButton" text="Log Out">
+               <graphic>
+                         <Label prefWidth="30.0" styleClass="menuLabel" text="⬅" textAlignment="CENTER" />
+               </graphic>
                 </Button>
             </VBox>
         </VBox>
@@ -327,55 +299,46 @@
     </StackPane>
 
     <!-- PARENTAL CONTROLS PASSWORD ENTRY -->
-    <StackPane fx:id="turnOffParentalControlsStackPane" layoutX="55.0" layoutY="225.0" minHeight="200.0" styleClass="confirmPane" visible="false">
+    <StackPane fx:id="turnOffParentalControlsStackPane" layoutX="55.0" layoutY="225.0" minHeight="180.0" prefHeight="180.0" styleClass="confirmPane" visible="false">
 
-        <VBox>
+        <VBox alignment="TOP_CENTER" prefHeight="173.0" prefWidth="270.0">
             <HBox alignment="TOP_RIGHT">
                 <Button mnemonicParsing="false" onAction="#onXLabelClick" styleClass="tinyXButton" text="X" />
             </HBox>
-            <VBox alignment="CENTER">
-                <Label styleClass="bodyLabel" text="Enter passcode to disable parental controls" textAlignment="CENTER" wrapText="true" />
-                <HBox alignment="CENTER">
-                    <padding>
-                        <Insets top="15.0" />
-                    </padding>
-                    <PasswordField fx:id="parentalControlsPasswordField" minWidth="230.0" onKeyTyped="#passwordEntered" promptText="Password" styleClass="addBox" />
-                </HBox>
-<!--                 text="* Incorrect password *"-->
-                <Label fx:id="denyParentalControlsDisableLabel" styleClass="warningLabel" textAlignment="RIGHT" wrapText="true" />
-                <padding>
-                    <Insets bottom="10.0" />
-                </padding>
-            </VBox>
-            <HBox>
-                <Region HBox.hgrow="ALWAYS" />
-                <Button fx:id="confirmPasswordButton" disable="true" minWidth="100.0" mnemonicParsing="false" onAction="#onConfirmParentalControlsButtonClick" styleClass="tinyPrimaryButton" text="CONFIRM" textAlignment="CENTER" />
-                <Region prefWidth="20.0" />
-                <padding>
-                    <Insets bottom="10.0" />
-                </padding>
-            </HBox>
+         <HBox>
+            <children>
+               <Region layoutX="228.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" />
+                  <VBox alignment="TOP_RIGHT" prefHeight="106.0" prefWidth="270.0">
+                      <Label styleClass="bodyLabel" text="Enter password to disable parental controls" textAlignment="CENTER" wrapText="true" />
+                       <PasswordField fx:id="parentalControlsPasswordField" minWidth="218.0" onKeyTyped="#passwordEntered" prefHeight="37.0" prefWidth="220.0" promptText="Password" styleClass="textBox" />
+      <!--                 text="* Incorrect password *"-->
+                      <Label fx:id="denyParentalControlsDisableLabel" styleClass="warningLabel" textAlignment="RIGHT" wrapText="true" />
+                      <Button fx:id="confirmPasswordButton" disable="true" minWidth="100.0" mnemonicParsing="false" onAction="#onConfirmParentalControlsButtonClick" prefHeight="30.0" prefWidth="342.0" styleClass="tinyPrimaryButton" text="Confirm" textAlignment="CENTER" />
+                      <padding>
+                          <Insets bottom="10.0" />
+                      </padding>
+                  </VBox>
+               <Region prefHeight="200.0" prefWidth="200.0" />
+            </children>
+         </HBox>
         </VBox>
     </StackPane>
 
     <!-- LOG OUT CONFIRMATION -->
-    <StackPane fx:id="confirmLogOutStackPane" layoutX="55.0" layoutY="225.0" styleClass="confirmPane" visible="false">
+    <StackPane fx:id="confirmLogOutStackPane" alignment="TOP_CENTER" layoutX="55.0" layoutY="225.0" styleClass="confirmPane" visible="false">
 
-        <VBox alignment="TOP_CENTER">
+        <VBox alignment="CENTER" prefHeight="96.0" prefWidth="270.0" spacing="30.0">
             <padding>
                 <Insets top="25.0" />
             </padding>
             <Label styleClass="bodyLabel" text="Are you sure you want to log out?" textAlignment="CENTER" wrapText="true" />
+           <HBox alignment="TOP_CENTER" prefHeight="0.0" prefWidth="270.0" spacing="55.0">
+               <Button fx:id="abortButton" mnemonicParsing="false" onAction="#onAbortButtonClick" prefWidth="80.0" styleClass="tinySecondaryButton" text="Cancel" textAlignment="CENTER" />
+               <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#onConfirmLogOutButtonClick" prefWidth="85.0" styleClass="tinyPrimaryButton" text="Confirm" textAlignment="CENTER" />
+               <padding>
+                   <Insets bottom="25.0" />
+               </padding>
+           </HBox>
         </VBox>
-        <HBox alignment="BOTTOM_CENTER">
-            <Region prefWidth="35.0" />
-            <Button fx:id="abortButton" mnemonicParsing="false" onAction="#onAbortButtonClick" styleClass="tinySecondaryButton" text="NO" textAlignment="CENTER" />
-            <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#onConfirmLogOutButtonClick" styleClass="tinyPrimaryButton" text="YES" textAlignment="CENTER" />
-            <Region prefWidth="35.0" />
-            <padding>
-                <Insets bottom="25.0" />
-            </padding>
-        </HBox>
     </StackPane>
 </AnchorPane>

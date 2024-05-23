@@ -68,28 +68,50 @@ public class ColourControl {
         try {
 
             String NewColourPalette = null;
-            Matcher Match;
 
             for (ColourPaletteKeys Key : CurrentColourPalette.keySet()) {
+                Color CurrentColour = CurrentColourPalette.get(Key);
 
-                String CSSVariable = "-" + Key.name() + "Colour";
-                String CSSColour = toHex(Key);
+                String Palette_Main_Variable = "-" + Key.name() + "Colour";
+                String Palette_Text_Variable = "-" + Key.name() + "TextColour";
 
-                Pattern CSSPattern = Pattern.compile(CSSVariable + ": ([#0-9a-fA-F]+);");
-                Match = NewColourPalette == null ? CSSPattern.matcher(CSSFileContent) : CSSPattern.matcher(Objects.requireNonNull(NewColourPalette));
+                String Palette_Main_Colour = toHex(CurrentColour);
+                String Palette_Text_Colour = toHex(getBestTextColour(CurrentColour));
 
-                if (Match.find()) {
-                    NewColourPalette = Match.replaceAll(CSSVariable + ": " + CSSColour + ";");
+                Pattern Palette_Main_Pattern = Pattern.compile(Palette_Main_Variable + ": ([#0-9a-fA-F]+);");
+                Pattern Palette_Text_Pattern = Pattern.compile(Palette_Text_Variable + ": ([#0-9a-fA-F]+);");
+
+                Matcher Palette_Main_Match = NewColourPalette == null ? Palette_Main_Pattern.matcher(CSSFileContent) : Palette_Main_Pattern.matcher(Objects.requireNonNull(NewColourPalette));
+
+                if (Palette_Main_Match.find()) {
+                    NewColourPalette = Palette_Main_Match.replaceAll(Palette_Main_Variable + ": " + Palette_Main_Colour + ";");
+                }
+
+                Matcher Palette_Text_Match = NewColourPalette == null ? Palette_Text_Pattern.matcher(CSSFileContent) : Palette_Text_Pattern.matcher(Objects.requireNonNull(NewColourPalette));
+
+                if (Palette_Text_Match.find()){
+                    NewColourPalette = Palette_Text_Match.replaceAll(Palette_Text_Variable + ": " + Palette_Text_Colour + ";");
                 }
             }
+            System.out.println();
             Files.write(CSSFilePath, Objects.requireNonNull(NewColourPalette).getBytes());
 
         } catch (IOException E){
             System.out.println(E);
         }
     }
-    public String toHex(ColourPaletteKeys Key){
-        Color CurrentColour = CurrentColourPalette.get(Key);
+    private Color getBestTextColour(Color CurrentColour){
+
+        double RedLight = 0.2126 * CurrentColour.getRed();
+        double GreenLight = 0.7152 * CurrentColour.getGreen();
+        double BlueLight = 0.0722 * CurrentColour.getBlue();
+
+        double TotalLuminance = RedLight + GreenLight + BlueLight;
+        double LightThreshold = 0.75;
+
+        return TotalLuminance > LightThreshold ? Color.BLACK : Color.WHITE;
+    }
+    private String toHex(Color CurrentColour){
 
         int Red = (int) (CurrentColour.getRed() * 255);
         int Green = (int) (CurrentColour.getGreen() * 255);
@@ -97,4 +119,11 @@ public class ColourControl {
 
         return String.format("#%02X%02X%02X", Red, Green, Blue);
     }
+    public String[] getHexFromPalette(ColourPaletteKeys MainKey, ColourPaletteKeys TextKey){
+        String MainColour = toHex(CurrentColourPalette.get(MainKey));
+        String TextColour = toHex(getBestTextColour(CurrentColourPalette.get(TextKey)));
+
+        return new String[]{MainColour, TextColour};
+    }
+
 }
