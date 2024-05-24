@@ -1,7 +1,6 @@
 package focusApp.controllers;
 
 import focusApp.HelloApplication;
-import focusApp.models.*;
 
 import focusApp.database.*;
 import focusApp.database.PresetDAO;
@@ -9,6 +8,13 @@ import focusApp.database.WebsiteDAO;
 import focusApp.database.ApplicationDAO;
 import focusApp.database.Preset;
 
+import focusApp.models.block.ApplicationItem;
+import focusApp.models.block.BlockedItem;
+import focusApp.models.block.WebsiteItem;
+import focusApp.models.colour.UserConfig;
+import focusApp.models.preset.PresetHolder;
+import focusApp.models.user.User;
+import focusApp.models.user.UserHolder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,12 +28,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import javafx.scene.input.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -259,9 +263,12 @@ public class BlockedController implements Initializable {
             File selectedFile = fileChooser.getSelectedFile();
             // Display the path of the selected file.
             System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+            addAppButton.setDisable(false);
             return selectedFile.getAbsolutePath();
+        } else{
+            addAppButton.setDisable(true);
+            return "File Not Found";
         }
-        else return "Not Found";
     }
 
     @FXML
@@ -277,7 +284,6 @@ public class BlockedController implements Initializable {
             if (UserConfig.FindCSSFile()){
                 scene.getStylesheets().add(UserConfig.getCSSFilePath().toUri().toString());
             } else {
-                
                 scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
             }
             stage.setScene(scene);
@@ -399,7 +405,7 @@ public class BlockedController implements Initializable {
 //        Get addWebsiteTextField contents
         if(addWebsiteStackPane.isVisible())
         {
-            addNewWebsite(addWebsiteTextField.getText());
+            addNewWebsite("https://" + addWebsiteTextField.getText());
         }
         else
         {
@@ -416,10 +422,25 @@ public class BlockedController implements Initializable {
         addWebButton.setDisable(false);
     }
 
-    public void onFileClick(ActionEvent actionEvent) {
+    public void onFileClick() {
         fileLocation = fileSearch();
         addApplicationTextField.setText(fileLocation);
-        addAppButton.setDisable(false);
+
     }
 
+    @FXML
+    private Button confirmButton;
+    public void onConfirmButtonClick() throws IOException {
+        Stage stage = (Stage) confirmButton.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
+
+        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        stage.setScene(scene);
+    }
+
+    public void onAbortButtonClick() {
+        blackOutStackPane.setVisible(false);
+        confirmCancelStackPane.setVisible(false);
+    }
 }

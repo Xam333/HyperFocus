@@ -1,6 +1,6 @@
 package focusApp.database;
 
-import focusApp.models.BlockedApplication;
+import focusApp.models.block.BlockedApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

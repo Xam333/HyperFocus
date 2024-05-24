@@ -1,4 +1,4 @@
-package focusApp.models;
+package focusApp.models.user;
 
 import javax.print.attribute.standard.RequestingUserName;
 

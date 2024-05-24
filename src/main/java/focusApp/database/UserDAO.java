@@ -1,6 +1,6 @@
 package focusApp.database;
 
-import focusApp.models.User;
+import focusApp.models.user.User;
 import org.sqlite.SQLiteErrorCode;
 import org.sqlite.SQLiteException;
 

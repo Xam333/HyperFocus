@@ -1,4 +1,6 @@
-package focusApp.models;
+package focusApp.models.colour;
+
+import focusApp.models.colour.ColourControl;
 
 import java.io.IOException;
 import java.nio.file.Files;

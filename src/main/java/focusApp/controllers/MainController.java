@@ -2,7 +2,14 @@ package focusApp.controllers;
 
 import focusApp.HelloApplication;
 import focusApp.database.UserDAO;
-import focusApp.models.*;
+import focusApp.models.block.BlockedItem;
+import focusApp.models.colour.ColourControl;
+import focusApp.models.colour.ColourPaletteKeys;
+import focusApp.models.colour.UserConfig;
+import focusApp.models.preset.PresetHolder;
+import focusApp.models.timer.Notification;
+import focusApp.models.user.User;
+import focusApp.models.user.UserHolder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
