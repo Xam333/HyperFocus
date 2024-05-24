@@ -1,4 +1,4 @@
-package focusApp.models;
+package focusApp.models.preset;
 
 import focusApp.database.Preset;
 

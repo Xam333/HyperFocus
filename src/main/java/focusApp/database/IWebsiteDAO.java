@@ -1,6 +1,6 @@
 package focusApp.database;
 
-import focusApp.models.WebsiteItem;
+import focusApp.models.block.WebsiteItem;
 
 public interface IWebsiteDAO {
 

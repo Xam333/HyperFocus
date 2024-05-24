@@ -1,8 +1,7 @@
 package focusApp.database;
 
-import focusApp.models.ApplicationItem;
-import focusApp.models.PresetHolder;
-import focusApp.models.WebsiteItem;
+import focusApp.models.block.ApplicationItem;
+import focusApp.models.block.WebsiteItem;
 import org.sqlite.SQLiteErrorCode;
 import org.sqlite.SQLiteException;
 

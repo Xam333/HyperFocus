@@ -1,4 +1,4 @@
-package focusApp.models;
+package focusApp.models.colour;
 
 import focusApp.HelloApplication;
 import javafx.scene.paint.Color;

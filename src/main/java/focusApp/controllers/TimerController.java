@@ -1,11 +1,11 @@
 package focusApp.controllers;
 
-import focusApp.models.Command;
-import focusApp.models.Notification;
-import focusApp.models.Timer;
+import focusApp.models.timer.Command;
+import focusApp.models.timer.Notification;
+import focusApp.models.timer.Timer;
 import focusApp.HelloApplication;
 
-import focusApp.models.UserConfig;
+import focusApp.models.colour.UserConfig;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,12 +14,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Arc;
 
-import java.beans.Visibility;
 import java.io.IOException;
 import java.util.Objects;
 

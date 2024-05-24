@@ -2,18 +2,13 @@ package focusApp.controllers;
 
 import focusApp.HelloApplication;
 import focusApp.database.UserDAO;
-import focusApp.models.User;
-import focusApp.models.UserConfig;
-import focusApp.models.UserHolder;
-import fr.brouillard.oss.cssfx.CSSFX;
-import fr.brouillard.oss.cssfx.api.URIToPathConverter;
+import focusApp.models.user.User;
+import focusApp.models.colour.UserConfig;
+import focusApp.models.user.UserHolder;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Objects;
 
 import javafx.fxml.FXMLLoader;

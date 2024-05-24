@@ -1,11 +1,10 @@
 package focusApp.controllers;
 
 import focusApp.HelloApplication;
-import focusApp.models.UserConfig;
+import focusApp.models.colour.UserConfig;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 
 
 import javafx.scene.Scene;

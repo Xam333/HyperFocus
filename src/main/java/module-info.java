@@ -19,6 +19,14 @@ module focusApp {
     exports focusApp.database;
     exports focusApp.controllers;
     opens focusApp.controllers to javafx.fxml;
-    exports focusApp.models;
-    opens focusApp.models to javafx.fxml;
+    exports focusApp.models.colour;
+    opens focusApp.models.colour to javafx.fxml;
+    exports focusApp.models.timer;
+    opens focusApp.models.timer to javafx.fxml;
+    exports focusApp.models.user;
+    opens focusApp.models.user to javafx.fxml;
+    exports focusApp.models.block;
+    opens focusApp.models.block to javafx.fxml;
+    exports focusApp.models.preset;
+    opens focusApp.models.preset to javafx.fxml;
 }

@@ -1,4 +1,4 @@
-package focusApp.models;
+package focusApp.models.block;
 
 public class ApplicationItem extends BlockedItem {
     public ApplicationItem(int id, String name, String url, String icon) {

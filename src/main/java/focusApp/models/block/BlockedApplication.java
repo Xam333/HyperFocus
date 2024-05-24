@@ -1,4 +1,4 @@
-package focusApp.models;
+package focusApp.models.block;
 
 public class BlockedApplication {
     //private String iconColumn;

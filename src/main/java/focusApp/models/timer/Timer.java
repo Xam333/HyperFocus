@@ -1,7 +1,8 @@
-package focusApp.models;
+package focusApp.models.timer;
 
 import focusApp.controllers.TimerController;
 import focusApp.database.UserDAO;
+import focusApp.models.user.*;
 
 import java.time.Duration;
 import java.time.LocalTime;
