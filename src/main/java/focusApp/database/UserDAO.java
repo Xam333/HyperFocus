@@ -68,12 +68,12 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
-    public int addToTotalTime(int id, int time) {
+    public long addToTotalTime(int id, long time) {
         try {
             String query = "UPDATE user SET focusTime = focusTime + ? WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
-            statement.setInt(1, time);
+            statement.setLong(1, time);
             statement.setInt(2, id);
 
             if (statement.executeUpdate() != 1) {
@@ -89,7 +89,7 @@ public class UserDAO implements IUserDAO {
             ResultSet res = statement.executeQuery();
 
             if (res != null) {
-                return res.getInt("focusTime");
+                return res.getLong("focusTime");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,7 +99,7 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
-    public int getTotalTime(int id) {
+    public long getTotalTime(int id) {
         try {
             String query = "SELECT focusTime FROM user WHERE id = ?";
 
@@ -110,7 +110,7 @@ public class UserDAO implements IUserDAO {
             ResultSet res = statement.executeQuery();
 
             if (res != null) {
-                return res.getInt("focusTime");
+                return res.getLong("focusTime");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -135,6 +135,25 @@ public class UserDAO implements IUserDAO {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    @Override
+    public boolean changePassword(int id, String newPassword) {
+        try {
+            String query = "UPDATE user SET password = ? WHERE id = ?";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setString(1, newPassword);
+            statement.setInt(2, id);
+
+            if (statement.executeUpdate() == 1) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override

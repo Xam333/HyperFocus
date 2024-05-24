@@ -6,10 +6,11 @@ public class User {
     private int id;
     private String userName;
     private boolean parentalLock;
-    private int totalFocusTime;
+    private long totalFocusTime;
 
-    public User(String userName, int totaFocusTime) {
+    public User(String userName, long totaFocusTime) {
         this.userName = userName;
+        this.totalFocusTime = totaFocusTime;
     }
 
     public int getId() {
@@ -36,11 +37,11 @@ public class User {
         this.parentalLock = parentalLock;
     }
 
-    public int getTotalFocusTime() {
+    public long getTotalFocusTime() {
         return totalFocusTime;
     }
 
-    public void setTotalFocusTime(int totalFocusTime) {
+    public void setTotalFocusTime(long totalFocusTime) {
         this.totalFocusTime = totalFocusTime;
     }
 }
