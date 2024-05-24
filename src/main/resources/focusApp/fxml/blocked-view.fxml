@@ -1,481 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.layout.StackPane?>
-<?import com.sun.javafx.charts.Legend?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.PasswordField?>
-<?import org.controlsfx.control.ToggleSwitch?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.collections.FXCollections?>
-<?import javafx.scene.shape.Rectangle?>
-<?import java.lang.String?>
-<?import javafx.scene.control.Slider?>
-<AnchorPane maxHeight="-Infinity"
-            maxWidth="-Infinity"
-            minHeight="-Infinity"
-            minWidth="-Infinity"
-            prefHeight="600.0"
-            prefWidth="390.0"
-            xmlns="http://javafx.com/javafx/17.0.6"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="focusApp.controllers.BlockedController">
-
-    <!-- NAV BAR -->
-    <HBox alignment="CENTER"
-          prefHeight="75.0"
-          prefWidth="390.0"
-          spacing="5.0"
-          styleClass="navBox">
-
-        <!-- To Previous Page -->
-        <!-- This should call a side menu -->
-        <Pane minHeight="75.0">
-            <VBox layoutY="17">
-                <Button onAction="#toggleMenu"
-                        styleClass="navButton">
-                    <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                            <Image url="@../images/menuIcon.png" />
-                        </ImageView>
-                    </graphic>
-                </Button>
-            </VBox>
-        </Pane>
-
-        <Region HBox.hgrow="ALWAYS" />
-
-        <!-- Page Title -->
-        <Label styleClass="navLabel"
-               text="Blocked Apps"
-               textAlignment="CENTER" />
-
-        <Region HBox.hgrow="ALWAYS" />
-
-        <!-- remove account page thingy -->
-        <!-- To Account Page -->
-        <Button fx:id="accountButton"
-                onAction="#onAccountButtonClick"
-                styleClass="accountButton">
-            <graphic>
-                <ImageView fitHeight="40.0"
-                           fitWidth="40.0"
-                           pickOnBounds="true"
-                           preserveRatio="true">
-                    <Image url="@../images/userIcon.png" />
-                </ImageView>
-            </graphic>
-        </Button>
-    </HBox>
-
-
-    <!-- ADD WEBSITE, APPLICATION BUTTONS -->
-    <VBox layoutX="55.0" layoutY="113.0" prefHeight="467.0" prefWidth="280.0" spacing="20.0">
-        <HBox alignment="CENTER" prefHeight="40.0" prefWidth="280.0" spacing="10.0">
-            <Button styleClass="defaultButton" onAction="#onWebsiteButtonClick" text="Website +" />
-            <Button styleClass="defaultButton" onAction="#onApplicationButtonClick" text="Application +" />
-        </HBox>
-
-        <!-- TABLE LAYOUT -->
-        <VBox prefHeight="300.0" prefWidth="280.0">
-            <Label styleClass="bodyLabel" text="Blocked Applications:" />
-            <TableView fx:id="tableView" styleClass="blockedTableView">
-                <columns>
-                    <TableColumn fx:id="iconColumn" maxWidth="50" minWidth="50" prefWidth="50" styleClass="blockedTableColumn" text=" " />
-                    <TableColumn fx:id="nameColumn" maxWidth="100" minWidth="70" prefWidth="81" styleClass="blockedTableColumn" text="Name" />
-                    <TableColumn fx:id="locationColumn" maxWidth="150" minWidth="120" prefWidth="144" styleClass="blockedTableColumn" text="Web/File Link" />
-                </columns>
-            </TableView>
-            <VBox.margin>
-                <Insets bottom="20.0" />
-            </VBox.margin>
-        </VBox>
-
-        <!-- CANCEL, SAVE BUTTONS -->
-        <HBox alignment="BOTTOM_CENTER" prefHeight="40.0" prefWidth="280.0" spacing="10.0">
-            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancelButtonClick" styleClass="smallSecondaryButton" text="CANCEL"/>
-            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#onSaveButtonClick" styleClass="smallPrimaryButton" text="SAVE" />
-        </HBox>
-    </VBox>
-
-    <!-- SIDE MENU -->
-    <StackPane fx:id="menuStackPane"
-               layoutY="74.9"
-               prefHeight="525.0"
-               prefWidth="300.0"
-               styleClass="menuPane"
-               visible="false">
-
-        <VBox>
-            <!--Account Information-->
-            <VBox>
-                <Button onAction="#onAccountButtonClick"
-                        styleClass="menuButton">
-                    <graphic>
-                        <HBox alignment="CENTER_LEFT">
-                            <Region prefWidth="15.0" />
-                            <Label prefWidth="30.0" styleClass="navLabel" text="👤" textAlignment="CENTER" />
-                            <Region prefWidth="10.0" />
-                            <Label styleClass="navLabel" text="Account Information" textAlignment="CENTER" />
-                        </HBox>
-                    </graphic>
-                </Button>
-
-                <!-- Drop down account information -->
-                <VBox fx:id="accountInformationSection" visible="false" managed="false">
-                    <Region prefHeight="10.0"/>
-                    <HBox>
-                        <Region prefWidth="50.0"/>
-                        <VBox>
-                            <!-- Total time focused -->
-                            <HBox>
-                                <Label styleClass="settingLabel" text="Total Time Focused:  " textAlignment="CENTER" wrapText="true"/>
-
-                                <!-- This label should be changed depending on time focused stored in db-->
-                                <Label fx:id="totalTimeFocused" styleClass="settingLabel" text="temp" textAlignment="CENTER" wrapText="true"/>
-                            </HBox>
-                            <Region prefHeight="10.0"/>
-
-                            <!-- USERNAME -->
-                            <Label fx:id="userNameLabel" styleClass="settingLabel" text="User Name:" textAlignment="CENTER" wrapText="true"/>
-                            <TextField fx:id="userNameTextField" styleClass="textBox" text="Place Holder" editable="false" prefWidth="210.0"/>
-                            <Region prefHeight="10.0"/>
-                            <Button fx:id="editUserNameButton" mnemonicParsing="false" onAction="#onEditUserNameButtonClick" minWidth="210.0" styleClass="settingButton" text="EDIT" textAlignment="CENTER"/>
-                            <Region prefHeight="10.0"/>
-
-                            <!-- PASSWORD -->
-                            <Label fx:id="passwordLabel" styleClass="settingLabel" text="Password:" textAlignment="CENTER" wrapText="true"/>
-                            <PasswordField fx:id="passwordTextField" styleClass="textBox" text="Place Holder" editable="false" prefWidth="210.0"/>
-                            <Region prefHeight="10.0"/>
-                            <Button fx:id="editPasswordButton" mnemonicParsing="false" onAction="#onEditPasswordButtonClick" minWidth="210.0" styleClass="settingButton" text="EDIT" textAlignment="CENTER"/>
-                            <Region prefHeight="10.0"/>
-                            <Label fx:id="accountError" styleClass="warningLabel" textAlignment="CENTER" wrapText="true" maxHeight="0" managed="false"/>
-                        </VBox>
-                        <Region prefWidth="15.0"/>
-                    </HBox>
-                    <Region prefHeight="10.0"/>
-                </VBox>
-            </VBox>
-
-
-
-            <!--Parental Controls-->
-            <VBox>
-                <Button fx:id="parentalControlsButton" onAction="#onParentalControlsButtonClick" styleClass="menuButton">
-                    <graphic>
-                        <HBox alignment="CENTER_LEFT">
-                            <Region prefWidth="15.0" />
-                            <Label prefWidth="30.0" styleClass="navLabel" text="👨‍👩‍👦" textAlignment="CENTER" />
-                            <Region prefWidth="10.0" />
-                            <Label styleClass="navLabel" text="Parental Controls" textAlignment="CENTER" />
-                        </HBox>
-                    </graphic>
-                </Button>
-
-                <!-- Drop down parental controls -->
-                <VBox fx:id="parentalControlsSection" visible="false" managed="false">
-                    <Region prefHeight="10.0"/>
-                    <HBox>
-                        <Region prefWidth="50.0"/>
-                        <VBox>
-                            <HBox alignment="CENTER"
-                                  prefWidth="210.0">
-                                <Label styleClass="settingLabel" text="Toggle controls" wrapText="true"/>
-                                <Region HBox.hgrow="ALWAYS"/>
-                                <ToggleSwitch fx:id="parentalControlToggleButton" styleClass="toggleButton"/>
-                            </HBox>
-                        </VBox>
-                        <Region prefWidth="15.0" />
-                    </HBox>
-                    <Region prefHeight="10.0"/>
-                </VBox>
-            </VBox>
-
-            <!--Colour Settings-->
-            <VBox>
-                <Button fx:id="colourSettingsButton" onAction="#onColourSettingsButtonClick" styleClass="menuButton">
-                    <graphic>
-                        <HBox alignment="CENTER_LEFT">
-                            <Region prefWidth="15.0" />
-                            <Label prefWidth="30.0" styleClass="navLabel" text="🎨" textAlignment="CENTER" />
-                            <Region prefWidth="10.0" />
-                            <Label styleClass="navLabel" text="Colour Settings" textAlignment="CENTER" />
-                        </HBox>
-                    </graphic>
-                </Button>
-
-                <!-- Drop down colour settings -->
-                <VBox fx:id="colourSettingsSection"
-                      visible="false"
-                      managed="false">
-                    <Region prefHeight="10.0"/>
-                    <HBox>
-                        <Region prefWidth="50.0"/>
-
-                        <VBox>
-                            <Label styleClass="settingLabel" text="Current palette:"/>
-                            <ComboBox fx:id="colourOptionsButton" styleClass="defaultButton" minWidth="210.0">
-                                <items>
-                                    <FXCollections fx:factory="observableArrayList">
-                                        <HBox fx:id="defaultPalette">
-                                            <HBox maxWidth="60.0" maxHeight="20.0" style="-fx-border-color: #000000">
-                                                <Rectangle width="20" height="20" fill="#4382BF"/>
-                                                <Rectangle width="20" height="20" fill="#59ADFF"/>
-                                                <Rectangle width="20" height="20" fill="#E6F9FF"/>
-                                            </HBox>
-                                            <Region prefWidth="10.0"/>
-                                            <Label styleClass="listLabel" text="Default" />
-                                        </HBox>
-                                        <HBox fx:id="greyScalePalette">
-                                            <HBox maxWidth="60.0" maxHeight="20.0" style="-fx-border-color: #000000">
-                                                <Rectangle width="20" height="20" fill="#202020" />
-                                                <Rectangle width="20" height="20" fill="#808080" />
-                                                <Rectangle width="20" height="20" fill="#F8F8F8" />
-                                            </HBox>
-                                            <Region prefWidth="10.0"/>
-                                            <Label styleClass="listLabel" text="Grey Scale" />
-                                        </HBox>
-                                        <HBox fx:id="redPalette">
-                                            <HBox maxWidth="60.0" maxHeight="20.0" style="-fx-border-color: #000000">
-                                                <Rectangle width="20" height="20" fill="#BF4343" />
-                                                <Rectangle width="20" height="20" fill="#FF5959" />
-                                                <Rectangle width="20" height="20" fill="#FFE6E6" />
-                                            </HBox>
-                                            <Region prefWidth="10.0"/>
-                                            <Label styleClass="listLabel" text="Red" />
-                                        </HBox>
-                                    </FXCollections>
-                                </items>
-                            </ComboBox>
-                            <Region prefWidth="15.0"/>
-                        </VBox>
-                    </HBox>
-                    <Region prefHeight="10.0"/>
-                </VBox>
-            </VBox>
-
-            <!--Sound Settings-->
-            <VBox>
-                <Button fx:id="soundSettingsButton" onAction="#onSoundSettingsButtonClick" styleClass="menuButton">
-                    <graphic>
-                        <HBox alignment="CENTER_LEFT">
-                            <Region prefWidth="15.0" />
-                            <Label prefWidth="30.0" styleClass="navLabel" text="🔊" textAlignment="CENTER" />
-                            <Region prefWidth="10.0" />
-                            <Label styleClass="navLabel" text="Sound Settings" textAlignment="CENTER" />
-                        </HBox>
-                    </graphic>
-                </Button>
-
-                <!-- Drop down sound settings -->
-                <VBox fx:id="soundSettingsSection" managed="false" visible="false">
-                    <Region prefHeight="10.0"/>
-                    <HBox>
-                        <Region prefWidth="50.0"/>
-                        <VBox>
-                            <Label styleClass="settingLabel" text="Alarm sound"/>
-                            <ComboBox fx:id="soundOptionsButton" styleClass="defaultButton" minWidth="210.0">
-                                <items>
-                                    <FXCollections fx:factory="observableArrayList">
-                                        <String fx:value="Default"/>
-                                        <String fx:value="Audio 2"/>
-                                    </FXCollections>
-                                </items>
-                            </ComboBox>
-                            <Region prefHeight="10.0"/>
-                            <Label styleClass="settingLabel" text="Volume"/>
-                            <Slider fx:id="volumeSlider" majorTickUnit="50.0" prefWidth="210.0" styleClass="timerSlider" />
-                        </VBox>
-                        <Region prefWidth="15.0"/>
-                    </HBox>
-                    <Region prefHeight="10.0"/>
-                </VBox>
-            </VBox>
-            <VBox>
-                <Button onAction="#onLogOutButton"
-                        styleClass="menuButton">
-                    <graphic>
-                        <HBox alignment="CENTER_LEFT">
-                            <Region prefWidth="15.0" />
-                            <Label prefWidth="30.0" styleClass="navLabel" text="⬅" textAlignment="CENTER" />
-                            <Region prefWidth="10.0" />
-                            <Label styleClass="navLabel" text="Log Out" textAlignment="CENTER" />
-                        </HBox>
-                    </graphic>
-                </Button>
-            </VBox>
-        </VBox>
-    </StackPane>
-
-    <!-- BLACK OUT PANE -->
-    <StackPane fx:id="blackOutStackPane"
-               prefHeight="600.0"
-               prefWidth="390.0"
-               styleClass="blackOutPane"
-               visible="false">
-    </StackPane>
-
-    <!-- CANCEL CONFIRMATION -->
-    <StackPane fx:id="confirmCancelStackPane"
-               layoutY="225.0"
-               layoutX="55.0"
-               styleClass="confirmPane"
-               visible="false">
-        <VBox alignment="TOP_CENTER">
-            <padding>
-                <Insets top="25.0"/>
-            </padding>
-            <Label styleClass="bodyLabel" text="Are you sure you want to leave without saving?" textAlignment="CENTER" wrapText="true"/>
-        </VBox>
-        <HBox alignment="BOTTOM_CENTER">
-            <Region prefWidth="35.0" />
-            <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#onConfirmButtonClick" styleClass="tinySecondaryButton" text="YES" textAlignment="CENTER"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Button fx:id="abortButton" mnemonicParsing="false" onAction="#onAbortButtonClick" styleClass="tinyPrimaryButton" text="NO" textAlignment="CENTER"/>
-            <Region prefWidth="35.0" />
-            <padding>
-                <Insets bottom="25.0"/>
-            </padding>
-        </HBox>
-    </StackPane>
-
-    <!-- ADD WEBSITE PANE -->
-    <StackPane fx:id="addWebsiteStackPane"
-               layoutY="225.0"
-               layoutX="55.0"
-               styleClass="confirmPane"
-               visible="false">
-        <VBox>
-            <HBox alignment="TOP_RIGHT">
-                <Button mnemonicParsing="false" text="X" onAction="#onXLabelClick" styleClass="tinyXButton"/>
-            </HBox>
-            <VBox alignment="CENTER">
-                <Label styleClass="bodyLabel" text="Add a website to block list" textAlignment="CENTER" wrapText="true"/>
-
-                <HBox alignment="CENTER">
-                    <padding>
-                        <Insets top="7.0"/>
-                    </padding>
-                    <TextField fx:id="addWebsiteTextField" minWidth="230.0" styleClass="addBox" onKeyTyped="#websiteEntered" promptText="https://www.example.com"/>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="390.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.BlockedController">
+   <Pane>
+      <children>
+         <VBox spacing="20.0">
+            <children>
+            
+                <!-- NAV BAR -->
+                <HBox alignment="CENTER" prefHeight="60.0" prefWidth="390.0" spacing="80.0" styleClass="navBox">
+            
+                    <!-- Page Title -->
+                    <Label styleClass="navLabel" text="Blocked Apps" textAlignment="CENTER" />
                 </HBox>
-                <padding>
-                    <Insets bottom="10.0"/>
-                </padding>
-            </VBox>
-            <HBox>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Button fx:id="addWebButton" mnemonicParsing="false" onAction="#onAddButtonClick" styleClass="tinyPrimaryButton" text="ADD" textAlignment="CENTER" disable="true"/>
-                <Region prefWidth="20.0" />
-                <padding>
-                    <Insets bottom="7.0"/>
-                </padding>
-            </HBox>
-        </VBox>
-    </StackPane>
-
-    <!-- ADD APPLICATION PANE -->
-    <StackPane fx:id="addApplicationStackPane"
-               layoutY="225.0"
-               layoutX="55.0"
-               styleClass="confirmPane"
-               visible="false">
-        <VBox>
-            <HBox alignment="TOP_RIGHT">
-                <Button mnemonicParsing="false" text="X" onAction="#onXLabelClick" styleClass="tinyXButton"/>
-            </HBox>
-            <VBox alignment="CENTER">
-                <Label styleClass="bodyLabel" text="Add an application to block list" textAlignment="CENTER" wrapText="true"/>
-                <HBox alignment="CENTER">
-                    <padding>
-                        <Insets top="7.0"/>
-                    </padding>
-                    <TextField fx:id="addApplicationTextField" styleClass="addBox" promptText="Search file explorer" editable="false"/>
-                    <Button mnemonicParsing="false" textAlignment="RIGHT" text="FILE" onAction="#onFileClick"/>
-                </HBox>
-                <padding>
-                    <Insets bottom="10.0"/>
-                </padding>
-            </VBox>
-            <HBox>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Button fx:id="addAppButton" mnemonicParsing="false" onAction="#onAddButtonClick" styleClass="tinyPrimaryButton" text="ADD" textAlignment="CENTER" disable="true"/>
-                <Region prefWidth="20.0" />
-                <padding>
-                    <Insets bottom="7.0"/>
-                </padding>
-            </HBox>
-        </VBox>
-
-    </StackPane>
-
-    <!-- LOG OUT CONFIRMATION -->
-    <StackPane fx:id="confirmLogOutStackPane"
-               layoutY="225.0"
-               layoutX="55.0"
-               styleClass="confirmPane"
-               visible="false">
-        <VBox alignment="TOP_CENTER">
+               <HBox alignment="CENTER">
+                  <children>
+                  
+                  
+                      <!-- ADD WEBSITE, APPLICATION BUTTONS -->
+                      <VBox prefWidth="370.0" spacing="20.0">
+                          <HBox alignment="CENTER" prefHeight="40.0" prefWidth="280.0" spacing="10.0">
+                              <Button onAction="#onWebsiteButtonClick" styleClass="defaultButton" text="Website +" />
+                              <Button onAction="#onApplicationButtonClick" styleClass="defaultButton" text="Application +" />
+                          </HBox>
+                  
+                          <!-- TABLE LAYOUT -->
+                          <VBox prefHeight="300.0" prefWidth="370.0">
+                              <Label styleClass="bodyLabel" text="Blocked Applications:" />
+                              <TableView fx:id="tableView" styleClass="blockedTableView">
+                                  <columns>
+                                      <TableColumn fx:id="iconColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" resizable="false" styleClass="blockedTableColumn" text="Icon" />
+                                      <TableColumn fx:id="nameColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" resizable="false" styleClass="blockedTableColumn" text="Name" />
+                                      <TableColumn fx:id="locationColumn" maxWidth="198.0" minWidth="198.0" prefWidth="198.0" resizable="false" styleClass="blockedTableColumn" text="Web/File Link" />
+                                  </columns>
+                              </TableView>
+                              <VBox.margin>
+                                  <Insets bottom="10.0" />
+                              </VBox.margin>
+                          </VBox>
+                          <!-- CANCEL, SAVE BUTTONS -->
+                          <HBox alignment="BOTTOM_CENTER" prefHeight="40.0" prefWidth="280.0" spacing="10.0">
+                              <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancelButtonClick" styleClass="smallSecondaryButton" text="Cancel" />
+                              <Button fx:id="saveButton" mnemonicParsing="false" onAction="#onSaveButtonClick" styleClass="smallPrimaryButton" text="Save" />
+                          </HBox>
+                      </VBox>
+                  </children>
+               </HBox>
+            </children>
+         </VBox>
+          <!-- BLACK OUT PANE -->
+          <StackPane fx:id="blackOutStackPane" prefHeight="600.0" prefWidth="390.0" styleClass="blackOutPane" visible="false">
+          </StackPane>
+      
+           <!-- ADD APPLICATION PANE -->
+           <StackPane fx:id="addApplicationStackPane" layoutX="55.0" layoutY="200.0" styleClass="confirmPane" visible="false">
+               <VBox>
+                   <HBox alignment="TOP_RIGHT">
+                       <Button mnemonicParsing="false" onAction="#onXLabelClick" styleClass="tinyXButton" text="X" />
+                   </HBox>
+                   <VBox alignment="CENTER">
+                       <Label styleClass="bodyLabel" text="Add an application to block list" textAlignment="CENTER" wrapText="true" />
+                       <HBox alignment="CENTER" styleClass="ButtonControlIcon">
+                           <padding>
+                               <Insets top="7.0" />
+                           </padding>
+                           <TextField fx:id="addApplicationTextField" editable="false" prefHeight="92.0" prefWidth="185.0" promptText="Search file explorer" style="-fx-border-radius: 8px 0px 0px 8px;" styleClass="textBox" />
+                           <Button mnemonicParsing="false" onAction="#onFileClick" text="AddFile" textAlignment="RIGHT" />
+                       </HBox>
+                       <padding>
+                           <Insets bottom="10.0" />
+                       </padding>
+                   </VBox>
+                   <HBox alignment="TOP_RIGHT">
+                       <Button fx:id="addAppButton" defaultButton="true" disable="true" mnemonicParsing="false" onAction="#onAddButtonClick" styleClass="tinyPrimaryButton" text="Block" textAlignment="CENTER" />
+                   </HBox>
+               </VBox>
             <padding>
-                <Insets top="25.0"/>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </padding>
-            <Label styleClass="bodyLabel" text="Are you sure you want to log out?" textAlignment="CENTER" wrapText="true"/>
-        </VBox>
-        <HBox alignment="BOTTOM_CENTER">
-            <Region prefWidth="35.0" />
-            <Button fx:id="abortLogOutButton" mnemonicParsing="false" onAction="#onAbortLogOutButtonClick" styleClass="tinySecondaryButton" text="NO" textAlignment="CENTER"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Button fx:id="confirmLogOutButton" mnemonicParsing="false" onAction="#onConfirmLogOutButtonClick" styleClass="tinyPrimaryButton" text="YES" textAlignment="CENTER"/>
-            <Region prefWidth="35.0" />
-            <padding>
-                <Insets bottom="25.0"/>
-            </padding>
-        </HBox>
-    </StackPane>
+      
+           </StackPane>
 
-    <!-- PARENTAL CONTROLS PASSWORD ENTRY -->
-    <StackPane fx:id="turnOffParentalControlsStackPane"
-               layoutY="225.0"
-               layoutX="55.0"
-               minHeight="200.0"
-               styleClass="confirmPane"
-               visible="false">
-        <VBox>
-            <HBox alignment="TOP_RIGHT">
-                <Button mnemonicParsing="false" text="X" onAction="#onXLabelClick" styleClass="tinyXButton"/>
-            </HBox>
-            <VBox alignment="CENTER">
-                <Label styleClass="bodyLabel" text="Enter passcode to disable parental controls" textAlignment="CENTER" wrapText="true"/>
-                <HBox alignment="CENTER">
-                    <padding>
-                        <Insets top="15.0"/>
-                    </padding>
-                    <PasswordField fx:id="parentalControlsPasswordField" minWidth="230.0" styleClass="addBox" onKeyTyped="#passwordEntered" promptText="Password"/>
-                </HBox>
-                <padding>
-                    <Insets bottom="10.0"/>
-                </padding>
-                <Label fx:id="denyParentalControlsDisableLabel" styleClass="warningLabel" textAlignment="RIGHT" wrapText="true"/>
-            </VBox>
-            <HBox>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Button fx:id="confirmPasswordButton" mnemonicParsing="false" onAction="#onConfirmParentalControlsButtonClick" styleClass="tinyPrimaryButton" minWidth="100.0" text="CONFIRM" textAlignment="CENTER" disable="true"/>
-                <Region prefWidth="20.0" />
-                <padding>
-                    <Insets bottom="10.0"/>
-                </padding>
-            </HBox>
-        </VBox>
-    </StackPane>
+          <!-- ADD WEBSITE PANE -->
+           <StackPane fx:id="addWebsiteStackPane" layoutX="55.0" layoutY="200.0" styleClass="confirmPane" visible="false">
+               <VBox>
+                   <HBox alignment="TOP_RIGHT">
+                       <Button mnemonicParsing="false" onAction="#onXLabelClick" styleClass="tinyXButton" text="X" />
+                   </HBox>
+                   <VBox alignment="CENTER">
+                       <Label styleClass="bodyLabel" text="Add a website to block list" textAlignment="CENTER" wrapText="true" />
+      
+                       <HBox alignment="CENTER">
+                           <padding>
+                               <Insets top="7.0" />
+                           </padding>
+                           <TextField fx:id="addWebsiteTextField" minWidth="230.0" onKeyTyped="#websiteEntered" promptText="https://www.example.com" styleClass="textBox" />
+                       </HBox>
+                       <padding>
+                           <Insets bottom="10.0" />
+                       </padding>
+                   </VBox>
+                   <HBox alignment="TOP_RIGHT">
+                       <Button fx:id="addWebButton" disable="true" mnemonicParsing="false" onAction="#onAddButtonClick" prefHeight="56.0" prefWidth="112.0" styleClass="tinyPrimaryButton" text="Block" textAlignment="CENTER" />
+                   </HBox>
+               </VBox>
+            <padding>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding>
+           </StackPane>
+      </children>
+   </Pane>
 </AnchorPane>

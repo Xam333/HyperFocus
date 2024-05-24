@@ -5,61 +5,47 @@ import focusApp.database.UserDAO;
 import focusApp.models.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.io.Console;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import java.util.Objects;
-import java.util.ResourceBundle;
 
 import focusApp.database.Preset;
 import focusApp.database.PresetDAO;
 import org.controlsfx.control.ToggleSwitch;
 
-import java.util.ArrayList;
-
 public class MainController implements Initializable {
     public Button startButton;
     public Pane blockedApplicationPane;
     public StackPane menuStackPane;
-    public Button accountButton;
     public Button parentalControlsButton;
     public Button colourSettingsButton;
     public Button soundSettingsButton;
     public VBox parentalControlsSection;
-    public PasswordField parentalControlPasswordField;
     public VBox soundSettingsSection;
     public VBox colourSettingsSection;
     public Slider volumeSlider;
     public ComboBox soundOptionsButton;
-    public HBox defaultPalette;
-    public ComboBox colourOptionsButton;
-    public HBox greyScalePalette;
-    public HBox redPalette;
+
     public ToggleSwitch parentalControlToggleButton;
-    public VBox passwordSection;
     public PasswordField parentalControlsPasswordField;
     public Button confirmPasswordButtonParentalControls;
     public StackPane turnOffParentalControlsStackPane;
@@ -77,25 +63,9 @@ public class MainController implements Initializable {
     public Button abortButton;
     public Button confirmButton;
     public StackPane confirmLogOutStackPane;
-    private Boolean isMenuOpen = false;
-
-    private Boolean isPCOpen = false;
-    private Boolean isSSOpen = false;
-    private Boolean isCSOpen = false;
-    private Boolean isAIOpen = false;
 
 
-    @FXML
-    private Label startTimeLabel;
 
-    @FXML
-    private Label endTimeLabel;
-
-    @FXML
-    private Slider startTimeSlider;
-
-    @FXML
-    private Slider endTimeSlider;
 
     @FXML
     private ComboBox presetsButton;
@@ -168,19 +138,29 @@ public class MainController implements Initializable {
         });
 
         // Initialise start and end time sliders
-        startTimeSlider();
-        endTimeSlider();
+        setSlider(OffsetSlider, OffsetLabel, TimeID.StartTime);
+        setSlider(DurationSlider, DurationLabel, TimeID.EndTime);
 
         /* update the blocked list */
         // Get preset name
         String presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
         updateBlockList(presetName);
 
-        // Display a sound name in combo box
-        soundOptionsButton.getSelectionModel().selectFirst();
+        // Check if there is a saved value for the alarm, if not display alarm1.
+        if (SelectedSound == null){
+            soundOptionsButton.getSelectionModel().selectFirst();
+        } else {
+            soundOptionsButton.getSelectionModel().select(SelectedSound);
+        }
+        // Check if there is a value for the volume.
+        if (SelectedVolume != null){
+            volumeSlider.setValue(SelectedVolume);
+        }
 
-        // Display a colour in combo box
-        colourOptionsButton.getSelectionModel().selectFirst();
+        // Load a new instance of the colour control class.
+        ColourPalette = new ColourControl();
+        setColourPalette();
+
 
         // Only show enter passcode if parental controls is being turned off
         parentalControlToggleButton.selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
@@ -200,27 +180,90 @@ public class MainController implements Initializable {
         userNameTextField.setText(user.getUserName());
         /* update total focus time */
         long time = user.getTotalFocusTime();
-        totalTimeFocused.setText(String.format("%d:%d:%d", time / 3600, (time % 3600) / 60, time % 60));
+        totalTimeFocused.setText(String.format("%02d:%02d:%02d", time / 3600, (time % 3600) / 60, time % 60));
         /* set the parental lock button */
         parentalControlToggleButton.setSelected(user.getParentalLcok());
     }
+    private static Object SelectedSound;
+    private static Double SelectedVolume;
+    private static ColourControl ColourPalette;
 
+    @FXML
+    private ColorPicker PrimaryColour;
+    @FXML
+    private ColorPicker SecondaryColour;
+    @FXML
+    private ColorPicker TertiaryColour;
+    @FXML
+    private ColorPicker BackgroundColour;
+    private void setColourPalette(){
+        HashMap<ColourPaletteKeys, ColorPicker> PaletteFormat =  getColourPaletteFormat();
+        for(ColourPaletteKeys PaletteKey : ColourPaletteKeys.values()){
+            if (PaletteFormat.containsKey(PaletteKey) && ColourPalette.getCurrentColourPalette().containsKey(PaletteKey)){
+                Color LoadedColour = ColourPalette.getCurrentColourPalette().get(PaletteKey);
+                PaletteFormat.get(PaletteKey).setValue(LoadedColour);
+            }
+        }
+    }
+    @FXML
+    private void onColourPicker() {
+        ColourPalette.LoadColourPalette(getAllColours());
+        setColourPalette();
+    }
+    @FXML
+    private void onDefaultButton(){
+        ColourPalette.LoadDefaultColourPalette();
+        setColourPalette();
+    }
+    private HashMap<ColourPaletteKeys, ColorPicker> getColourPaletteFormat(){
+        return new HashMap<>() {{
+            put(ColourPaletteKeys.Primary, PrimaryColour);
+            put(ColourPaletteKeys.Secondary, SecondaryColour);
+            put(ColourPaletteKeys.Tertiary, TertiaryColour);
+            put(ColourPaletteKeys.Background, BackgroundColour);
+        }};
+    }
+    private HashMap<ColourPaletteKeys, Color> getAllColours(){
+        return new HashMap<>(){{
+            put(ColourPaletteKeys.Primary, PrimaryColour.getValue());
+            put(ColourPaletteKeys.Secondary, SecondaryColour.getValue());
+            put(ColourPaletteKeys.Tertiary, TertiaryColour.getValue());
+            put(ColourPaletteKeys.Background, BackgroundColour.getValue());
+        }};
+    }
 
+    private enum TimeID{
+        StartTime, EndTime
+    }
 
-    /**
-     * Initialises start time slider and listens for updates
-     */
-    public void startTimeSlider() {
+    @FXML
+    private Label OffsetLabel;
+
+    @FXML
+    private Label DurationLabel;
+
+    @FXML
+    private Slider OffsetSlider;
+
+    @FXML
+    private Slider DurationSlider;
+
+    public void setSlider(Slider TimerSlider, Label SliderLabel, TimeID TID) {
         // Listen for changes to the slider and update the label
-        startTimeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+        TimerSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             int totalMinutes = newVal.intValue();  // Convert slider value to int
-            this.startTime = totalMinutes;
+
+            switch (TID){
+                case StartTime -> startTime = totalMinutes;
+                case EndTime -> endTime = totalMinutes;
+            }
+
             int hours = totalMinutes / 60;  // Get full hours
             int minutes = totalMinutes % 60;  // Get remaining minutes
 
             // Build the formatted time string
             String formattedTime;
-            if (totalMinutes == 0) {
+            if (totalMinutes == 0 && TimerSlider == OffsetSlider) {
                 formattedTime = "Now";
             }
             else if (hours > 0) {
@@ -231,47 +274,19 @@ public class MainController implements Initializable {
                 formattedTime = String.format("%d Minute%s", minutes, minutes > 1 ? "s" : "");
             }
 
-            startTimeLabel.setText(formattedTime);  // Update the label with the formatted time
+            SliderLabel.setText(formattedTime);  // Update the label with the formatted time
 
             // Calculate percentage of the slider position
-            double percentage = newVal.doubleValue() / startTimeSlider.getMax();
+            double percentage = newVal.doubleValue() / TimerSlider.getMax();
 
             // Set inline CSS for the track color
-            String trackColor = String.format("-fx-background-color: linear-gradient(to right, #59ADFF %f%%, white %f%%);", percentage * 100, percentage * 100);
-            startTimeSlider.lookup(".track").setStyle(trackColor);
+            String[] CalledColours = ColourPalette.getHexFromPalette(ColourPaletteKeys.Primary, ColourPaletteKeys.Background);
+            String trackColor = String.format("-fx-background-color: linear-gradient(to right, " + CalledColours[0] + " %f%%, " + CalledColours[1] + " %f%%);", percentage * 100, percentage * 100);
+            TimerSlider.lookup(".track").setStyle(trackColor);
         });
     }
 
-    /**
-     * Initialises end time slider and listens for updates
-     */
-    public void endTimeSlider() {
-        endTimeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-            int totalMinutes = newVal.intValue();  // Convert slider value to int
-            this.endTime = totalMinutes;
-            int hours = totalMinutes / 60;  // Get full hours
-            int minutes = totalMinutes % 60;  // Get remaining minutes
 
-            // Build the formatted time string
-            String formattedTime;
-            if (hours > 0) {
-                formattedTime = String.format("%d Hour%s %d Minute%s",
-                        hours, hours > 1 ? "s" : "",
-                        minutes, minutes > 1 ? "s" : "");
-            } else {
-                formattedTime = String.format("%d Minute%s", minutes, minutes > 1 ? "s" : "");
-            }
-
-            endTimeLabel.setText(formattedTime);  // Update the label with the formatted time
-
-            // Calculate percentage of the slider position
-            double percentage = newVal.doubleValue() / endTimeSlider.getMax();
-
-            // Set inline CSS for the track color
-            String trackColor = String.format("-fx-background-color: linear-gradient(to right, #59ADFF %f%%, white %f%%);", percentage * 100, percentage * 100);
-            endTimeSlider.lookup(".track").setStyle(trackColor);
-        });
-    }
 
     public void loadPresets() {
         ArrayList<String> presetNames = new ArrayList<>();
@@ -471,20 +486,24 @@ public class MainController implements Initializable {
     /**
      * Opens blocked applications page
      */
-    public void onBlockedApplicationsPaneClick(MouseEvent mouseEvent) throws IOException {
+    public void onBlockedApplicationsPaneClick() throws IOException {
         Stage stage = (Stage) blockedApplicationPane.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/blocked-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
 
         // Set scene stylesheet
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        if (UserConfig.FindCSSFile()){
+            scene.getStylesheets().add(UserConfig.getCSSFilePath().toUri().toString());
+        } else {
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        }
         stage.setScene(scene);
     }
 
     /**
      * Starts timer with specified start and end times
      */
-    public void onStartButtonClick(ActionEvent actionEvent) throws IOException {
+    public void onStartButtonClick() throws IOException {
         Stage stage = (Stage) startButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/timer-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
@@ -492,142 +511,72 @@ public class MainController implements Initializable {
         // Get the controller of the loaded scene
         TimerController timerController = fxmlLoader.getController();
 
-        // Pass the start time and end time to the timer controller
-        timerController.initialize(startTime, endTime);
+        // Pass the start time and end time to the timer controller and the Notification alarm.
+        timerController.initialize(startTime, endTime, new Notification(soundOptionsButton.getValue().toString(), (float) volumeSlider.getValue()));
+
+        // Remember the Alarm and the volume level that was chosen.
+        SelectedSound = soundOptionsButton.getSelectionModel().getSelectedItem();
+        SelectedVolume = volumeSlider.getValue();
 
         // Set scene stylesheet
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        if (UserConfig.FindCSSFile()){
+            scene.getStylesheets().add(UserConfig.getCSSFilePath().toUri().toString());
+        } else {
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        }
         stage.setScene(scene);
     }
 
+    private boolean SideMenuOpen = false;
     /**
      * Toggle side menu (visible or not visible)
      */
     @FXML
     private void toggleMenu() {
-        if (isMenuOpen) {
-            // Close the menu
-            menuStackPane.setVisible(false);
-            isMenuOpen = false;
-        } else {
-            // Open the menu
-            menuStackPane.setVisible(true);
-            isMenuOpen = true;
-        }
+        // Open and Close the menu.
+        UpdateSideMenu(!SideMenuOpen);
+    }
+    private void UpdateSideMenu(boolean Control){
+        menuStackPane.setVisible(Control);
+        SideMenuOpen = Control;
     }
 
-
-    public void onAccountButtonClick(ActionEvent actionEvent) throws IOException {
-        if (isAIOpen) {
-            // Close the menu
-            accountInformationSection.setManaged(false);
-            accountInformationSection.setVisible(false);
-            isAIOpen = false;
-        } else {
-            // Open the menu
-            accountInformationSection.setManaged(true);
-            accountInformationSection.setVisible(true);
-            isAIOpen = true;
-
-            // Close all other menus
-            parentalControlsSection.setManaged(false);
-            parentalControlsSection.setVisible(false);
-            isPCOpen = false;
-
-            colourSettingsSection.setManaged(false);
-            colourSettingsSection.setVisible(false);
-            isCSOpen = false;
-
-            soundSettingsSection.setManaged(false);
-            soundSettingsSection.setVisible(false);
-            isSSOpen = false;
-        }
+    /**
+     * Stores what side menu item is open.
+     */
+    private MenuAttribute MenuItemOpened = null;
+    private enum MenuAttribute{
+        AccountInformation, ParentalControls, ColourSettings, SoundSettings
     }
-
-    public void onParentalControlsButtonClick(ActionEvent actionEvent) throws IOException {
-
-        if (isPCOpen) {
-            // Close the menu
-            parentalControlsSection.setManaged(false);
-            parentalControlsSection.setVisible(false);
-            isPCOpen = false;
-        } else {
-            // Open the menu
-            parentalControlsSection.setManaged(true);
-            parentalControlsSection.setVisible(true);
-            isPCOpen = true;
-
-            // Close all other menus
-            accountInformationSection.setManaged(false);
-            accountInformationSection.setVisible(false);
-            isAIOpen = false;
-
-            colourSettingsSection.setManaged(false);
-            colourSettingsSection.setVisible(false);
-            isCSOpen = false;
-
-            soundSettingsSection.setManaged(false);
-            soundSettingsSection.setVisible(false);
-            isSSOpen = false;
-        }
+    private void MenuControl(VBox Section, boolean Visible){
+        Section.setManaged(Visible);
+        Section.setVisible(Visible);
     }
+    private void MenuAttributeControl(MenuAttribute Attribute){
 
-    public void onColourSettingsButtonClick(ActionEvent actionEvent) throws IOException {
+        MenuControl(accountInformationSection, false);
+        MenuControl(parentalControlsSection, false);
+        MenuControl(colourSettingsSection, false);
+        MenuControl(soundSettingsSection, false);
 
-        if (isCSOpen) {
-            // Close the menu
-            colourSettingsSection.setManaged(false);
-            colourSettingsSection.setVisible(false);
-            isCSOpen = false;
-        } else {
-            // Open the menu
-            colourSettingsSection.setManaged(true);
-            colourSettingsSection.setVisible(true);
-            isCSOpen = true;
-
-            // Close all other menus
-            accountInformationSection.setManaged(false);
-            accountInformationSection.setVisible(false);
-            isAIOpen = false;
-
-            parentalControlsSection.setManaged(false);
-            parentalControlsSection.setVisible(false);
-            isPCOpen = false;
-
-            soundSettingsSection.setManaged(false);
-            soundSettingsSection.setVisible(false);
-            isSSOpen = false;
+        if (MenuItemOpened == Attribute){
+            MenuItemOpened = null;
+            return;
         }
 
-    }
+        MenuItemOpened = Attribute;
 
-    public void onSoundSettingsButtonClick(ActionEvent actionEvent) throws IOException {
-
-        if (isSSOpen) {
-            // Close the menu
-            soundSettingsSection.setManaged(false);
-            soundSettingsSection.setVisible(false);
-            isSSOpen = false;
-        } else {
-            // Open the menu
-            soundSettingsSection.setManaged(true);
-            soundSettingsSection.setVisible(true);
-            isSSOpen = true;
-
-            // Close all other menus
-            accountInformationSection.setManaged(false);
-            accountInformationSection.setVisible(false);
-            isAIOpen = false;
-
-            parentalControlsSection.setManaged(false);
-            parentalControlsSection.setVisible(false);
-            isPCOpen = false;
-
-            colourSettingsSection.setManaged(false);
-            colourSettingsSection.setVisible(false);
-            isCSOpen = false;
+        switch (Attribute) {
+            case AccountInformation -> MenuControl(accountInformationSection, true);
+            case ParentalControls -> MenuControl(parentalControlsSection, true);
+            case ColourSettings -> MenuControl(colourSettingsSection, true);
+            case SoundSettings -> MenuControl(soundSettingsSection, true);
         }
     }
+    public void onAccountButtonClick(){MenuAttributeControl(MenuAttribute.AccountInformation);}
+    public void onParentalControlsButtonClick(){MenuAttributeControl(MenuAttribute.ParentalControls);}
+    public void onColourSettingsButtonClick(){MenuAttributeControl(MenuAttribute.ColourSettings);}
+    public void onSoundSettingsButtonClick(){MenuAttributeControl(MenuAttribute.SoundSettings);}
 
     public void passwordEnteredParentalControls(KeyEvent keyEvent) {
         confirmPasswordButtonParentalControls.setDisable(false);
@@ -637,14 +586,14 @@ public class MainController implements Initializable {
         confirmPasswordButtonPasswordAuth.setDisable(false);
     }
 
-    public void onXLabelClickPasswordAuth(ActionEvent actionEvent) {
+    public void onXLabelClickPasswordAuth() {
         blackOutStackPane.setVisible(false);
         passwordAuthStackPane.setVisible(false);
         denyPasswordAuth.setText("");
         passwordAuth.clear();
     }
 
-    public void onXLabelClickParentalControls(ActionEvent actionEvent) {
+    public void onXLabelClickParentalControls() {
         parentalControlToggleButton.setSelected(true);
         blackOutStackPane.setVisible(false);
         turnOffParentalControlsStackPane.setVisible(false);
@@ -654,7 +603,7 @@ public class MainController implements Initializable {
 
 
 
-    public void onEditUserNameButtonClick(ActionEvent actionEvent) {
+    public void onEditUserNameButtonClick() {
         if (userNameTextField.isEditable()) {
             if (userDAO.updateName(user.getId(), userNameTextField.getText())) {
                 user.setUserName(userNameTextField.getText());
@@ -672,7 +621,7 @@ public class MainController implements Initializable {
         userNameTextField.setEditable(!userNameTextField.isEditable());
     }
 
-    public void onEditPasswordButtonClick(ActionEvent actionEvent) {
+    public void onEditPasswordButtonClick() {
         if (passwordTextField.isEditable()) {
             if (passwordTextField.getText().isEmpty()) {
                 accountError.setText("* Password must not be blank *");
@@ -690,29 +639,29 @@ public class MainController implements Initializable {
         }
     }
 
-    public void onLogOutButton(ActionEvent actionEvent) {
-        blackOutStackPane.setVisible(true);
-        confirmLogOutStackPane.setVisible(true);
+    private void ShowPane(boolean Display){
+        blackOutStackPane.setVisible(Display);
+        confirmLogOutStackPane.setVisible(Display);
     }
+    public void onLogOutButton() { ShowPane(true); }
+    public void onAbortButtonClick(){ ShowPane(false); }
 
-    public void onAbortButtonClick(ActionEvent actionEvent) {
-        blackOutStackPane.setVisible(false);
-        confirmLogOutStackPane.setVisible(false);
-    }
-
-    public void onConfirmLogOutButtonClick(ActionEvent actionEvent) throws IOException {
+    public void onConfirmLogOutButtonClick() throws IOException {
         Stage stage = (Stage) confirmButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
 
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        if (UserConfig.FindCSSFile()){
+            scene.getStylesheets().add(UserConfig.getCSSFilePath().toUri().toString());
+        } else {
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        }
         stage.setScene(scene);
     }
 
-    public void onPasswordAuthenticationCheck(ActionEvent actionEvent) {
+    public void onPasswordAuthenticationCheck() {
         // Check if password is correct
         User login_user = userDAO.login(user.getUserName(), passwordAuth.getText());
-        System.out.println(passwordAuth.getText());
 
         /* if user != null then login successful and user class returned */
         if (!Objects.equals(login_user, null)){
@@ -733,13 +682,14 @@ public class MainController implements Initializable {
         }
     }
 
-    public void onConfirmParentalControlsButtonClick(ActionEvent actionEvent) {
+    public void onConfirmParentalControlsButtonClick() {
         // Check if password is correct
         User login_user = userDAO.login(user.getUserName(), parentalControlsPasswordField.getText());
 
         /* if user != null then login successful and user class returned */
         if (!Objects.equals(login_user, null)){
             parentalControlToggleButton.setSelected(false);
+
             blackOutStackPane.setVisible(false);
             turnOffParentalControlsStackPane.setVisible(false);
             denyParentalControlsDisableLabel.setText("");
