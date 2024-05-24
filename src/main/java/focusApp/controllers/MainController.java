@@ -61,7 +61,7 @@ public class MainController implements Initializable {
     public ToggleSwitch parentalControlToggleButton;
     public VBox passwordSection;
     public PasswordField parentalControlsPasswordField;
-    public Button confirmPasswordButton;
+    public Button confirmPasswordButtonParentalControls;
     public StackPane turnOffParentalControlsStackPane;
     public StackPane blackOutStackPane;
     public Label denyParentalControlsDisableLabel;
@@ -102,6 +102,18 @@ public class MainController implements Initializable {
 
     @FXML
     private GridPane blockedIcons;
+
+    @FXML
+    private PasswordField passwordAuth;
+
+    @FXML
+    private Label denyPasswordAuth;
+
+    @FXML
+    private StackPane passwordAuthStackPane;
+
+    @FXML
+    private Button confirmPasswordButtonPasswordAuth;
 
     public int startTime;
     public int endTime;
@@ -179,13 +191,18 @@ public class MainController implements Initializable {
             } else{
                 blackOutStackPane.setVisible(false);
                 turnOffParentalControlsStackPane.setVisible(false);
+                /* sets parental lock */
+                user.setParentalLock(true);
             }
         });
 
         /* update user name text */
         userNameTextField.setText(user.getUserName());
         /* update total focus time */
-        totalTimeFocused.setText(Integer.toString(user.getTotalFocusTime()));
+        long time = user.getTotalFocusTime();
+        totalTimeFocused.setText(String.format("%d:%d:%d", time / 3600, (time % 3600) / 60, time % 60));
+        /* set the parental lock button */
+        parentalControlToggleButton.setSelected(user.getParentalLcok());
     }
 
 
@@ -612,11 +629,22 @@ public class MainController implements Initializable {
         }
     }
 
-    public void passwordEntered(KeyEvent keyEvent) {
-        confirmPasswordButton.setDisable(false);
+    public void passwordEnteredParentalControls(KeyEvent keyEvent) {
+        confirmPasswordButtonParentalControls.setDisable(false);
     }
 
-    public void onXLabelClick(ActionEvent actionEvent) {
+    public void passwordEnteredPasswordAuth(KeyEvent keyEvent) {
+        confirmPasswordButtonPasswordAuth.setDisable(false);
+    }
+
+    public void onXLabelClickPasswordAuth(ActionEvent actionEvent) {
+        blackOutStackPane.setVisible(false);
+        passwordAuthStackPane.setVisible(false);
+        denyPasswordAuth.setText("");
+        passwordAuth.clear();
+    }
+
+    public void onXLabelClickParentalControls(ActionEvent actionEvent) {
         parentalControlToggleButton.setSelected(true);
         blackOutStackPane.setVisible(false);
         turnOffParentalControlsStackPane.setVisible(false);
@@ -630,7 +658,6 @@ public class MainController implements Initializable {
         if (userNameTextField.isEditable()) {
             if (userDAO.updateName(user.getId(), userNameTextField.getText())) {
                 user.setUserName(userNameTextField.getText());
-                userHolder.setUser(user);
                 accountError.setText("");
                 accountError.setManaged(false);
             } else {
@@ -646,7 +673,21 @@ public class MainController implements Initializable {
     }
 
     public void onEditPasswordButtonClick(ActionEvent actionEvent) {
-        passwordTextField.setEditable(!passwordTextField.isEditable());
+        if (passwordTextField.isEditable()) {
+            if (passwordTextField.getText().isEmpty()) {
+                accountError.setText("* Password must not be blank *");
+                accountError.setManaged(true);
+                return;
+            }
+            blackOutStackPane.setVisible(true);
+            passwordAuthStackPane.setVisible(true);
+            accountError.setText("");
+            accountError.setManaged(false);
+        } else {
+            passwordTextField.clear();
+            passwordTextField.setEditable(true);
+            editPasswordButton.setText("SAVE");
+        }
     }
 
     public void onLogOutButton(ActionEvent actionEvent) {
@@ -668,20 +709,44 @@ public class MainController implements Initializable {
         stage.setScene(scene);
     }
 
+    public void onPasswordAuthenticationCheck(ActionEvent actionEvent) {
+        // Check if password is correct
+        User login_user = userDAO.login(user.getUserName(), passwordAuth.getText());
+        System.out.println(passwordAuth.getText());
+
+        /* if user != null then login successful and user class returned */
+        if (!Objects.equals(login_user, null)){
+            /* update password */
+            if (userDAO.changePassword(user.getId(), passwordTextField.getText())) {
+                blackOutStackPane.setVisible(false);
+                passwordAuthStackPane.setVisible(false);
+                denyPasswordAuth.setText("");
+                passwordAuth.clear();
+                passwordTextField.setText("Place holder");
+                editPasswordButton.setText("EDIT");
+                passwordTextField.setEditable(false);
+            } else {
+                denyPasswordAuth.setText("* Something went wrong when updating password *");
+            }
+        } else {
+            denyPasswordAuth.setText("* Incorrect password. *");
+        }
+    }
+
     public void onConfirmParentalControlsButtonClick(ActionEvent actionEvent) {
         // Check if password is correct
         User login_user = userDAO.login(user.getUserName(), parentalControlsPasswordField.getText());
 
         /* if user != null then login successful and user class returned */
         if (!Objects.equals(login_user, null)){
-            user.setParentalLock(true);
             parentalControlToggleButton.setSelected(false);
             blackOutStackPane.setVisible(false);
             turnOffParentalControlsStackPane.setVisible(false);
             denyParentalControlsDisableLabel.setText("");
             parentalControlsPasswordField.clear();
-        } else {
+            /* disable the parental lock */
             user.setParentalLock(false);
+        } else {
             denyParentalControlsDisableLabel.setText("* Incorrect password. *");
         }
     }
