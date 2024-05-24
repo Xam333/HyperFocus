@@ -85,6 +85,9 @@ public class MainController implements Initializable {
     @FXML
     private Button confirmPasswordButtonPasswordAuth;
 
+    @FXML
+    private Label presetError;
+
     public int startTime;
     public int endTime;
 
@@ -129,7 +132,6 @@ public class MainController implements Initializable {
 
         loadPresets();
         presetsButton.getSelectionModel().selectFirst();
-        originalPresetName = presetsButton.getValue().toString();
 
         // Add listener to ComboBox editor property
         presetsButton.getEditor().textProperty().addListener((obs, oldVal, newVal) -> {
@@ -319,7 +321,9 @@ public class MainController implements Initializable {
         if (presetsButton.getSelectionModel().getSelectedItem() != null) {
             presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
         }
-        originalPresetName = presetName;
+        if (!presetsButton.isEditable()) {
+            originalPresetName = presetName;
+        }
 
         // Check if new preset or existing
         if (presetName.equals("New Preset +")) {
@@ -373,43 +377,64 @@ public class MainController implements Initializable {
     private void onEditButtonClick() {
         if (presetsButton.isEditable()) {
             // Save changes
-            saveEditedPresetName();
-            // Revert to edit icon
-            setButtonGraphic(editButton, editIcon, 30, 30);
+            if (saveEditedPresetName()) {
+                // Revert to edit icon
+                setButtonGraphic(editButton, editIcon, 30, 30);
+            }
         } else {
             // Enable editing
+            originalPresetName = presetsButton.getValue().toString();
             presetsButton.setEditable(true);
             presetsButton.requestFocus();
             // Change to tick icon
             setButtonGraphic(editButton, tickIcon, 30, 30);
+
+            ArrayList<String> presetNames = new ArrayList<>();
+            presetNames.add(presetsButton.getSelectionModel().getSelectedItem().toString());
+
+            ObservableList<String> presetsList = FXCollections.observableList(presetNames);
+            presetsButton.setItems(presetsList);
         }
     }
 
-    public void saveEditedPresetName() {
+    public boolean saveEditedPresetName() {
         // Check if ComboBox is editable
         if (presetsButton.isEditable()) {
-            // Get the index of the currently selected item
-            int selectedIndex = presetsButton.getSelectionModel().getSelectedIndex();
-
-            // Disable editing in the ComboBox
-            presetsButton.setEditable(false);
-
             // Update the database with the edited preset name
-            presetDAO.editPresetName(user.getId(), originalPresetName, newPresetName);
+            boolean res = presetDAO.editPresetName(user.getId(), originalPresetName, newPresetName);
 
-            // Reload presets
-            loadPresets();
-            presetsButton.getSelectionModel().select(selectedIndex);
+            /* check if new name was unique */
+            if (res) {
+                // Get the index of the currently selected item
+                int selectedIndex = presetsButton.getSelectionModel().getSelectedIndex();
+
+                // Disable editing in the ComboBox
+                presetsButton.setEditable(false);
+
+                // Reload presets
+                loadPresets();
+                int index = presetsButton.getItems().indexOf(newPresetName);
+                presetsButton.getSelectionModel().select(index);
+
+                presetError.setManaged(false);
+                presetError.setText("");
+                return true;
+            } else {
+                presetError.setManaged(true);
+                presetError.setText("Preset name must be unique");
+            }
         }
+        return false;
     }
 
     @FXML
     private void onComboBoxKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             // Save changes when Enter is pressed
-            saveEditedPresetName();
-            // Revert to edit icon
-            setButtonGraphic(editButton, editIcon, 30, 30);
+            if (saveEditedPresetName()) {
+                // Revert to edit icon
+                setButtonGraphic(editButton, editIcon, 30, 30);
+            }
         }
     }
 

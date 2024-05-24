@@ -61,6 +61,7 @@
           </Button>
       </HBox>
 
+       <Label fx:id="presetError" managed="false" maxHeight="0" styleClass="warningLabel" textAlignment="CENTER" wrapText="true" />
 
        <!--      Blocked Apps -->
        <VBox>
