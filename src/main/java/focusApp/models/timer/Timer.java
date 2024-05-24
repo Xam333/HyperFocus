@@ -120,12 +120,12 @@ public class Timer {
      * user class holding important user data
      * in this class used to update the users total focus time
      */
-    private User user;
+    private final User user;
 
     /**
      * class used to interact with the user in the database
      */
-    private UserDAO userDAO;
+    private final UserDAO userDAO;
 
     /**
      * Basic constructor for the timer class.
@@ -363,8 +363,6 @@ public class Timer {
 
         CreateTimer();
         Control(Command.Start);
-
-
     }
 
     /**

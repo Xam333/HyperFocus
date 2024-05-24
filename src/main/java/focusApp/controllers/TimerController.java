@@ -6,6 +6,7 @@ import focusApp.models.timer.Timer;
 import focusApp.HelloApplication;
 
 import focusApp.models.colour.UserConfig;
+import focusApp.models.timer.TimerState;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +25,8 @@ import java.util.Objects;
 public class TimerController {
 
     private Timer timer;
+    private boolean InParentalControl;
+    private boolean PasswordGood;
 
 
     @FXML
@@ -58,7 +61,10 @@ public class TimerController {
 
 
     @FXML
-    protected void onStopButtonClick(){ timer.Control(Command.Stop); }
+    protected void onStopButtonClick(){
+        // Add code to check Passwords here. if in parental control mode.
+        timer.Control(Command.Stop);
+    }
     @FXML
     protected void mouseInStopButton(){ StopButton.setContentDisplay(ContentDisplay.LEFT); }
     @FXML
@@ -115,59 +121,101 @@ public class TimerController {
     protected void mouseOutReturnButton(){ ReturnButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
 
 
-    private void UpdateButtons(Button[] Buttons, Boolean Attribute){
-        for(Button B : Buttons){
-            if (Attribute != null){
-                B.setDisable(Attribute);
-            } else {
-                B.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+    private enum ButtonStates{
+        Disable, Enable, DisplayGraphic
+    }
+    private void UpdateButtons(Button[] Buttons, ButtonStates[] States){
+        if (Buttons.length == States.length){
+            for (int i = 0; i < Buttons.length; i++){
+                switch (States[i]){
+                    case Enable -> Buttons[i].setDisable(false);
+                    case Disable -> Buttons[i].setDisable(true);
+                    case DisplayGraphic -> Buttons[i].setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                }
             }
-
+        } else {
+            System.out.println("Button State mapping failed: Error length is not equal.");
         }
+
     }
     public void ButtonStateManager(){
-        switch(timer.getTimerState()){
-            case Running -> {
-                UpdateButtons(new Button[]{StopButton, PauseButton}, false);
-                UpdateButtons(new Button[]{RestartButton, ReturnButton, ResumeButton}, true);
+        Button[] AllButtons = new Button[]{PauseButton, ResumeButton, StopButton, RestartButton, ReturnButton};
 
-                Platform.runLater(() ->{
-                    UpdateButtons(new Button[]{RestartButton, ReturnButton, ResumeButton}, null);
-                });
-            }
-
-            case Delayed, Restarting -> {
-                UpdateButtons(new Button[]{StopButton}, false);
-                UpdateButtons(new Button[]{RestartButton, ReturnButton, PauseButton,ResumeButton}, true);
-
-                Platform.runLater(() ->{
-                    UpdateButtons(new Button[]{RestartButton, ReturnButton, PauseButton, ResumeButton}, null);
-                });
-            }
-
-            case Paused -> {
-                UpdateButtons(new Button[]{ResumeButton}, false);
-                UpdateButtons(new Button[]{StopButton, RestartButton, ReturnButton, PauseButton}, true);
-
-                Platform.runLater(() ->{
-                    UpdateButtons(new Button[]{RestartButton, ReturnButton, PauseButton}, null);
-                });
-            }
-
-            case Stopped, Finished -> {
-                UpdateButtons(new Button[]{RestartButton, ReturnButton}, false);
-                UpdateButtons(new Button[]{StopButton, PauseButton, ResumeButton}, true);
-
-                Platform.runLater(() ->{
-                    UpdateButtons(new Button[]{StopButton, PauseButton, ResumeButton}, null);
-                });
-            }
+        // Bypass Button updates while in  parent control mode until the timer state is "finished".
+        if (InParentalControl && timer.getTimerState() != TimerState.Finished){
+            return;
         }
+
+        UpdateButtonStates(AllButtons);
+    }
+
+    private void UpdateButtonStates(Button[] AllButtons){
+        ButtonStates[] States;
+        switch(timer.getTimerState()) {
+
+            case Running -> States = getRunningState();
+            case Delayed, Restarting -> States = getPreRunState();
+            case Paused -> States = getPausedState();
+            case Stopped, Finished -> States = getEndState();
+            default -> States = new ButtonStates[0];
+        }
+        UpdateButtons(AllButtons, States);
+
+        Platform.runLater(() -> {
+            ButtonStates[] LimpStates = new ButtonStates[]{
+                    ButtonStates.DisplayGraphic,    // Pause
+                    ButtonStates.DisplayGraphic,    // Resume
+                    ButtonStates.DisplayGraphic,    // Stop
+                    ButtonStates.DisplayGraphic,    // Restart
+                    ButtonStates.DisplayGraphic     // Return
+            };
+            UpdateButtons(AllButtons, LimpStates);
+        });
+    }
+
+    private ButtonStates[] getRunningState(){
+        return new ButtonStates[]{
+                ButtonStates.Enable,    // Pause
+                ButtonStates.Disable,   // Resume
+                ButtonStates.Enable,    // Stop
+                ButtonStates.Disable,   // Restart
+                ButtonStates.Disable    // Return
+        };
+    }
+    private ButtonStates[] getPreRunState(){
+        return new ButtonStates[]{
+                ButtonStates.Disable,   // Pause
+                ButtonStates.Disable,   // Resume
+                ButtonStates.Enable,    // Stop
+                ButtonStates.Disable,   // Restart
+                ButtonStates.Disable    // Return
+        };
+    }
+    private ButtonStates[] getPausedState(){
+        return new ButtonStates[]{
+                ButtonStates.Disable,   // Pause
+                ButtonStates.Enable,    // Resume
+                ButtonStates.Disable,   // Stop
+                ButtonStates.Disable,   // Restart
+                ButtonStates.Disable    // Return
+        };
+    }
+    private ButtonStates[] getEndState(){
+        return new ButtonStates[]{
+                ButtonStates.Disable,   // Pause
+                ButtonStates.Disable,   // Resume
+                ButtonStates.Disable,   // Stop
+                ButtonStates.Enable,    // Restart
+                ButtonStates.Enable     // Return
+        };
     }
 
     public void initialize(double startTime, double endTime, Notification Alarm) {
         timer = new Timer(startTime, endTime, this, Alarm);
         timer.Control(Command.Start);
+        // Get the bool of parent mode here.
+        InParentalControl = false;
+        ButtonStateManager();
     }
 
     public void UpdateTimerStatus(){
@@ -183,7 +231,7 @@ public class TimerController {
         Platform.runLater(() ->  MiniArc.setLength(((timer.getDCDinMS() + 1) / timer.getDTDinMS()) * 360));
     }
 
-    private void UpdateArcAttributes(Arc ThisArc,int Length, Boolean Visibility){
+    private void UpdateArcAttributes(Arc ThisArc, int Length, Boolean Visibility){
         ThisArc.setLength(Length);
         if (Visibility != null){
             ThisArc.setVisible(Visibility);
@@ -207,7 +255,6 @@ public class TimerController {
                 }
 
                 case Finished -> UpdateArcAttributes(arc, 0, false);
-
             }
         });
     }
