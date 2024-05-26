@@ -486,6 +486,8 @@ public class BlockedController implements Initializable {
 
 //    Add new websites and applications to database
     public void onSaveButtonClick(ActionEvent actionEvent) throws IOException {
+        List<String> urlsToBlock = new ArrayList<>();
+
 
         for (BlockedItem item : blockedItems) {
             if (item.getClass() == WebsiteItem.class) {
@@ -500,6 +502,7 @@ public class BlockedController implements Initializable {
         }
 
 
+        blockUrls(urlsToBlock);
 
         changesSaved = true;
         Stage stage = (Stage) saveButton.getScene().getWindow();
