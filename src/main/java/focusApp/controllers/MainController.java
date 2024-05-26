@@ -503,7 +503,7 @@ public class MainController implements Initializable {
         /* this code is currently slow */
         /* maybe to do with the urls */
         for (BlockedItem item : blockedItems) {
-            Image img = null;
+            Image img;
             if (item.getIconURI().endsWith("png")) {
                 img = new Image(item.getIconURI().toString(), true);
             }
