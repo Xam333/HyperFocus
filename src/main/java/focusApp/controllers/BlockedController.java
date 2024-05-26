@@ -490,6 +490,7 @@ public class BlockedController implements Initializable {
         for (BlockedItem item : blockedItems) {
             if (item.getClass() == WebsiteItem.class) {
                 System.out.println(item.getName() + " is website");
+                urlsToBlock.add(item.getURI());
                 presetDAO.addWebsitePreset(currentPreset.getPresetID(), item.getID());
             } else if (item.getClass() == ApplicationItem.class) {
                 System.out.println(item.getName() + " is application");
