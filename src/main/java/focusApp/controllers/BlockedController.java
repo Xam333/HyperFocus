@@ -498,6 +498,8 @@ public class BlockedController implements Initializable {
 
         }
 
+
+
         changesSaved = true;
         Stage stage = (Stage) saveButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
