@@ -289,6 +289,8 @@ public class BlockedController implements Initializable {
             } else {
                 scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
             }
+
+            resetBlockedList();
             stage.setScene(scene);
         }
 
