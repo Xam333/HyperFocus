@@ -59,13 +59,6 @@ import java.util.regex.Matcher;
 
 public class BlockedController implements Initializable {
 
-
-
-
-    public StackPane turnOffParentalControlsStackPane;
-    public PasswordField parentalControlsPasswordField;
-    public Label denyParentalControlsDisableLabel;
-
     private String fileLocation;
     public StackPane addWebsiteStackPane;
     public TextField addWebsiteTextField;

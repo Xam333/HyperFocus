@@ -50,15 +50,11 @@ public class MainController implements Initializable {
     public Button startButton;
     public Pane blockedApplicationPane;
     public StackPane menuStackPane;
-    public Button parentalControlsButton;
-    public Button colourSettingsButton;
-    public Button soundSettingsButton;
     public VBox parentalControlsSection;
     public VBox soundSettingsSection;
     public VBox colourSettingsSection;
     public Slider volumeSlider;
     public ComboBox soundOptionsButton;
-
     public ToggleSwitch parentalControlToggleButton;
     public PasswordField parentalControlsPasswordField;
     public Button confirmPasswordButtonParentalControls;
@@ -67,14 +63,11 @@ public class MainController implements Initializable {
     public Label denyParentalControlsDisableLabel;
     public VBox accountInformationSection;
     public Label totalTimeFocused;
-    public Label userNameLabel;
     public TextField userNameTextField;
     public Button editUserNameButton;
     public Button editPasswordButton;
     public PasswordField passwordTextField;
-    public Label passwordLabel;
     public Label accountError;
-    public Button abortButton;
     public Button confirmButton;
     public StackPane confirmLogOutStackPane;
 
@@ -118,12 +111,8 @@ public class MainController implements Initializable {
     @FXML
     private Button editButton;
 
-    @FXML
-    private ImageView editImage;
-
     private Image editIcon;
     private Image tickIcon;
-    private boolean isEditing = false;
 
 
     public MainController() {
