@@ -1,4 +1,4 @@
-package focusApp.models;
+package focusApp.models.timer;
 
 import javax.sound.sampled.*;
 import java.io.File;

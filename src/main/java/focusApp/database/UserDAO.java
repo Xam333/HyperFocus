@@ -1,9 +1,10 @@
 package focusApp.database;
 
-import focusApp.models.User;
+import focusApp.models.user.User;
 import org.sqlite.SQLiteErrorCode;
 import org.sqlite.SQLiteException;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.sql.*;
 
 public class UserDAO implements IUserDAO {
@@ -21,7 +22,7 @@ public class UserDAO implements IUserDAO {
             /* insert user into database */
             String query =
                     """
-                    INSERT INTO user(userName, password, parentalLock) VALUES(?,?,0)
+                    INSERT INTO user(userName, password) VALUES(?,?)
                     """;
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, userName);
@@ -67,43 +68,54 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
-    public boolean setParentalLock(int id, boolean lock) {
+    public long addToTotalTime(int id, long time) {
         try {
-            String query = "UPDATE user SET parentalLock = ? WHERE id = ?";
-
+            String query = "UPDATE user SET focusTime = focusTime + ? WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
-            statement.setBoolean(1, lock);
+            statement.setLong(1, time);
             statement.setInt(2, id);
 
-            return (statement.executeUpdate() != 0);
+            if (statement.executeUpdate() != 1) {
+                return -1;
+            }
+
+            query = "SELECT focusTime FROM user WHERE id = ?";
+
+            statement = connection.prepareStatement(query);
+
+            statement.setInt(1, id);
+
+            ResultSet res = statement.executeQuery();
+
+            if (res != null) {
+                return res.getLong("focusTime");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+
+        return -1;
     }
 
     @Override
-    public boolean getParentalLock(int id) {
-       try {
-           /* get statement based on user id */
+    public long getTotalTime(int id) {
+        try {
+            String query = "SELECT focusTime FROM user WHERE id = ?";
 
-           String query = "SELECT parentalLock FROM user WHERE id = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
 
-           PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
 
-           statement.setInt(1, id);
+            ResultSet res = statement.executeQuery();
 
-           ResultSet result = statement.executeQuery();
-
-           /* check value of parentalLock as sql returns int value */
-           if (result != null) {
-               return (1 == result.getInt("parentalLock"));
-           }
-       } catch (Exception e) {
-           e.printStackTrace();
-       }
-       return false;
+            if (res != null) {
+                return res.getLong("focusTime");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
 
@@ -126,11 +138,30 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
+    public boolean changePassword(int id, String newPassword) {
+        try {
+            String query = "UPDATE user SET password = ? WHERE id = ?";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setString(1, newPassword);
+            statement.setInt(2, id);
+
+            if (statement.executeUpdate() == 1) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
     public User login(String userName, String password) {
         try {
             /* get user from database */
 
-            String query = "SELECT id, parentalLock FROM user WHERE userName = ? AND password = ?";
+            String query = "SELECT id, focusTime FROM user WHERE userName = ? AND password = ?";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, userName);
@@ -142,11 +173,10 @@ public class UserDAO implements IUserDAO {
                 /* if results is not null then user provided correct password and useranme */
                 /* so create and return User class */
                 int id = result.getInt("id");
-                boolean parentalLock = result.getBoolean("parentalLock");
+                int focusTime = result.getInt("focusTime");
 
-                User user = new User(userName, parentalLock);
+                User user = new User(userName, focusTime);
                 user.setId(id);
-                user.setParentalLock(parentalLock);
 
                 return user;
             }

@@ -1,7 +1,7 @@
 package focusApp.database;
 
-import focusApp.models.ApplicationItem;
-import focusApp.models.WebsiteItem;
+import focusApp.models.block.ApplicationItem;
+import focusApp.models.block.WebsiteItem;
 
 import java.util.ArrayList;
 
@@ -21,7 +21,6 @@ public interface IPresetDAO {
      * @return the preset that was created
      */
     public Preset addPreset(int userID, String presetName);
-
 
     /**
      * add website to a preset
@@ -52,4 +51,21 @@ public interface IPresetDAO {
      * @return list of websites from preset
      */
     public ArrayList<WebsiteItem> getPresetWebsite(int presetID);
+
+    /**
+     * changes the name of a preset
+     * @param userID id of the user
+     * @param currentName the current name
+     * @param newName the name to be changed to
+     * @return true if operation ran successfully, false otherwise
+     */
+    public boolean editPresetName(int userID, String currentName, String newName);
+
+    /**
+     * deletes a given preset
+     * @param userID the id of the user
+     * @param presetName the name of the preset
+     * @return true if operation ran successfully, false otherwise
+     */
+    public boolean deletePresetByName(int userID, String presetName);
 }

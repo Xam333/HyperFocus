@@ -1,10 +1,11 @@
 package focusApp.database;
 
-import focusApp.models.ApplicationItem;
-import focusApp.models.WebsiteItem;
+import focusApp.models.block.ApplicationItem;
+import focusApp.models.block.WebsiteItem;
 import org.sqlite.SQLiteErrorCode;
 import org.sqlite.SQLiteException;
 
+import java.awt.desktop.SystemSleepEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -86,7 +87,7 @@ public class PresetDAO implements IPresetDAO {
         return null;
     }
 
-    public void editPresetName(int userID, String currentName, String newName) {
+    public boolean editPresetName(int userID, String currentName, String newName) {
         try {
             String query = "UPDATE presets SET presetName = ? WHERE userID = ? AND presetName = ?";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -95,24 +96,61 @@ public class PresetDAO implements IPresetDAO {
             statement.setInt(2, userID);
             statement.setString(3, currentName);
 
-            statement.executeUpdate();
+            if (statement.executeUpdate() == 1) {
+                return true;
+            }
+
+        } catch (SQLiteException sqlex) {
+            if (sqlex.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE) {
+                return false;
+            }
+            sqlex.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    public void deletePresetByName(int userID, String presetName) {
+    public boolean deletePresetByName(int userID, String presetName) {
         try {
-            String query = "DELETE FROM presets WHERE userID = ? AND presetName = ?";
+            String query = "SELECT presetID FROM presets WHERE presetName = ? AND userID = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
-            statement.setInt(1, userID);
-            statement.setString(2, presetName);
+            statement.setString(1, presetName);
+            statement.setInt(2, userID);
 
+            ResultSet res = statement.executeQuery();
+
+            if (res == null) {
+                return false;
+            }
+
+            int presetID = res.getInt("presetID");
+
+            /* delete dependencies */
+            query = "DELETE FROM presetsToWebsite WHERE presetID = ?";
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, presetID);
             statement.executeUpdate();
+
+            /* delete dependencies */
+            query = "DELETE FROM presetsToApplication WHERE presetID = ?";
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, presetID);
+            statement.executeUpdate();
+
+            /* delete preset */
+            query = "DELETE FROM presets WHERE presetID = ?";
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, presetID);
+
+            if (statement.executeUpdate() != 0) {
+                return true;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     public boolean addWebsitePreset(int presetID, int websiteID) {

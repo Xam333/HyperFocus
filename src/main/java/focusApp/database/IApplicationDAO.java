@@ -1,6 +1,6 @@
 package focusApp.database;
 
-import focusApp.models.ApplicationItem;
+import focusApp.models.block.ApplicationItem;
 
 public interface IApplicationDAO {
 

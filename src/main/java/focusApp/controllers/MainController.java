@@ -2,7 +2,14 @@ package focusApp.controllers;
 
 import focusApp.HelloApplication;
 import focusApp.database.UserDAO;
-import focusApp.models.*;
+import focusApp.models.block.BlockedItem;
+import focusApp.models.colour.ColourControl;
+import focusApp.models.colour.ColourPaletteKeys;
+import focusApp.models.colour.UserConfig;
+import focusApp.models.preset.PresetHolder;
+import focusApp.models.timer.Notification;
+import focusApp.models.user.User;
+import focusApp.models.user.UserHolder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,6 +28,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -30,7 +39,12 @@ import javafx.scene.control.Slider;
 
 import focusApp.database.Preset;
 import focusApp.database.PresetDAO;
+import org.apache.commons.imaging.ImageReadException;
+import org.apache.commons.imaging.Imaging;
+import org.apache.commons.io.FileUtils;
 import org.controlsfx.control.ToggleSwitch;
+
+import javax.imageio.ImageIO;
 
 public class MainController implements Initializable {
     public Button startButton;
@@ -47,7 +61,7 @@ public class MainController implements Initializable {
 
     public ToggleSwitch parentalControlToggleButton;
     public PasswordField parentalControlsPasswordField;
-    public Button confirmPasswordButton;
+    public Button confirmPasswordButtonParentalControls;
     public StackPane turnOffParentalControlsStackPane;
     public StackPane blackOutStackPane;
     public Label denyParentalControlsDisableLabel;
@@ -73,7 +87,23 @@ public class MainController implements Initializable {
     @FXML
     private GridPane blockedIcons;
 
+    @FXML
+    private PasswordField passwordAuth;
 
+    @FXML
+    private Label denyPasswordAuth;
+
+    @FXML
+    private StackPane passwordAuthStackPane;
+
+    @FXML
+    private Button confirmPasswordButtonPasswordAuth;
+
+    @FXML
+    private Label presetError;
+
+    public int startTime;
+    public int endTime;
 
     private UserHolder userHolder;
     private User user;
@@ -116,7 +146,6 @@ public class MainController implements Initializable {
 
         loadPresets();
         presetsButton.getSelectionModel().selectFirst();
-        originalPresetName = presetsButton.getValue().toString();
 
         // Add listener to ComboBox editor property
         presetsButton.getEditor().textProperty().addListener((obs, oldVal, newVal) -> {
@@ -131,7 +160,13 @@ public class MainController implements Initializable {
         /* update the blocked list */
         // Get preset name
         String presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
-        updateBlockList(presetName);
+        try {
+            updateBlockList(presetName);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ImageReadException e) {
+            throw new RuntimeException(e);
+        }
 
         // Check if there is a saved value for the alarm, if not display alarm1.
         if (SelectedSound == null){
@@ -158,11 +193,18 @@ public class MainController implements Initializable {
             } else{
                 blackOutStackPane.setVisible(false);
                 turnOffParentalControlsStackPane.setVisible(false);
+                /* sets parental lock */
+                user.setParentalLock(true);
             }
         });
 
-        // update user name text
+        /* update user name text */
         userNameTextField.setText(user.getUserName());
+        /* update total focus time */
+        long time = user.getTotalFocusTime();
+        totalTimeFocused.setText(String.format("%02d:%02d:%02d", time / 3600, (time % 3600) / 60, time % 60));
+        /* set the parental lock button */
+        parentalControlToggleButton.setSelected(user.getParentalLcok());
     }
     private static Object SelectedSound;
     private static Double SelectedVolume;
@@ -215,8 +257,6 @@ public class MainController implements Initializable {
     private enum TimeID{
         StartTime, EndTime
     }
-    public int startTime;
-    public int endTime;
 
     @FXML
     private Label OffsetLabel;
@@ -295,13 +335,15 @@ public class MainController implements Initializable {
     /**
      * when clicking preset in dropdown menu
      */
-    public void onPresetsButtonClick() {
+    public void onPresetsButtonClick() throws IOException, ImageReadException {
         // Get preset name
         String presetName = "";
         if (presetsButton.getSelectionModel().getSelectedItem() != null) {
             presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
         }
-        originalPresetName = presetName;
+        if (!presetsButton.isEditable()) {
+            originalPresetName = presetName;
+        }
 
         // Check if new preset or existing
         if (presetName.equals("New Preset +")) {
@@ -355,43 +397,64 @@ public class MainController implements Initializable {
     private void onEditButtonClick() {
         if (presetsButton.isEditable()) {
             // Save changes
-            saveEditedPresetName();
-            // Revert to edit icon
-            setButtonGraphic(editButton, editIcon, 30, 30);
+            if (saveEditedPresetName()) {
+                // Revert to edit icon
+                setButtonGraphic(editButton, editIcon, 30, 30);
+            }
         } else {
             // Enable editing
+            originalPresetName = presetsButton.getValue().toString();
             presetsButton.setEditable(true);
             presetsButton.requestFocus();
             // Change to tick icon
             setButtonGraphic(editButton, tickIcon, 30, 30);
+
+            ArrayList<String> presetNames = new ArrayList<>();
+            presetNames.add(presetsButton.getSelectionModel().getSelectedItem().toString());
+
+            ObservableList<String> presetsList = FXCollections.observableList(presetNames);
+            presetsButton.setItems(presetsList);
         }
     }
 
-    public void saveEditedPresetName() {
+    public boolean saveEditedPresetName() {
         // Check if ComboBox is editable
         if (presetsButton.isEditable()) {
-            // Get the index of the currently selected item
-            int selectedIndex = presetsButton.getSelectionModel().getSelectedIndex();
-
-            // Disable editing in the ComboBox
-            presetsButton.setEditable(false);
-
             // Update the database with the edited preset name
-            presetDAO.editPresetName(user.getId(), originalPresetName, newPresetName);
+            boolean res = presetDAO.editPresetName(user.getId(), originalPresetName, newPresetName);
 
-            // Reload presets
-            loadPresets();
-            presetsButton.getSelectionModel().select(selectedIndex);
+            /* check if new name was unique */
+            if (res) {
+                // Get the index of the currently selected item
+                int selectedIndex = presetsButton.getSelectionModel().getSelectedIndex();
+
+                // Disable editing in the ComboBox
+                presetsButton.setEditable(false);
+
+                // Reload presets
+                loadPresets();
+                int index = presetsButton.getItems().indexOf(newPresetName);
+                presetsButton.getSelectionModel().select(index);
+
+                presetError.setManaged(false);
+                presetError.setText("");
+                return true;
+            } else {
+                presetError.setManaged(true);
+                presetError.setText("Preset name must be unique");
+            }
         }
+        return false;
     }
 
     @FXML
     private void onComboBoxKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             // Save changes when Enter is pressed
-            saveEditedPresetName();
-            // Revert to edit icon
-            setButtonGraphic(editButton, editIcon, 30, 30);
+            if (saveEditedPresetName()) {
+                // Revert to edit icon
+                setButtonGraphic(editButton, editIcon, 30, 30);
+            }
         }
     }
 
@@ -406,7 +469,7 @@ public class MainController implements Initializable {
     /**
      * update the blocked items display
      */
-    public void updateBlockList(String presetName) {
+    public void updateBlockList(String presetName) throws IOException, ImageReadException {
         Preset currentPreset = null;
 
         for (Preset preset : presetDAO.getUsersPresets(user.getId())) {
@@ -443,7 +506,22 @@ public class MainController implements Initializable {
             Image img;
             if (item.getIconURI().endsWith("png")) {
                 img = new Image(item.getIconURI().toString(), true);
-            } else {
+            } else if (item.getIconURI().endsWith("ico")) {
+                // Download the .ico file
+                File icoFile = File.createTempFile("favicon", ".ico");
+                FileUtils.copyURLToFile(new URL(item.getIconURI()), icoFile);
+
+                // Convert the .ico file to a BufferedImage
+                BufferedImage bufferedImage = Imaging.getBufferedImage(icoFile);
+
+                // Create a temporary file for the converted image
+                File tempFile = File.createTempFile("temp_image", ".png");
+                tempFile.deleteOnExit();
+                ImageIO.write(bufferedImage, "png", tempFile);
+
+                // Load the image using the temporary file path
+                img = new Image(tempFile.toURI().toString(), true);  // true for background loading
+            }else {
                 String url = getClass().getResource(defaultIcon).toString();
                 img = new Image(url, true);
             }
@@ -474,7 +552,11 @@ public class MainController implements Initializable {
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
 
         // Set scene stylesheet
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        if (UserConfig.FindCSSFile()){
+            scene.getStylesheets().add(UserConfig.getCSSFilePath().toUri().toString());
+        } else {
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        }
         stage.setScene(scene);
     }
 
@@ -497,7 +579,11 @@ public class MainController implements Initializable {
         SelectedVolume = volumeSlider.getValue();
 
         // Set scene stylesheet
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        if (UserConfig.FindCSSFile()){
+            scene.getStylesheets().add(UserConfig.getCSSFilePath().toUri().toString());
+        } else {
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        }
         stage.setScene(scene);
     }
 
@@ -552,12 +638,22 @@ public class MainController implements Initializable {
     public void onColourSettingsButtonClick(){MenuAttributeControl(MenuAttribute.ColourSettings);}
     public void onSoundSettingsButtonClick(){MenuAttributeControl(MenuAttribute.SoundSettings);}
 
-
-    public void passwordEntered() {
-        confirmPasswordButton.setDisable(false);
+    public void passwordEnteredParentalControls(KeyEvent keyEvent) {
+        confirmPasswordButtonParentalControls.setDisable(false);
     }
 
-    public void onXLabelClick() {
+    public void passwordEnteredPasswordAuth(KeyEvent keyEvent) {
+        confirmPasswordButtonPasswordAuth.setDisable(false);
+    }
+
+    public void onXLabelClickPasswordAuth() {
+        blackOutStackPane.setVisible(false);
+        passwordAuthStackPane.setVisible(false);
+        denyPasswordAuth.setText("");
+        passwordAuth.clear();
+    }
+
+    public void onXLabelClickParentalControls() {
         parentalControlToggleButton.setSelected(true);
         blackOutStackPane.setVisible(false);
         turnOffParentalControlsStackPane.setVisible(false);
@@ -571,7 +667,6 @@ public class MainController implements Initializable {
         if (userNameTextField.isEditable()) {
             if (userDAO.updateName(user.getId(), userNameTextField.getText())) {
                 user.setUserName(userNameTextField.getText());
-                userHolder.setUser(user);
                 accountError.setText("");
                 accountError.setManaged(false);
             } else {
@@ -587,7 +682,21 @@ public class MainController implements Initializable {
     }
 
     public void onEditPasswordButtonClick() {
-        passwordTextField.setEditable(!passwordTextField.isEditable());
+        if (passwordTextField.isEditable()) {
+            if (passwordTextField.getText().isEmpty()) {
+                accountError.setText("* Password must not be blank *");
+                accountError.setManaged(true);
+                return;
+            }
+            blackOutStackPane.setVisible(true);
+            passwordAuthStackPane.setVisible(true);
+            accountError.setText("");
+            accountError.setManaged(false);
+        } else {
+            passwordTextField.clear();
+            passwordTextField.setEditable(true);
+            editPasswordButton.setText("SAVE");
+        }
     }
 
     private void ShowPane(boolean Display){
@@ -602,8 +711,35 @@ public class MainController implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
 
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        if (UserConfig.FindCSSFile()){
+            scene.getStylesheets().add(UserConfig.getCSSFilePath().toUri().toString());
+        } else {
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        }
         stage.setScene(scene);
+    }
+
+    public void onPasswordAuthenticationCheck() {
+        // Check if password is correct
+        User login_user = userDAO.login(user.getUserName(), passwordAuth.getText());
+
+        /* if user != null then login successful and user class returned */
+        if (!Objects.equals(login_user, null)){
+            /* update password */
+            if (userDAO.changePassword(user.getId(), passwordTextField.getText())) {
+                blackOutStackPane.setVisible(false);
+                passwordAuthStackPane.setVisible(false);
+                denyPasswordAuth.setText("");
+                passwordAuth.clear();
+                passwordTextField.setText("Place holder");
+                editPasswordButton.setText("EDIT");
+                passwordTextField.setEditable(false);
+            } else {
+                denyPasswordAuth.setText("* Something went wrong when updating password *");
+            }
+        } else {
+            denyPasswordAuth.setText("* Incorrect password. *");
+        }
     }
 
     public void onConfirmParentalControlsButtonClick() {
@@ -612,15 +748,15 @@ public class MainController implements Initializable {
 
         /* if user != null then login successful and user class returned */
         if (!Objects.equals(login_user, null)){
-            user.setParentalLock(true);
             parentalControlToggleButton.setSelected(false);
 
             blackOutStackPane.setVisible(false);
             turnOffParentalControlsStackPane.setVisible(false);
             denyParentalControlsDisableLabel.setText("");
             parentalControlsPasswordField.clear();
-        } else {
+            /* disable the parental lock */
             user.setParentalLock(false);
+        } else {
             denyParentalControlsDisableLabel.setText("* Incorrect password. *");
         }
     }

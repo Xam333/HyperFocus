@@ -1,4 +1,4 @@
-package focusApp.models;
+package focusApp.models.timer;
 
 /**
  * Used for tracking the state of the timer.

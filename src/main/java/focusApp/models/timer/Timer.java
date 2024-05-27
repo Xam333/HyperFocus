@@ -1,6 +1,9 @@
-package focusApp.models;
+package focusApp.models.timer;
 
 import focusApp.controllers.TimerController;
+import focusApp.database.UserDAO;
+import focusApp.models.user.*;
+
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -109,6 +112,22 @@ public class Timer {
 
 
     /**
+     * class used to save user state between pages and classes
+     */
+    private UserHolder userHolder;
+
+    /**
+     * user class holding important user data
+     * in this class used to update the users total focus time
+     */
+    private final User user;
+
+    /**
+     * class used to interact with the user in the database
+     */
+    private final UserDAO userDAO;
+
+    /**
      * Basic constructor for the timer class.
      * @param Timer_Controller The calling time controller.
      * @param TimerOffset   The offset of minutes before the timer starts.
@@ -119,6 +138,11 @@ public class Timer {
         Timer_Duration = TimerDuration == null ? 0.0 : (TimerDuration * 60);
         this.Timer_Controller = Timer_Controller;
         this.Alarm = Alarm;
+
+        /* initialise the user */
+        userDAO = new UserDAO();
+        userHolder = UserHolder.getInstance();
+        user = userHolder.getUser();
 
         CreateTimer();
     }
@@ -296,6 +320,8 @@ public class Timer {
 
         // If the text to speech is on.
         if(Speak){ Notification.SpeakText("Timer finished."); }
+        user.setTotalFocusTime(userDAO.addToTotalTime(user.getId(), (long)Timer_Duration));
+
     }
 
     /**
@@ -307,6 +333,10 @@ public class Timer {
             EnforceState(TimerState.Stopped);
             TimeScheduler.shutdownNow();
         }
+
+        /* update total focus time */
+        user.setTotalFocusTime(userDAO.addToTotalTime(user.getId(), (long)Timer_Duration - Running_Counting_Duration.getSeconds()));
+
         // Drain the Running Counting Duration to -1.
         Running_Counting_Duration = Duration.ZERO.minusSeconds(1);
 

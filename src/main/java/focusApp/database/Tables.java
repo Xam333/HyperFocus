@@ -15,7 +15,7 @@ public class Tables {
                         id INTEGER PRIMARY KEY,
                         userName TEXT NOT NULL UNIQUE,
                         password TEXT NOT NULL,
-                        parentalLock INTEGER NOT NULL CHECK(parentalLock in (0,1))
+                        focusTime INTEGER DEFAULT 0
                     )
                     """;
             statement.execute(query);

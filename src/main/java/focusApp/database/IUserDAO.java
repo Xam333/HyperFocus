@@ -1,6 +1,6 @@
 package focusApp.database;
 
-import focusApp.models.User;
+import focusApp.models.user.User;
 
 public interface IUserDAO {
 
@@ -20,14 +20,28 @@ public interface IUserDAO {
      */
     public boolean updateName(int id, String newName);
 
-    public boolean setParentalLock(int id, boolean lock);
+    /**
+     * changes the users password
+     * @param id the id of the user
+     * @param newPassword the new password to be set
+     * @return true if action successful false if not
+     */
+    public boolean changePassword(int id, String newPassword);
 
     /**
-     * gets the parentalLock value for a given id
-     * @param id user id
-     * @return parental lock value
+     * add to the total time
+     * @param id the id of the user
+     * @param time time to be added
+     * @return the new total time, -1 if no user found
      */
-    public boolean getParentalLock(int id);
+    public long addToTotalTime(int id, long time);
+
+    /**
+     * get the total time from the db
+     * @param id id of the user
+     * @return total time
+     */
+    public long getTotalTime(int id);
 
     /**
      * return checks if the user id if exists and returns id or -1 if doesnt exits

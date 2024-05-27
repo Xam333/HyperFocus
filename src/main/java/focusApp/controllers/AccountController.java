@@ -6,15 +6,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Objects;
 
-import focusApp.models.UserHolder;
-import focusApp.models.User;
+import focusApp.models.user.UserHolder;
+import focusApp.models.user.User;
 import focusApp.database.UserDAO;
 
 public class AccountController {

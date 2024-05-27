@@ -1,4 +1,4 @@
-package focusApp.models;
+package focusApp.models.user;
 
 import javax.print.attribute.standard.RequestingUserName;
 
@@ -6,9 +6,11 @@ public class User {
     private int id;
     private String userName;
     private boolean parentalLock;
+    private long totalFocusTime;
 
-    public User(String userName, boolean parentalLock) {
+    public User(String userName, long totaFocusTime) {
         this.userName = userName;
+        this.totalFocusTime = totaFocusTime;
     }
 
     public int getId() {
@@ -27,11 +29,19 @@ public class User {
         this.userName = name;
     }
 
+    public boolean getParentalLcok() {
+        return parentalLock;
+    }
+
     public void setParentalLock(boolean parentalLock) {
         this.parentalLock = parentalLock;
     }
 
-    public boolean getParentalLock() {
-        return parentalLock;
+    public long getTotalFocusTime() {
+        return totalFocusTime;
+    }
+
+    public void setTotalFocusTime(long totalFocusTime) {
+        this.totalFocusTime = totalFocusTime;
     }
 }

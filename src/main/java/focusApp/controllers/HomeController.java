@@ -1,10 +1,10 @@
 package focusApp.controllers;
 
 import focusApp.HelloApplication;
+import focusApp.models.colour.UserConfig;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 
 
 import javafx.scene.Scene;
@@ -33,7 +33,11 @@ public class HomeController {
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
 
         // Set scene stylesheet
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        if (UserConfig.FindCSSFile()){
+            scene.getStylesheets().add(UserConfig.getCSSFilePath().toUri().toString());
+        } else {
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        }
         stage.setScene(scene);
     }
 
@@ -44,7 +48,11 @@ public class HomeController {
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
 
         // Set scene stylesheet
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        if (UserConfig.FindCSSFile()){
+            scene.getStylesheets().add(UserConfig.getCSSFilePath().toUri().toString());
+        } else {
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        }
         stage.setScene(scene);
     }
 

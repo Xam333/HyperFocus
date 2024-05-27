@@ -2,8 +2,9 @@ package focusApp.controllers;
 
 import focusApp.HelloApplication;
 import focusApp.database.UserDAO;
-import focusApp.models.User;
-import focusApp.models.UserHolder;
+import focusApp.models.user.User;
+import focusApp.models.colour.UserConfig;
+import focusApp.models.user.UserHolder;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -46,15 +47,7 @@ public class LoginController {
 
 
     @FXML
-    private void initialize(){
-        if (loginButton != null){
-            loginButton.setDefaultButton(true);
-        }
-        if (confirmButton != null){
-            confirmButton.setDefaultButton(true);
-        }
-
-    }
+    private void initialize(){}
 
 //    Return to home page
 
@@ -65,7 +58,11 @@ public class LoginController {
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
 
         // Set scene stylesheet
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        if (UserConfig.FindCSSFile()){
+            scene.getStylesheets().add(UserConfig.getCSSFilePath().toUri().toString());
+        } else {
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        }
         stage.setScene(scene);
     }
 
@@ -74,7 +71,7 @@ public class LoginController {
      */
     @FXML
     protected void onLoginButtonClick() throws IOException {
-        /* create userDAO and attempt to login */
+        /* create userDAO and attempt to log in */
         UserDAO userDAO = new UserDAO();
         User user = userDAO.login(userNameTextField.getText(), passwordTextField.getText());
 
@@ -86,7 +83,11 @@ public class LoginController {
             Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
 
             // Set scene stylesheet
-            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+            if (UserConfig.FindCSSFile()){
+                scene.getStylesheets().add(UserConfig.getCSSFilePath().toUri().toString());
+            } else {
+                scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+            }
             stage.setScene(scene);
         } else {
             denyLoginLabel.setText("* Incorrect username or password. *");
@@ -118,7 +119,11 @@ public class LoginController {
             Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
 
             // Set scene stylesheet
-            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+            if (UserConfig.FindCSSFile()){
+                scene.getStylesheets().add(UserConfig.getCSSFilePath().toUri().toString());
+            } else {
+                scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+            }
             stage.setScene(scene);
         } else {
             denyRegisterLabel.setText("This username is already taken");
@@ -134,7 +139,11 @@ public class LoginController {
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
 
         // Set scene stylesheet
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        if (UserConfig.FindCSSFile()){
+            scene.getStylesheets().add(UserConfig.getCSSFilePath().toUri().toString());
+        } else {
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        }
         stage.setScene(scene);
     }
 
@@ -147,7 +156,11 @@ public class LoginController {
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
 
         // Set scene stylesheet
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        if (UserConfig.FindCSSFile()){
+            scene.getStylesheets().add(UserConfig.getCSSFilePath().toUri().toString());
+        } else {
+            scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        }
         stage.setScene(scene);
     }
 }

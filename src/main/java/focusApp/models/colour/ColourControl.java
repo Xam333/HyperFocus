@@ -1,10 +1,11 @@
-package focusApp.models;
+package focusApp.models.colour;
 
+import focusApp.HelloApplication;
 import javafx.scene.paint.Color;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -12,26 +13,41 @@ import java.util.regex.Pattern;
 
 public class ColourControl {
 
-    private final Path CSSFilePath = Paths.get("src/main/resources/focusApp/stylesheet.css");
+    private static Path CSSFilePath = UserConfig.getCSSFilePath();
     private HashMap<ColourPaletteKeys, Color> CurrentColourPalette = new HashMap<>();
-    private String CSSFileContent;
+    private static String CSSFileContent;
     public ColourControl(){
-        boolean FileRead = false;
-
         try{
-            CSSFileContent = new String(Files.readAllBytes(CSSFilePath));
-            FileRead = true;
+            if (UserConfig.FindCSSFile()){
+                GetContentFromUser();
+                LoadColourPaletteFromFile();
+            } else {
+                GetContentFromBase();
+                LoadDefaultColourPalette();
+            }
 
         } catch (IOException E){
             System.out.println(E);
         }
+    }
 
-        if(FileRead){
-            LoadColourPaletteFromFile();
+    public static void InjectBasePalette(){
+        try {
+            GetContentFromBase();
+            Files.write(CSSFilePath, CSSFileContent.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        else{
-            LoadDefaultColourPalette();
-        }
+    }
+
+    private static void GetContentFromBase() throws IOException {
+        // Read the Base CSS file.
+        URI CSSURI = URI.create(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
+        CSSFileContent = new String(Files.readAllBytes(Path.of(CSSURI)));
+    }
+    private static void GetContentFromUser() throws IOException {
+        // Read the users CSS file.
+        CSSFileContent = new String(Files.readAllBytes(CSSFilePath));
     }
 
     public void LoadDefaultColourPalette() {
@@ -62,8 +78,8 @@ public class ColourControl {
                 CurrentColourPalette.put(Key,Color.web(Match.group(1)));
             }
         }
-        System.out.println("Loaded Palette From File: " + CurrentColourPalette);
     }
+
     public void SaveColourPaletteToFile() {
         try {
 
@@ -93,7 +109,6 @@ public class ColourControl {
                     NewColourPalette = Palette_Text_Match.replaceAll(Palette_Text_Variable + ": " + Palette_Text_Colour + ";");
                 }
             }
-            System.out.println();
             Files.write(CSSFilePath, Objects.requireNonNull(NewColourPalette).getBytes());
 
         } catch (IOException E){

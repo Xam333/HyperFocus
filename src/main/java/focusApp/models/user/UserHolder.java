@@ -1,4 +1,4 @@
-package focusApp.models;
+package focusApp.models.user;
 
 /**
  * singleton class used to hold the user class for usage between files
