@@ -40,8 +40,4 @@
             text="Timer"
             onAction="#onTimerButtonClick"
     />
-    <Button fx:id="accountButton"
-            text="Account"
-            onAction="#onAccountButtonClick"
-    />
 </VBox>

@@ -7,7 +7,6 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="390.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.LoginController">
-
     <VBox alignment="TOP_CENTER" layoutX="53.0" prefHeight="600.0" prefWidth="284.0">
 
         <!-- LOGO -->
@@ -28,6 +27,7 @@
 
         <!-- LOGIN FIELDS -->
         <VBox alignment="CENTER" spacing="10.0">
+
             <!-- USERNAME -->
             <TextField fx:id="userNameTextField" promptText="Username" styleClass="textBox" />
 
@@ -40,15 +40,16 @@
             <!-- LOGIN BUTTONS -->
             <HBox alignment="CENTER" spacing="10.0">
                 <Button fx:id="backButton" alignment="CENTER" cancelButton="true" mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="40.0" prefWidth="140.0" styleClass="smallSecondaryButton" text="Back" textAlignment="CENTER">
-               <font>
-                  <Font name="System Bold" size="16.0" />
-               </font>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets></Button>
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                    <HBox.margin>
+                        <Insets />
+                    </HBox.margin>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </Button>
                 <Button fx:id="loginButton" defaultButton="true" mnemonicParsing="false" onAction="#onLoginButtonClick" styleClass="smallPrimaryButton" text="Login" textAlignment="CENTER" />
             </HBox>
 

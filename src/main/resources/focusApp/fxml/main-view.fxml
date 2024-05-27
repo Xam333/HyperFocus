@@ -255,7 +255,7 @@
                                     </items>
                                 </ComboBox>
                             </VBox>
-                            <!-- Volume silder -->
+                            <!-- Volume slider -->
                             <VBox>
                                 <Label styleClass="settingLabel" text="Volume"/>
                                 <Slider fx:id="volumeSlider" majorTickUnit="5.0" max="0.0" min="-25.0" prefWidth="210.0" showTickMarks="true" styleClass="menuSlider"/>
@@ -278,8 +278,7 @@
     </StackPane>
 
     <!-- BLACK OUT PANE -->
-    <StackPane fx:id="blackOutStackPane" prefHeight="600.0" prefWidth="390.0" styleClass="blackOutPane" visible="false">
-    </StackPane>
+    <StackPane fx:id="blackOutStackPane" prefHeight="600.0" prefWidth="390.0" styleClass="blackOutPane" visible="false"/>
 
     <!-- Password Authentication For Changing Password -->
     <StackPane fx:id="passwordAuthStackPane" layoutX="55.0" layoutY="225.0" minHeight="200.0" styleClass="confirmPane" visible="false">
@@ -313,7 +312,6 @@
 
     <!-- PARENTAL CONTROLS PASSWORD ENTRY -->
     <StackPane fx:id="turnOffParentalControlsStackPane" layoutX="55.0" layoutY="225.0" minHeight="180.0" prefHeight="180.0" styleClass="confirmPane" visible="false">
-
         <VBox alignment="TOP_CENTER" prefHeight="173.0" prefWidth="270.0">
             <HBox alignment="TOP_RIGHT">
                 <Button mnemonicParsing="false" onAction="#onXLabelClickParentalControls" styleClass="tinyXButton" text="X" />

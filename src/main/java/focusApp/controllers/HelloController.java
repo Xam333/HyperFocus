@@ -117,15 +117,4 @@ public class HelloController {
         scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
         stage.setScene(scene);
     }
-
-    public void onAccountButtonClick(ActionEvent actionEvent) throws IOException {
-        Stage stage = (Stage) accountButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/account-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
-
-        // Set scene stylesheet
-        scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
-        stage.setScene(scene);
-
-    }
 }
