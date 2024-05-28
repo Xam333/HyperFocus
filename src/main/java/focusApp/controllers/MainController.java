@@ -71,9 +71,6 @@ public class MainController implements Initializable {
     public Button confirmButton;
     public StackPane confirmLogOutStackPane;
 
-
-
-
     @FXML
     private ComboBox presetsButton;
 
@@ -116,7 +113,9 @@ public class MainController implements Initializable {
 
 
     /**
-     *
+     * Constructs new MainController and initialises necessary
+     * components, such as userHolder, presetHolder,presetDAO,
+     * and userDAO, and retrieves user and presets from database
      */
     public MainController() {
         userHolder = UserHolder.getInstance();
@@ -128,15 +127,18 @@ public class MainController implements Initializable {
     }
 
     /**
+     * Initialise the controller automatically after the FXML file is loaded
      *
      * @param url
+     *      Used to resolve paths for objects. Returns null if path is unknown
      * @param resourceBundle
+     *      Used to localise an object. Returns null if it can not localise.
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Load images
-        editIcon = new Image(getClass().getResourceAsStream("/focusApp/images/editIcon.png"));
-        tickIcon = new Image(getClass().getResourceAsStream("/focusApp/images/tickIcon.png"));
+        editIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/focusApp/images/editIcon.png")));
+        tickIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/focusApp/images/tickIcon.png")));
 
         // Set initial image for edit button
         setButtonGraphic(editButton, editIcon, 30, 30);
@@ -159,9 +161,7 @@ public class MainController implements Initializable {
         String presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
         try {
             updateBlockList(presetName);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ImageReadException e) {
+        } catch (IOException | ImageReadException e) {
             throw new RuntimeException(e);
         }
 
@@ -217,7 +217,8 @@ public class MainController implements Initializable {
     private ColorPicker BackgroundColour;
 
     /**
-     *
+     * Sets the color palette by loading colors from the current
+     * palette and applying them to corresponding ColorPickers.
      */
     private void setColourPalette(){
         HashMap<ColourPaletteKeys, ColorPicker> PaletteFormat =  getColourPaletteFormat();
@@ -230,7 +231,8 @@ public class MainController implements Initializable {
     }
 
     /**
-     *
+     * Handles the onColourPicker action by loading the colour palette
+     * with selected colours and updating the UI accordingly
      */
     @FXML
     private void onColourPicker() {
@@ -239,7 +241,8 @@ public class MainController implements Initializable {
     }
 
     /**
-     *
+     * Handles the oDefaultButton action by loading the default colour
+     * palette and updating the UI accordingly
      */
     @FXML
     private void onDefaultButton(){
@@ -248,8 +251,10 @@ public class MainController implements Initializable {
     }
 
     /**
-     *
+     * Retrieves the format of the colour palette by mapping each colour
+     * palette key to its corresponding colour picker in a HashMap
      * @return
+     *      The associated HashMap with keys and colours
      */
     private HashMap<ColourPaletteKeys, ColorPicker> getColourPaletteFormat(){
         return new HashMap<>() {{
@@ -261,8 +266,9 @@ public class MainController implements Initializable {
     }
 
     /**
-     *
+     * Retrieves all selected colours in the colour picker
      * @return
+     *      The associated HashMap of keys and values is returned
      */
     private HashMap<ColourPaletteKeys, Color> getAllColours(){
         return new HashMap<>(){{
@@ -274,7 +280,7 @@ public class MainController implements Initializable {
     }
 
     /**
-     *
+     * States identifiers used for start time and end time
      */
     private enum TimeID{
         StartTime, EndTime
