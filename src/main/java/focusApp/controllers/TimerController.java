@@ -39,8 +39,6 @@ public class TimerController {
     private Arc MiniArc;
     @FXML
     private Group DelayedGroup;
-
-
     @FXML
     private Button PauseButton;
     @FXML
@@ -55,7 +53,8 @@ public class TimerController {
     private ToggleButton ToggleListen;
 
     /**
-     *
+     * Handles the onToggleListenClick action by turning the text-to-speech
+     * function off or on depending on its previous state
      */
     @FXML
     protected void onToggleListenClick() {
@@ -64,7 +63,7 @@ public class TimerController {
 
 
     /**
-     *
+     * Handles the onStopButtonClick action by stopping the timer
      */
     @FXML
     protected void onStopButtonClick(){
@@ -73,20 +72,22 @@ public class TimerController {
     }
 
     /**
-     *
+     * Handles mouse hover event over stop button by highlighting the
+     * button when mouse enters the field
      */
     @FXML
     protected void mouseInStopButton(){ StopButton.setContentDisplay(ContentDisplay.LEFT); }
 
     /**
-     *
+     * Handles mouse hover event over stop button by un-highlighting the
+     * button when mouse exits the field
      */
     @FXML
     protected void mouseOutStopButton(){ StopButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
 
 
     /**
-     *
+     * Handles the onPauseButtonClick action by pausing the timer
      */
     @FXML
     protected void onPauseButtonClick(){
@@ -94,20 +95,22 @@ public class TimerController {
     }
 
     /**
-     *
+     * Handles mouse hover event over pause button by highlighting the
+     * button when mouse enters the field
      */
     @FXML
     protected void mouseInPauseButton(){ PauseButton.setContentDisplay(ContentDisplay.LEFT);}
 
     /**
-     *
+     * Handles mouse hover event over pause button by un-highlighting the
+     * button when mouse exits the field
      */
     @FXML
     protected void mouseOutPauseButton(){ PauseButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
 
 
     /**
-     *
+     * Handles the onResumeButtonClick action by resuming the timer
      */
     @FXML
     protected void onResumeButtonClick(){
@@ -115,20 +118,22 @@ public class TimerController {
     }
 
     /**
-     *
+     * Handles mouse hover event over resume button by highlighting the
+     * button when mouse enters the field
      */
     @FXML
     protected void mouseInResumeButton(){ ResumeButton.setContentDisplay(ContentDisplay.LEFT);}
 
     /**
-     *
+     * Handles mouse hover event over resume button by un-highlighting the
+     * button when mouse exits the field
      */
     @FXML
     protected void mouseOutResumeButton(){ ResumeButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
 
 
     /**
-     *
+     * Handles the onRestartButtonClick action by restarting the timer
      */
     @FXML
     protected void onRestartButtonClick(){
@@ -136,13 +141,15 @@ public class TimerController {
     }
 
     /**
-     *
+     * Handles mouse hover event over restart button by highlighting the
+     * button when mouse enters the field
      */
     @FXML
     protected void mouseInRestartButton(){ RestartButton.setContentDisplay(ContentDisplay.LEFT);}
 
     /**
-     *
+     * Handles mouse hover event over restart button by un-highlighting the
+     * button when mouse exits the field
      */
     @FXML
     protected void mouseOutRestartButton(){ RestartButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
@@ -151,6 +158,7 @@ public class TimerController {
     /**
      *
      * @throws IOException
+     *      If an exception occurred while loading the FXML file
      */
     @FXML
     protected void onReturnButtonClick() throws IOException {
@@ -168,20 +176,22 @@ public class TimerController {
     }
 
     /**
-     *
+     * Handles mouse hover event over return button by highlighting the
+     * button when mouse enters the field
      */
     @FXML
     protected void mouseInReturnButton(){ ReturnButton.setContentDisplay(ContentDisplay.LEFT);}
 
     /**
-     *
+     * Handles mouse hover event over return button by un-highlighting the
+     * button when mouse exits the field
      */
     @FXML
     protected void mouseOutReturnButton(){ ReturnButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
 
 
     /**
-     *
+     * States button identifiers used for disabled, enabled, graphic display states
      */
     private enum ButtonStates{
         Disable, Enable, DisplayGraphic

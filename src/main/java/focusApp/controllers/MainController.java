@@ -299,10 +299,13 @@ public class MainController implements Initializable {
     private Slider DurationSlider;
 
     /**
-     *
+     * Sets the slider colour to reflect the selected time
      * @param TimerSlider
+     *      Used for selecting the time
      * @param SliderLabel
+     *      Used to display the selected time
      * @param TID
+     *      Used to distinguish between start and end time
      */
     public void setSlider(Slider TimerSlider, Label SliderLabel, TimeID TID) {
         // Listen for changes to the slider and update the label
@@ -372,6 +375,7 @@ public class MainController implements Initializable {
     /**
      * when clicking preset in dropdown menu
      * @throws IOException
+     *      If an exception occurred while loading the FXML file
      * @throws ImageReadException
      */
     public void onPresetsButtonClick() throws IOException, ImageReadException {
@@ -512,11 +516,15 @@ public class MainController implements Initializable {
     }
 
     /**
-     *
+     * Sets the graphic and dimensions for a button
      * @param button
+     *      The button whose graphic is being set
      * @param image
+     *      The image for the button to ge set to
      * @param width
+     *      The width of the image
      * @param height
+     *      The height of the image
      */
     private void setButtonGraphic(Button button, Image image, double width, double height) {
         ImageView imageView = new ImageView(image);
@@ -525,12 +533,11 @@ public class MainController implements Initializable {
         button.setGraphic(imageView);
     }
 
-
-
     /**
      * update the blocked items display
      * @param presetName
      * @throws IOException
+     *      If an exception occurred while loading the FXML file
      * @throws ImageReadException
      */
     public void updateBlockList(String presetName) throws IOException, ImageReadException {
@@ -608,8 +615,10 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Opens blocked applications page
+     * Handles the onBlockedApplicationsPaneClick action by loading the
+     * blocked-view FXML and the appropriate stylesheet
      * @throws IOException
+     *      If an exception occurred while loading the FXML file
      */
     public void onBlockedApplicationsPaneClick() throws IOException {
         Stage stage = (Stage) blockedApplicationPane.getScene().getWindow();
@@ -627,8 +636,10 @@ public class MainController implements Initializable {
 
 
     /**
-     * Starts timer with specified start and end times
+     * Handles the onStartButtonClick action by loading the
+     * timer-view FXML and the appropriate stylesheet
      * @throws IOException
+     *      If an exception occurred while loading the FXML file
      */
     public void onStartButtonClick() throws IOException {
         Stage stage = (Stage) startButton.getScene().getWindow();
@@ -655,8 +666,10 @@ public class MainController implements Initializable {
     }
 
     private boolean SideMenuOpen = false;
+
     /**
-     * Toggle side menu (visible or not visible)
+     * Toggles the visibility of the side menu by using the
+     * UpdateSideMenu function and the menu's previous state
      */
     @FXML
     private void toggleMenu() {
@@ -665,8 +678,10 @@ public class MainController implements Initializable {
     }
 
     /**
-     *
+     * Handles the states of the side menu by making the side menu
+     * visible or hidden depending on the Control param
      * @param Control
+     *      True to show the menu, false to hide it
      */
     private void UpdateSideMenu(boolean Control){
         menuStackPane.setVisible(Control);
@@ -674,9 +689,14 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Stores what side menu item is open.
+     * Stores what side menu item is open, if no menu is open, it is set to null
      */
     private MenuAttribute MenuItemOpened = null;
+
+    /**
+     * States identifiers for different menu attributes:
+     * AccountInformation, ParentalControls, ColourSettings, SoundSettings
+     */
     private enum MenuAttribute{
         AccountInformation, ParentalControls, ColourSettings, SoundSettings
     }
@@ -718,43 +738,50 @@ public class MainController implements Initializable {
     }
 
     /**
-     *
+     * Handles the onAccountButtonClick action by controlling
+     * the menu attribute to display the account information section
      */
     public void onAccountButtonClick(){MenuAttributeControl(MenuAttribute.AccountInformation);}
 
     /**
-     *
+     * Handles the onParentalControlsButtonClick action by controlling
+     * the menu attribute to display the parental controls section
      */
     public void onParentalControlsButtonClick(){MenuAttributeControl(MenuAttribute.ParentalControls);}
 
     /**
-     *
+     * Handles the onColourSettingsButtonClick action by controlling
+     * the menu attribute to display the colour settings section
      */
     public void onColourSettingsButtonClick(){MenuAttributeControl(MenuAttribute.ColourSettings);}
 
     /**
-     *
+     * Handles the onSoundSettingsButtonClick action by controlling
+     * the menu attribute to display the sound settings section
      */
     public void onSoundSettingsButtonClick(){MenuAttributeControl(MenuAttribute.SoundSettings);}
 
     /**
-     *
+     * Enables the confirm button for parental controls
      * @param keyEvent
+     *      Triggered when a key is pressed in the field
      */
     public void passwordEnteredParentalControls(KeyEvent keyEvent) {
         confirmPasswordButtonParentalControls.setDisable(false);
     }
 
     /**
-     *
+     * Enables the confirm button for parental controls
      * @param keyEvent
+     *      Triggered when a key is pressed in the field
      */
     public void passwordEnteredPasswordAuth(KeyEvent keyEvent) {
         confirmPasswordButtonPasswordAuth.setDisable(false);
     }
 
     /**
-     *
+     * Handles the XLabelClickPasswordAuth action by hiding the
+     * password authentication section and clearing the password section
      */
     public void onXLabelClickPasswordAuth() {
         blackOutStackPane.setVisible(false);
@@ -764,7 +791,8 @@ public class MainController implements Initializable {
     }
 
     /**
-     *
+     * Handles the XLabelClickParentalControls action by hiding the
+     * password authentication section and clearing the password section
      */
     public void onXLabelClickParentalControls() {
         parentalControlToggleButton.setSelected(true);
@@ -827,18 +855,22 @@ public class MainController implements Initializable {
     }
 
     /**
-     *
+     * Handles the onLogOutButton action by showing the
+     * logout confirmation pane
      */
     public void onLogOutButton() { ShowPane(true); }
 
     /**
-     *
+     * Handles the onAbortButtonClick action by hiding the
+     * logout confirmation pane
      */
     public void onAbortButtonClick(){ ShowPane(false); }
 
     /**
-     *
+     * Handles the onConfirmLogOutButton action by loading the
+     * login-view FXML and the appropriate stylesheet
      * @throws IOException
+     *      If an exception occurred while loading the FXML file
      */
     public void onConfirmLogOutButtonClick() throws IOException {
         Stage stage = (Stage) confirmButton.getScene().getWindow();
