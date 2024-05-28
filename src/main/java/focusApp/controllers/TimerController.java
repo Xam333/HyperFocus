@@ -61,7 +61,6 @@ public class TimerController {
         timer.TurnOnTTS(ToggleListen.isSelected());
     }
 
-
     /**
      * Handles the onStopButtonClick action by stopping the timer
      */
@@ -85,7 +84,6 @@ public class TimerController {
     @FXML
     protected void mouseOutStopButton(){ StopButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
 
-
     /**
      * Handles the onPauseButtonClick action by pausing the timer
      */
@@ -107,7 +105,6 @@ public class TimerController {
      */
     @FXML
     protected void mouseOutPauseButton(){ PauseButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
-
 
     /**
      * Handles the onResumeButtonClick action by resuming the timer
@@ -131,7 +128,6 @@ public class TimerController {
     @FXML
     protected void mouseOutResumeButton(){ ResumeButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
 
-
     /**
      * Handles the onRestartButtonClick action by restarting the timer
      */
@@ -154,9 +150,9 @@ public class TimerController {
     @FXML
     protected void mouseOutRestartButton(){ RestartButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
 
-
     /**
-     *
+     * Handles the onReturnButtonClick action by loading the
+     * main-view FXML and the appropriate stylesheet
      * @throws IOException
      *      If an exception occurred while loading the FXML file
      */
@@ -188,7 +184,6 @@ public class TimerController {
      */
     @FXML
     protected void mouseOutReturnButton(){ ReturnButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
-
 
     /**
      * States button identifiers used for disabled, enabled, graphic display states
@@ -316,10 +311,14 @@ public class TimerController {
     }
 
     /**
+     * Initialises the timer with the given start time, end time, and alarm
      *
      * @param startTime
+     *      The start time for the timer
      * @param endTime
+     *      The end time for the timer
      * @param Alarm
+     *      The alarm the timer will use
      */
     public void initialize(double startTime, double endTime, Notification Alarm) {
         timer = new Timer(startTime, endTime, this, Alarm);
@@ -330,38 +329,43 @@ public class TimerController {
     }
 
     /**
-     *
+     * Updates the timer status based on the status
      */
     public void UpdateTimerStatus(){
         Platform.runLater(() -> TimerStatus.setText(timer.getStatus()));
     }
 
     /**
-     *
+     * Updates the text of the stop watch with the formatted current timer value
      */
     public void UpdateStopWatch(){
         Platform.runLater(() -> StopWatch.setText(timer.FormatTime()));
     }
 
     /**
-     *
+     * Updates the length of the arc based on current timer value
      */
     public void UpdateArc(){
         Platform.runLater(() -> arc.setLength(((timer.getRCDinMS() + 1) / timer.getRTDinMS()) * 360));
     }
 
     /**
-     *
+     * Updates the length of the mini arc based on current timer value
      */
     public void UpdateMiniArc(){
         Platform.runLater(() ->  MiniArc.setLength(((timer.getDCDinMS() + 1) / timer.getDTDinMS()) * 360));
     }
 
     /**
+     * Updates the attributes of a specific arc element
      *
      * @param ThisArc
+     *      The arc being updated
      * @param Length
+     *      The length of the arc
      * @param Visibility
+     *      Used to track the visibility of the arc, if null the
+     *      visibility is no changed
      */
     private void UpdateArcAttributes(Arc ThisArc, int Length, Boolean Visibility){
         ThisArc.setLength(Length);
@@ -371,7 +375,8 @@ public class TimerController {
     }
 
     /**
-     *
+     * Updates the graphical user interface elements
+     * based on the timer state
      */
     public void UpdateGUI(){
         Platform.runLater(() -> {
