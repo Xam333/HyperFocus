@@ -111,7 +111,6 @@ public class MainController implements Initializable {
     private Image editIcon;
     private Image tickIcon;
 
-
     /**
      * Constructs new MainController and initialises necessary
      * components, such as userHolder, presetHolder,presetDAO,
@@ -345,9 +344,9 @@ public class MainController implements Initializable {
         });
     }
 
-
     /**
-     *
+     * Loads the preset and ComboBox based off of the current user
+     * If no presets exist, a default preset is created called "Preset"
      */
     public void loadPresets() {
         ArrayList<String> presetNames = new ArrayList<>();
@@ -371,12 +370,13 @@ public class MainController implements Initializable {
         presetsButton.setItems(presetsList);
     }
 
-
     /**
-     * when clicking preset in dropdown menu
+     * Handles the action for when a preset is selected from the ComboBox
+     *
      * @throws IOException
      *      If an exception occurred while loading the FXML file
      * @throws ImageReadException
+     *      If an exception occurred while reading an image
      */
     public void onPresetsButtonClick() throws IOException, ImageReadException {
         // Get preset name
@@ -422,7 +422,8 @@ public class MainController implements Initializable {
     }
 
     /**
-     *
+     * Handles the onDeleteButtonClick action by deleting the selected
+     * preset from the database, and removing it from the ComboBox
      */
     public void onDeleteButtonClick() {
         // Get the currently selected preset name
@@ -440,7 +441,12 @@ public class MainController implements Initializable {
     }
 
     /**
-     *
+     * Handles the onEditButtonClick action by checking if the
+     * ComboBox is editable, then the changes are saved and the tick
+     * icon is changed to the edit icon with the setButtonGraphic function
+     * If the ComboBox is not editable, the ComboBox is set to editable,
+     * and the icon is changed to a tick icon with the setButtonGraphic
+     * function
      */
     @FXML
     private void onEditButtonClick() {
@@ -467,8 +473,9 @@ public class MainController implements Initializable {
     }
 
     /**
-     *
+     * Saves an edited preset to the database and updates the combo box
      * @return
+     *      True if the preset name was successfully changed, false if not
      */
     public boolean saveEditedPresetName() {
         // Check if ComboBox is editable
@@ -501,8 +508,9 @@ public class MainController implements Initializable {
     }
 
     /**
-     *
+     * Handles the onComboBoxKeyPressed event
      * @param event
+     *      Triggered by the combo box
      */
     @FXML
     private void onComboBoxKeyPressed(KeyEvent event) {
@@ -534,11 +542,13 @@ public class MainController implements Initializable {
     }
 
     /**
-     * update the blocked items display
+     * Updates the blocked list display based off of the selected preset
      * @param presetName
+     *      The name of the selected preset
      * @throws IOException
      *      If an exception occurred while loading the FXML file
      * @throws ImageReadException
+     *      If an exception occurred while reading images
      */
     public void updateBlockList(String presetName) throws IOException, ImageReadException {
         Preset currentPreset = null;
@@ -634,7 +644,6 @@ public class MainController implements Initializable {
         stage.setScene(scene);
     }
 
-
     /**
      * Handles the onStartButtonClick action by loading the
      * timer-view FXML and the appropriate stylesheet
@@ -665,6 +674,9 @@ public class MainController implements Initializable {
         stage.setScene(scene);
     }
 
+    /**
+     * Tracks the visibility and management of the side menu
+     */
     private boolean SideMenuOpen = false;
 
     /**
@@ -702,9 +714,12 @@ public class MainController implements Initializable {
     }
 
     /**
+     * Controls the visibility and layout of the side menu
      *
      * @param Section
+     *      The section being managed
      * @param Visible
+     *      True is setting to visible and managed, false if not
      */
     private void MenuControl(VBox Section, boolean Visible){
         Section.setManaged(Visible);
@@ -712,8 +727,11 @@ public class MainController implements Initializable {
     }
 
     /**
+     * Controls the visibility and management of sections based on the
+     * provided attribute through the use of the MenuControl function
      *
      * @param Attribute
+     *      The menu attribute being controlled
      */
     private void MenuAttributeControl(MenuAttribute Attribute){
 
@@ -802,9 +820,13 @@ public class MainController implements Initializable {
         parentalControlsPasswordField.clear();
     }
 
-
     /**
-     *
+     * Handles the onEditUserNameButtonClick action by checking if the
+     * username field is editable, if so it checks the username is not
+     * already taken, if the password is taken, it displays an error
+     * message and changes the button text to "EDIT"
+     * If the username field is not editable, then the text is changed
+     * to "SAVE" and the field is set to editable
      */
     public void onEditUserNameButtonClick() {
         if (userNameTextField.isEditable()) {
@@ -825,7 +847,11 @@ public class MainController implements Initializable {
     }
 
     /**
-     *
+     * Handles the onEditPasswordButtonClick action by checking if the
+     * password field is editable, if so it checks the password is not blank,
+     * then it displays the password authentication pane
+     * If the password field is not editable, the password field is cleared,
+     * and then set to editable, and the button text is changed to "SAVE"
      */
     public void onEditPasswordButtonClick() {
         if (passwordTextField.isEditable()) {
@@ -846,8 +872,9 @@ public class MainController implements Initializable {
     }
 
     /**
-     *
+     * Sets the visibility of the blackout and confirm logout panes
      * @param Display
+     *      True to make panes visible, false to make them hidden
      */
     private void ShowPane(boolean Display){
         blackOutStackPane.setVisible(Display);
@@ -855,14 +882,16 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Handles the onLogOutButton action by showing the
-     * logout confirmation pane
+     * Handles the onLogOutButton action by setting the visibility
+     * of the blackout and confirmation panes, through the use of the
+     * showPane function
      */
     public void onLogOutButton() { ShowPane(true); }
 
     /**
-     * Handles the onAbortButtonClick action by hiding the
-     * logout confirmation pane
+     * Handles the onAbortButtonClick action by setting the visibility
+     * of the blackout and confirmation panes, through the use of the
+     * showPane function
      */
     public void onAbortButtonClick(){ ShowPane(false); }
 
@@ -886,7 +915,11 @@ public class MainController implements Initializable {
     }
 
     /**
-     *
+     * Handles the onConfirmParentalControlsButtonClick action by
+     * checking if the password entered in correct.
+     * If so, the parental controls are disabled, and the status is
+     * updated in the database.
+     * Otherwise, the user is notified that the password is incorrect.
      */
     public void onPasswordAuthenticationCheck() {
         // Check if password is correct
@@ -912,7 +945,11 @@ public class MainController implements Initializable {
     }
 
     /**
-     *
+     * Handles the onConfirmParentalControlsButtonClick action by
+     * checking if the password entered in correct.
+     * If so, the parental controls are disabled, and the status is
+     * updated in the database.
+     * Otherwise, the user is notified that the password is incorrect.
      */
     public void onConfirmParentalControlsButtonClick() {
         // Check if password is correct
