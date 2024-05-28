@@ -22,7 +22,7 @@ public class HomeController {
     private ImageView focusAppLogo;
 
     /**
-     *
+     * Initialise the controller automatically after the FXML file is loaded
      */
     @FXML
     private void initialize() {
@@ -30,8 +30,11 @@ public class HomeController {
     }
 
     /**
+     * Handles the onRegisterButtonClick action by loading the
+     * register-view FXML and the appropriate stylesheet
      *
      * @throws IOException
+     *      If an exception occurred while loading the FXML file
      */
     @FXML
     protected void onRegisterButtonClick() throws IOException {
@@ -49,8 +52,11 @@ public class HomeController {
     }
 
     /**
+     * Handles the onLoginButtonClick action by loading the
+     * login-view FXML and the appropriate stylesheet
      *
      * @throws IOException
+     *      If an exception occurred while loading the FXML file
      */
     @FXML
     protected void onLoginButtonClick() throws IOException {
@@ -68,7 +74,7 @@ public class HomeController {
     }
 
     /**
-     *
+     * Constructs new HomeController when initialised
      */
     public HomeController(){
     }

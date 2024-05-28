@@ -23,8 +23,11 @@ public class HelloApplication extends Application {
 
     /**
      * Sets the configurations of the home page
+     *
      * @param stage
+     *      The primary stage for HyperFocus that scenes can be set on
      * @throws IOException
+     *      If an exception occurred while loading the FXML file
      */
     @Override
     public void start(Stage stage) throws IOException {
@@ -65,6 +68,7 @@ public class HelloApplication extends Application {
     /**
      * Launches the application
      * @param args
+     *      Command line arguments
      */
     public static void main(String[] args) {
         launch();

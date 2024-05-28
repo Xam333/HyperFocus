@@ -41,21 +41,22 @@ public class LoginController {
     @FXML
     public Hyperlink loginLink;
 
-    /* singleton used to hold user class for use in other controllers */
+    /**
+     * singleton used to hold user class for use in other controllers
+     */
     private UserHolder userHolder = UserHolder.getInstance();
 
-
     /**
-     *
+     * Initialise the controller automatically after the FXML file is loaded
      */
     @FXML
     private void initialize(){}
 
-//    Return to home page
-
     /**
-     *
+     * Handles the onBackButtonClick action by loading the
+     * home-view FXML and the appropriate stylesheet
      * @throws IOException
+     *      If an exception occurred while loading the FXML file
      */
     @FXML
     protected void onBackButtonClick() throws IOException {
@@ -72,13 +73,14 @@ public class LoginController {
         stage.setScene(scene);
     }
 
-
-    /* login button in login-view.fxml
-     */
-
     /**
+     * Handles the onLoginButtonClick action.
+     * If the username and password provided are correct,
+     * the main-view FXML and the appropriate stylesheet are loaded
+     * Otherwise, an error message is displayed
      *
      * @throws IOException
+     *      If an exception occurred while loading the FXML file
      */
     @FXML
     protected void onLoginButtonClick() throws IOException {
@@ -105,12 +107,18 @@ public class LoginController {
         }
     }
 
-    /* confirm button on register-view.fxml
-     */
-
     /**
+     * Handles the onConfirmButtonClick action.
+     * If inputted passwords match and are not empty,
+     * and if username is available, it attempts to
+     * create a new user account.
+     * If creation is successful,
+     * the username and password provided are correct,
+     * the login-view FXML and the appropriate stylesheet are loaded
+     * Otherwise, an error message is displayed
      *
      * @throws IOException
+     *      If an exception occurred while loading the FXML file
      */
     @FXML
     protected void onConfirmButtonClick() throws IOException {
@@ -146,12 +154,11 @@ public class LoginController {
         }
     }
 
-
-//    Takes user from login page to register page
-
     /**
-     *
+     * Handles the onRegisterLinkClick action by loading the
+     * register-view FXML and the appropriate stylesheet
      * @throws IOException
+     *      If an exception occurred while loading the FXML file
      */
     @FXML
     protected void onRegisterLinkClick() throws IOException{
@@ -168,12 +175,11 @@ public class LoginController {
         stage.setScene(scene);
     }
 
-
-    //    Takes user from register page to login page
-
     /**
-     *
+     * Handles the onLoginLinkClick action by loading the
+     * login-view FXML and the appropriate stylesheet
      * @throws IOException
+     *      If an exception occurred while loading the FXML file
      */
     @FXML
     protected void onLoginLinkClick() throws IOException{
