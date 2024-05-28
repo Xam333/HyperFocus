@@ -45,12 +45,18 @@ public class LoginController {
     private UserHolder userHolder = UserHolder.getInstance();
 
 
-
+    /**
+     *
+     */
     @FXML
     private void initialize(){}
 
 //    Return to home page
 
+    /**
+     *
+     * @throws IOException
+     */
     @FXML
     protected void onBackButtonClick() throws IOException {
         Stage stage = (Stage) backButton.getScene().getWindow();
@@ -68,6 +74,11 @@ public class LoginController {
 
 
     /* login button in login-view.fxml
+     */
+
+    /**
+     *
+     * @throws IOException
      */
     @FXML
     protected void onLoginButtonClick() throws IOException {
@@ -95,6 +106,11 @@ public class LoginController {
     }
 
     /* confirm button on register-view.fxml
+     */
+
+    /**
+     *
+     * @throws IOException
      */
     @FXML
     protected void onConfirmButtonClick() throws IOException {
@@ -132,6 +148,11 @@ public class LoginController {
 
 
 //    Takes user from login page to register page
+
+    /**
+     *
+     * @throws IOException
+     */
     @FXML
     protected void onRegisterLinkClick() throws IOException{
         Stage stage = (Stage) regLink.getScene().getWindow();
@@ -149,6 +170,11 @@ public class LoginController {
 
 
     //    Takes user from register page to login page
+
+    /**
+     *
+     * @throws IOException
+     */
     @FXML
     protected void onLoginLinkClick() throws IOException{
         Stage stage = (Stage) loginLink.getScene().getWindow();

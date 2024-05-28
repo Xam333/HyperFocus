@@ -21,11 +21,18 @@ public class HomeController {
     @FXML
     private ImageView focusAppLogo;
 
+    /**
+     *
+     */
     @FXML
     private void initialize() {
 
     }
 
+    /**
+     *
+     * @throws IOException
+     */
     @FXML
     protected void onRegisterButtonClick() throws IOException {
         Stage stage = (Stage) registerButton.getScene().getWindow();
@@ -41,6 +48,10 @@ public class HomeController {
         stage.setScene(scene);
     }
 
+    /**
+     *
+     * @throws IOException
+     */
     @FXML
     protected void onLoginButtonClick() throws IOException {
         Stage stage = (Stage) loginButton.getScene().getWindow();
@@ -56,6 +67,9 @@ public class HomeController {
         stage.setScene(scene);
     }
 
+    /**
+     *
+     */
     public HomeController(){
     }
 

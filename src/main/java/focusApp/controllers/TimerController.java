@@ -54,53 +54,104 @@ public class TimerController {
     @FXML
     private ToggleButton ToggleListen;
 
+    /**
+     *
+     */
     @FXML
     protected void onToggleListenClick() {
         timer.TurnOnTTS(ToggleListen.isSelected());
     }
 
 
+    /**
+     *
+     */
     @FXML
     protected void onStopButtonClick(){
         // Add code to check Passwords here. if in parental control mode.
         timer.Control(Command.Stop);
     }
+
+    /**
+     *
+     */
     @FXML
     protected void mouseInStopButton(){ StopButton.setContentDisplay(ContentDisplay.LEFT); }
+
+    /**
+     *
+     */
     @FXML
     protected void mouseOutStopButton(){ StopButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
 
 
+    /**
+     *
+     */
     @FXML
     protected void onPauseButtonClick(){
         timer.Control(Command.Pause);
     }
+
+    /**
+     *
+     */
     @FXML
     protected void mouseInPauseButton(){ PauseButton.setContentDisplay(ContentDisplay.LEFT);}
+
+    /**
+     *
+     */
     @FXML
     protected void mouseOutPauseButton(){ PauseButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
 
 
+    /**
+     *
+     */
     @FXML
     protected void onResumeButtonClick(){
         timer.Control(Command.Resume);
     }
+
+    /**
+     *
+     */
     @FXML
     protected void mouseInResumeButton(){ ResumeButton.setContentDisplay(ContentDisplay.LEFT);}
+
+    /**
+     *
+     */
     @FXML
     protected void mouseOutResumeButton(){ ResumeButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
 
 
+    /**
+     *
+     */
     @FXML
     protected void onRestartButtonClick(){
         timer.Control(Command.Restart);
     }
+
+    /**
+     *
+     */
     @FXML
     protected void mouseInRestartButton(){ RestartButton.setContentDisplay(ContentDisplay.LEFT);}
+
+    /**
+     *
+     */
     @FXML
     protected void mouseOutRestartButton(){ RestartButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
 
 
+    /**
+     *
+     * @throws IOException
+     */
     @FXML
     protected void onReturnButtonClick() throws IOException {
         Stage stage = (Stage) ReturnButton.getScene().getWindow();
@@ -115,15 +166,32 @@ public class TimerController {
         }
         stage.setScene(scene);
     }
+
+    /**
+     *
+     */
     @FXML
     protected void mouseInReturnButton(){ ReturnButton.setContentDisplay(ContentDisplay.LEFT);}
+
+    /**
+     *
+     */
     @FXML
     protected void mouseOutReturnButton(){ ReturnButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
 
 
+    /**
+     *
+     */
     private enum ButtonStates{
         Disable, Enable, DisplayGraphic
     }
+
+    /**
+     *
+     * @param Buttons
+     * @param States
+     */
     private void UpdateButtons(Button[] Buttons, ButtonStates[] States){
         if (Buttons.length == States.length){
             for (int i = 0; i < Buttons.length; i++){
@@ -138,6 +206,10 @@ public class TimerController {
         }
 
     }
+
+    /**
+     *
+     */
     public void ButtonStateManager(){
         Button[] AllButtons = new Button[]{PauseButton, ResumeButton, StopButton, RestartButton, ReturnButton};
 
@@ -149,6 +221,10 @@ public class TimerController {
         UpdateButtonStates(AllButtons);
     }
 
+    /**
+     *
+     * @param AllButtons
+     */
     private void UpdateButtonStates(Button[] AllButtons){
         ButtonStates[] States;
         switch(timer.getTimerState()) {
@@ -173,6 +249,10 @@ public class TimerController {
         });
     }
 
+    /**
+     *
+     * @return
+     */
     private ButtonStates[] getRunningState(){
         return new ButtonStates[]{
                 ButtonStates.Enable,    // Pause
@@ -182,6 +262,11 @@ public class TimerController {
                 ButtonStates.Disable    // Return
         };
     }
+
+    /**
+     *
+     * @return
+     */
     private ButtonStates[] getPreRunState(){
         return new ButtonStates[]{
                 ButtonStates.Disable,   // Pause
@@ -191,6 +276,11 @@ public class TimerController {
                 ButtonStates.Disable    // Return
         };
     }
+
+    /**
+     *
+     * @return
+     */
     private ButtonStates[] getPausedState(){
         return new ButtonStates[]{
                 ButtonStates.Disable,   // Pause
@@ -200,6 +290,11 @@ public class TimerController {
                 ButtonStates.Disable    // Return
         };
     }
+
+    /**
+     *
+     * @return
+     */
     private ButtonStates[] getEndState(){
         return new ButtonStates[]{
                 ButtonStates.Disable,   // Pause
@@ -210,6 +305,12 @@ public class TimerController {
         };
     }
 
+    /**
+     *
+     * @param startTime
+     * @param endTime
+     * @param Alarm
+     */
     public void initialize(double startTime, double endTime, Notification Alarm) {
         timer = new Timer(startTime, endTime, this, Alarm);
         timer.Control(Command.Start);
@@ -218,25 +319,50 @@ public class TimerController {
         ButtonStateManager();
     }
 
+    /**
+     *
+     */
     public void UpdateTimerStatus(){
         Platform.runLater(() -> TimerStatus.setText(timer.getStatus()));
     }
+
+    /**
+     *
+     */
     public void UpdateStopWatch(){
         Platform.runLater(() -> StopWatch.setText(timer.FormatTime()));
     }
+
+    /**
+     *
+     */
     public void UpdateArc(){
         Platform.runLater(() -> arc.setLength(((timer.getRCDinMS() + 1) / timer.getRTDinMS()) * 360));
     }
+
+    /**
+     *
+     */
     public void UpdateMiniArc(){
         Platform.runLater(() ->  MiniArc.setLength(((timer.getDCDinMS() + 1) / timer.getDTDinMS()) * 360));
     }
 
+    /**
+     *
+     * @param ThisArc
+     * @param Length
+     * @param Visibility
+     */
     private void UpdateArcAttributes(Arc ThisArc, int Length, Boolean Visibility){
         ThisArc.setLength(Length);
         if (Visibility != null){
             ThisArc.setVisible(Visibility);
         }
     }
+
+    /**
+     *
+     */
     public void UpdateGUI(){
         Platform.runLater(() -> {
             switch (timer.getTimerState()){

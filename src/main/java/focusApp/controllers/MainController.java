@@ -115,6 +115,9 @@ public class MainController implements Initializable {
     private Image tickIcon;
 
 
+    /**
+     *
+     */
     public MainController() {
         userHolder = UserHolder.getInstance();
         presetHolder = PresetHolder.getInstance();
@@ -124,6 +127,11 @@ public class MainController implements Initializable {
         userDAO = new UserDAO();
     }
 
+    /**
+     *
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Load images
@@ -207,6 +215,10 @@ public class MainController implements Initializable {
     private ColorPicker TertiaryColour;
     @FXML
     private ColorPicker BackgroundColour;
+
+    /**
+     *
+     */
     private void setColourPalette(){
         HashMap<ColourPaletteKeys, ColorPicker> PaletteFormat =  getColourPaletteFormat();
         for(ColourPaletteKeys PaletteKey : ColourPaletteKeys.values()){
@@ -216,16 +228,29 @@ public class MainController implements Initializable {
             }
         }
     }
+
+    /**
+     *
+     */
     @FXML
     private void onColourPicker() {
         ColourPalette.LoadColourPalette(getAllColours());
         setColourPalette();
     }
+
+    /**
+     *
+     */
     @FXML
     private void onDefaultButton(){
         ColourPalette.LoadDefaultColourPalette();
         setColourPalette();
     }
+
+    /**
+     *
+     * @return
+     */
     private HashMap<ColourPaletteKeys, ColorPicker> getColourPaletteFormat(){
         return new HashMap<>() {{
             put(ColourPaletteKeys.Primary, PrimaryColour);
@@ -234,6 +259,11 @@ public class MainController implements Initializable {
             put(ColourPaletteKeys.Background, BackgroundColour);
         }};
     }
+
+    /**
+     *
+     * @return
+     */
     private HashMap<ColourPaletteKeys, Color> getAllColours(){
         return new HashMap<>(){{
             put(ColourPaletteKeys.Primary, PrimaryColour.getValue());
@@ -243,6 +273,9 @@ public class MainController implements Initializable {
         }};
     }
 
+    /**
+     *
+     */
     private enum TimeID{
         StartTime, EndTime
     }
@@ -259,6 +292,12 @@ public class MainController implements Initializable {
     @FXML
     private Slider DurationSlider;
 
+    /**
+     *
+     * @param TimerSlider
+     * @param SliderLabel
+     * @param TID
+     */
     public void setSlider(Slider TimerSlider, Label SliderLabel, TimeID TID) {
         // Listen for changes to the slider and update the label
         TimerSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
@@ -298,7 +337,9 @@ public class MainController implements Initializable {
     }
 
 
-
+    /**
+     *
+     */
     public void loadPresets() {
         ArrayList<String> presetNames = new ArrayList<>();
 
@@ -321,8 +362,11 @@ public class MainController implements Initializable {
         presetsButton.setItems(presetsList);
     }
 
+
     /**
      * when clicking preset in dropdown menu
+     * @throws IOException
+     * @throws ImageReadException
      */
     public void onPresetsButtonClick() throws IOException, ImageReadException {
         // Get preset name
@@ -367,6 +411,9 @@ public class MainController implements Initializable {
         updateBlockList(presetName);
     }
 
+    /**
+     *
+     */
     public void onDeleteButtonClick() {
         // Get the currently selected preset name
         String presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
@@ -382,6 +429,9 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     *
+     */
     @FXML
     private void onEditButtonClick() {
         if (presetsButton.isEditable()) {
@@ -406,6 +456,10 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean saveEditedPresetName() {
         // Check if ComboBox is editable
         if (presetsButton.isEditable()) {
@@ -436,6 +490,10 @@ public class MainController implements Initializable {
         return false;
     }
 
+    /**
+     *
+     * @param event
+     */
     @FXML
     private void onComboBoxKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
@@ -447,6 +505,13 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     *
+     * @param button
+     * @param image
+     * @param width
+     * @param height
+     */
     private void setButtonGraphic(Button button, Image image, double width, double height) {
         ImageView imageView = new ImageView(image);
         imageView.setFitWidth(width);
@@ -455,8 +520,12 @@ public class MainController implements Initializable {
     }
 
 
+
     /**
      * update the blocked items display
+     * @param presetName
+     * @throws IOException
+     * @throws ImageReadException
      */
     public void updateBlockList(String presetName) throws IOException, ImageReadException {
         Preset currentPreset = null;
@@ -534,6 +603,7 @@ public class MainController implements Initializable {
 
     /**
      * Opens blocked applications page
+     * @throws IOException
      */
     public void onBlockedApplicationsPaneClick() throws IOException {
         Stage stage = (Stage) blockedApplicationPane.getScene().getWindow();
@@ -549,8 +619,10 @@ public class MainController implements Initializable {
         stage.setScene(scene);
     }
 
+
     /**
      * Starts timer with specified start and end times
+     * @throws IOException
      */
     public void onStartButtonClick() throws IOException {
         Stage stage = (Stage) startButton.getScene().getWindow();
@@ -585,6 +657,11 @@ public class MainController implements Initializable {
         // Open and Close the menu.
         UpdateSideMenu(!SideMenuOpen);
     }
+
+    /**
+     *
+     * @param Control
+     */
     private void UpdateSideMenu(boolean Control){
         menuStackPane.setVisible(Control);
         SideMenuOpen = Control;
@@ -597,10 +674,21 @@ public class MainController implements Initializable {
     private enum MenuAttribute{
         AccountInformation, ParentalControls, ColourSettings, SoundSettings
     }
+
+    /**
+     *
+     * @param Section
+     * @param Visible
+     */
     private void MenuControl(VBox Section, boolean Visible){
         Section.setManaged(Visible);
         Section.setVisible(Visible);
     }
+
+    /**
+     *
+     * @param Attribute
+     */
     private void MenuAttributeControl(MenuAttribute Attribute){
 
         MenuControl(accountInformationSection, false);
@@ -622,19 +710,46 @@ public class MainController implements Initializable {
             case SoundSettings -> MenuControl(soundSettingsSection, true);
         }
     }
+
+    /**
+     *
+     */
     public void onAccountButtonClick(){MenuAttributeControl(MenuAttribute.AccountInformation);}
+
+    /**
+     *
+     */
     public void onParentalControlsButtonClick(){MenuAttributeControl(MenuAttribute.ParentalControls);}
+
+    /**
+     *
+     */
     public void onColourSettingsButtonClick(){MenuAttributeControl(MenuAttribute.ColourSettings);}
+
+    /**
+     *
+     */
     public void onSoundSettingsButtonClick(){MenuAttributeControl(MenuAttribute.SoundSettings);}
 
+    /**
+     *
+     * @param keyEvent
+     */
     public void passwordEnteredParentalControls(KeyEvent keyEvent) {
         confirmPasswordButtonParentalControls.setDisable(false);
     }
 
+    /**
+     *
+     * @param keyEvent
+     */
     public void passwordEnteredPasswordAuth(KeyEvent keyEvent) {
         confirmPasswordButtonPasswordAuth.setDisable(false);
     }
 
+    /**
+     *
+     */
     public void onXLabelClickPasswordAuth() {
         blackOutStackPane.setVisible(false);
         passwordAuthStackPane.setVisible(false);
@@ -642,6 +757,9 @@ public class MainController implements Initializable {
         passwordAuth.clear();
     }
 
+    /**
+     *
+     */
     public void onXLabelClickParentalControls() {
         parentalControlToggleButton.setSelected(true);
         blackOutStackPane.setVisible(false);
@@ -651,7 +769,9 @@ public class MainController implements Initializable {
     }
 
 
-
+    /**
+     *
+     */
     public void onEditUserNameButtonClick() {
         if (userNameTextField.isEditable()) {
             if (userDAO.updateName(user.getId(), userNameTextField.getText())) {
@@ -670,6 +790,9 @@ public class MainController implements Initializable {
         userNameTextField.setEditable(!userNameTextField.isEditable());
     }
 
+    /**
+     *
+     */
     public void onEditPasswordButtonClick() {
         if (passwordTextField.isEditable()) {
             if (passwordTextField.getText().isEmpty()) {
@@ -688,13 +811,29 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     *
+     * @param Display
+     */
     private void ShowPane(boolean Display){
         blackOutStackPane.setVisible(Display);
         confirmLogOutStackPane.setVisible(Display);
     }
+
+    /**
+     *
+     */
     public void onLogOutButton() { ShowPane(true); }
+
+    /**
+     *
+     */
     public void onAbortButtonClick(){ ShowPane(false); }
 
+    /**
+     *
+     * @throws IOException
+     */
     public void onConfirmLogOutButtonClick() throws IOException {
         Stage stage = (Stage) confirmButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/login-view.fxml"));
@@ -708,6 +847,9 @@ public class MainController implements Initializable {
         stage.setScene(scene);
     }
 
+    /**
+     *
+     */
     public void onPasswordAuthenticationCheck() {
         // Check if password is correct
         User login_user = userDAO.login(user.getUserName(), passwordAuth.getText());
@@ -731,6 +873,9 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     *
+     */
     public void onConfirmParentalControlsButtonClick() {
         // Check if password is correct
         User login_user = userDAO.login(user.getUserName(), parentalControlsPasswordField.getText());
