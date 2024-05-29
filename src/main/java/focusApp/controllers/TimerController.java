@@ -26,8 +26,6 @@ public class TimerController {
 
     private Timer timer;
     private boolean InParentalControl;
-    private boolean PasswordGood;
-
 
     @FXML
     private Label StopWatch;

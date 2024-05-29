@@ -49,7 +49,7 @@
           <!-- Edit/Save Button-->
           <Button fx:id="editButton" onAction="#onEditButtonClick" prefHeight="40.0" prefWidth="40.0" styleClass="iconButton">
               <graphic>
-                  <ImageView fx:id="editImage" fitHeight="30.0" fitWidth="30.0" preserveRatio="true" />
+                  <ImageView fitHeight="30.0" fitWidth="30.0" preserveRatio="true" />
               </graphic>
           </Button>
 
@@ -75,11 +75,9 @@
                </VBox.margin>
            </Label>
        </VBox>
-      <Pane fx:id="blockedApplicationPane" onMouseClicked="#onBlockedApplicationsPaneClick" prefHeight="114.0" prefWidth="280.0" styleClass="blockedPane">
-          <GridPane fx:id="blockedIcons" prefHeight="114.0" prefWidth="280.0">
-
-          </GridPane>
-      </Pane>
+        <Pane fx:id="blockedApplicationPane" onMouseClicked="#onBlockedApplicationsPaneClick" prefHeight="114.0" prefWidth="280.0" styleClass="blockedPane">
+          <GridPane fx:id="blockedIcons" prefHeight="114.0" prefWidth="280.0"/>
+        </Pane>
 
        <!-- TIMERS -->
        <!-- Set Start Timer -->
@@ -260,7 +258,7 @@
                     </HBox>
                 </VBox>
             </VBox>
-         <Region prefHeight="315.0" prefWidth="300.0" />
+            <Region prefHeight="315.0" prefWidth="300.0" />
 
             <!-- Log Out Section -->
             <VBox>
@@ -276,28 +274,53 @@
     <!-- BLACK OUT PANE -->
     <StackPane fx:id="blackOutStackPane" prefHeight="600.0" prefWidth="390.0" styleClass="blackOutPane" visible="false"/>
 
-    <!-- Password Authentication For Changing Password -->
-    <StackPane fx:id="passwordAuthStackPane" layoutX="55.0" layoutY="225.0" minHeight="200.0" styleClass="confirmPane" visible="false">
+    <!-- PASSWORD AUTHENTICATION FOR CHANGING PASSWORD -->
+    <StackPane fx:id="passwordAuthStackPane"
+               layoutX="55.0"
+               layoutY="225.0"
+               minHeight="200.0"
+               styleClass="confirmPane"
+               visible="false">
         <VBox>
             <HBox alignment="TOP_RIGHT">
-                <Button mnemonicParsing="false" onAction="#onXLabelClickPasswordAuth" styleClass="tinyXButton" text="X" />
+                <Button mnemonicParsing="false"
+                        onAction="#onXLabelClickPasswordAuth"
+                        styleClass="tinyXButton"
+                        text="X" />
             </HBox>
             <VBox alignment="CENTER">
-                <Label styleClass="bodyLabel" text="Enter current password for authentication" textAlignment="CENTER" wrapText="true" />
+                <Label styleClass="bodyLabel"
+                       text="Enter current password for authentication"
+                       textAlignment="CENTER"
+                       wrapText="true" />
                 <HBox alignment="CENTER">
                     <padding>
                         <Insets top="15.0" />
                     </padding>
-                    <PasswordField fx:id="passwordAuth" minWidth="230.0" onKeyTyped="#passwordEnteredPasswordAuth" promptText="Password" styleClass="addBox" />
+                    <PasswordField fx:id="passwordAuth"
+                                   minWidth="230.0"
+                                   onKeyTyped="#passwordEnteredPasswordAuth"
+                                   promptText="Password"
+                                   styleClass="addBox" />
                 </HBox>
-                <Label fx:id="denyPasswordAuth" styleClass="warningLabel" textAlignment="RIGHT" wrapText="true" />
+                <Label fx:id="denyPasswordAuth"
+                       styleClass="warningLabel"
+                       textAlignment="RIGHT"
+                       wrapText="true" />
                 <padding>
                     <Insets bottom="10.0" />
                 </padding>
             </VBox>
             <HBox>
                 <Region HBox.hgrow="ALWAYS" />
-                <Button fx:id="confirmPasswordButtonPasswordAuth" disable="true" minWidth="100.0" mnemonicParsing="false" onAction="#onPasswordAuthenticationCheck" styleClass="tinyPrimaryButton" text="CONFIRM" textAlignment="CENTER" />
+                <Button fx:id="confirmPasswordButtonPasswordAuth"
+                        disable="true"
+                        minWidth="100.0"
+                        mnemonicParsing="false"
+                        onAction="#onPasswordAuthenticationCheck"
+                        styleClass="tinyPrimaryButton"
+                        text="CONFIRM"
+                        textAlignment="CENTER" />
                 <Region prefWidth="20.0" />
                 <padding>
                     <Insets bottom="10.0" />
@@ -307,27 +330,52 @@
     </StackPane>
 
     <!-- PARENTAL CONTROLS PASSWORD ENTRY -->
-    <StackPane fx:id="turnOffParentalControlsStackPane" layoutX="55.0" layoutY="225.0" minHeight="180.0" prefHeight="180.0" styleClass="confirmPane" visible="false">
-        <VBox alignment="TOP_CENTER" prefHeight="173.0" prefWidth="270.0">
+    <StackPane fx:id="turnOffParentalControlsStackPane"
+               layoutX="55.0"
+               layoutY="225.0"
+               minHeight="200.0"
+               styleClass="confirmPane"
+               visible="false">
+        <VBox>
             <HBox alignment="TOP_RIGHT">
-                <Button mnemonicParsing="false" onAction="#onXLabelClickParentalControls" styleClass="tinyXButton" text="X" />
+                <Button mnemonicParsing="false"
+                        onAction="#onXLabelClickParentalControls"
+                        styleClass="tinyXButton"
+                        text="X" />
             </HBox>
             <VBox alignment="CENTER">
-                <Label styleClass="bodyLabel" text="Enter passcode to disable parental controls" textAlignment="CENTER" wrapText="true" />
+                <Label styleClass="bodyLabel"
+                       text="Enter password to disable parental controls"
+                       textAlignment="CENTER"
+                       wrapText="true" />
                 <HBox alignment="CENTER">
                     <padding>
                         <Insets top="15.0" />
                     </padding>
-                    <PasswordField fx:id="parentalControlsPasswordField" minWidth="230.0" onKeyTyped="#passwordEnteredParentalControls" promptText="Password" styleClass="addBox" />
+                    <PasswordField fx:id="parentalControlsPasswordField"
+                                   minWidth="230.0"
+                                   onKeyTyped="#passwordEnteredParentalControls"
+                                   promptText="Password"
+                                   styleClass="addBox" />
                 </HBox>
-                <Label fx:id="denyParentalControlsDisableLabel" styleClass="warningLabel" textAlignment="RIGHT" wrapText="true" />
+                <Label fx:id="denyParentalControlsDisableLabel"
+                       styleClass="warningLabel"
+                       textAlignment="RIGHT"
+                       wrapText="true" />
                 <padding>
                     <Insets bottom="10.0" />
                 </padding>
             </VBox>
             <HBox>
                 <Region HBox.hgrow="ALWAYS" />
-                <Button fx:id="confirmPasswordButtonParentalControls" disable="true" minWidth="100.0" mnemonicParsing="false" onAction="#onConfirmParentalControlsButtonClick" styleClass="tinyPrimaryButton" text="CONFIRM" textAlignment="CENTER" />
+                <Button fx:id="confirmPasswordButtonParentalControls"
+                        disable="true"
+                        minWidth="100.0"
+                        mnemonicParsing="false"
+                        onAction="#onConfirmParentalControlsButtonClick"
+                        styleClass="tinyPrimaryButton"
+                        text="CONFIRM"
+                        textAlignment="CENTER" />
                 <Region prefWidth="20.0" />
                 <padding>
                     <Insets bottom="10.0" />
