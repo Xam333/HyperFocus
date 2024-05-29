@@ -102,7 +102,8 @@ public class BlockedController implements Initializable {
     private ArrayList<BlockedItem> blockedItems;
 
     /**
-     *
+     * Constructs new BlockedController and initialises necessary
+     * components
      */
     public BlockedController(){
         blockedDAO = new MockedBlockedItemDAO();
@@ -138,8 +139,9 @@ public class BlockedController implements Initializable {
 
 
     /**
-     *
+     * Extracts image URL, name, and link from the given website
      * @param newWebsiteURL
+     *      The URL of the website
      */
     @FXML
     private void addNewWebsite(String newWebsiteURL)
@@ -170,8 +172,9 @@ public class BlockedController implements Initializable {
     }
 
     /**
-     *
+     * Extracts the image URL, name, and link from the application location
      * @param newApplicationLocation
+     *      The location of the application
      */
     @FXML
     private void addNewApplication(String newApplicationLocation)
@@ -225,11 +228,12 @@ public class BlockedController implements Initializable {
     }
 
     /**
-     *
+     * Extracts the title and icon from the given executable file location
      * @param exeLocation
+     *      The location of the executable file
      * @return
+     *      An array containing the icon URL, title, and location
      */
-    //C:\Program Files (x86)\Nisscan\NDS II 2.56\NDS II 2_56.exe
     public static String[] getExecutableTitleAndIcon(String exeLocation)
     {
         String regex = "([^\\\\]+)";
@@ -257,8 +261,9 @@ public class BlockedController implements Initializable {
     }
 
     /**
-     *
+     * Handles the application file search
      * @return
+     *      The location of the application selected otherwise returns "File Not Found"
      */
     public String fileSearch() {
         JFrame frame = new JFrame("Open File");
@@ -287,8 +292,10 @@ public class BlockedController implements Initializable {
     }
 
     /**
-     *
+     * Opens confirmation pane is changes are not saved. Otherwise
+     * it loads the main-view FXML and the appropriate stylesheet
      * @throws IOException
+     *      If an exception occurred while loading the FXML file
      */
     @FXML
     protected void onCancelButtonClick() throws IOException {
@@ -311,7 +318,8 @@ public class BlockedController implements Initializable {
     }
 
     /**
-     *
+     * Syncs the blocked applications data with the table view by
+     * retrieving the blocked items and assigning it to table columns
      */
     public void syncBlockedApplications()
     {
@@ -363,9 +371,11 @@ public class BlockedController implements Initializable {
     }
 
     /**
-     *
+     * Initialise the controller automatically after the FXML file is loaded
      * @param url
+     *      Used to resolve paths for objects. Returns null if path is unknown
      * @param resourceBundle
+     *      Used to localise an object. Returns null if it can not localise.
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -388,9 +398,12 @@ public class BlockedController implements Initializable {
     }
 
     /**
-     *
+     * Saves new blocked applications and websites to the database
+     * And loads the main-view FXML and the appropriate stylesheet
      * @param actionEvent
+     *      Triggered when pressed
      * @throws IOException
+     *      If an exception occurred while loading the FXML file
      */
 //    Add new websites and applications to database
     public void onSaveButtonClick(ActionEvent actionEvent) throws IOException {
@@ -420,8 +433,9 @@ public class BlockedController implements Initializable {
     }
 
     /**
-     *
+     * Enables visibility of the blackout and add website pane when clicked
      * @param actionEvent
+     *      Triggered when pressed
      */
 //    Navigate to form page or, open stack pane
     public void onWebsiteButtonClick(ActionEvent actionEvent) {
@@ -431,8 +445,9 @@ public class BlockedController implements Initializable {
     }
 
     /**
-     *
+     * Enables visibility of the blackout and add application pane when clicked
      * @param actionEvent
+     *      Triggered when pressed
      */
     public void onApplicationButtonClick(ActionEvent actionEvent) {
         blackOutStackPane.setVisible(true);
@@ -440,8 +455,10 @@ public class BlockedController implements Initializable {
     }
 
     /**
-     *
+     * Disables visibility of the blackout,
+     * add website and add app pane when clicked
      * @param mouseEvent
+     *      Triggered when pressed
      */
     public void onXLabelClick(ActionEvent mouseEvent) {
         blackOutStackPane.setVisible(false);
@@ -450,10 +467,10 @@ public class BlockedController implements Initializable {
     }
 
     /**
-     *
+     * Stores to temporary database things, wait for save button to be clicked
      * @param actionEvent
+     *      Triggered when pressed
      */
-//    Store to temp database things, wait for save button to be clicked
     @FXML
     public void onAddButtonClick(ActionEvent actionEvent) {
 //        Get addWebsiteTextField contents
@@ -474,15 +491,17 @@ public class BlockedController implements Initializable {
     }
 
     /**
-     *
+     * Handles the status of the block button based on if something is
+     * entered in the text field or not
      * @param keyEvent
+     *      Triggered when something is entered in the text field
      */
     public void websiteEntered(KeyEvent keyEvent) {
         addWebButton.setDisable(false);
     }
 
     /**
-     *
+     * Calls the fileSearch function when triggered
      */
     public void onFileClick() {
         fileLocation = fileSearch();
@@ -495,8 +514,10 @@ public class BlockedController implements Initializable {
     private Button confirmButton;
 
     /**
-     *
+     * Handles the onConfirmButtonClick action by loading the
+     * main-view FXML and the appropriate stylesheet
      * @throws IOException
+     *      If an exception occurred while loading the FXML file
      */
     public void onConfirmButtonClick() throws IOException {
         Stage stage = (Stage) confirmButton.getScene().getWindow();
@@ -508,7 +529,7 @@ public class BlockedController implements Initializable {
     }
 
     /**
-     *
+     * Hides the cancel pane and block out pane
      */
     public void onAbortButtonClick() {
         blackOutStackPane.setVisible(false);
