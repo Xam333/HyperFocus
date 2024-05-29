@@ -59,13 +59,6 @@ import java.util.regex.Matcher;
 
 public class BlockedController implements Initializable {
 
-
-
-
-    public StackPane turnOffParentalControlsStackPane;
-    public PasswordField parentalControlsPasswordField;
-    public Label denyParentalControlsDisableLabel;
-
     private String fileLocation;
     public StackPane addWebsiteStackPane;
     public TextField addWebsiteTextField;
@@ -106,6 +99,9 @@ public class BlockedController implements Initializable {
     private User user;
     private ArrayList<BlockedItem> blockedItems;
 
+    /**
+     *
+     */
     public BlockedController(){
         blockedDAO = new MockedBlockedItemDAO();
         presetDAO = new PresetDAO();
@@ -139,6 +135,10 @@ public class BlockedController implements Initializable {
     }
 
 
+    /**
+     *
+     * @param newWebsiteURL
+     */
     @FXML
     private void addNewWebsite(String newWebsiteURL)
     {
@@ -167,6 +167,10 @@ public class BlockedController implements Initializable {
         syncBlockedApplications();
     }
 
+    /**
+     *
+     * @param newApplicationLocation
+     */
     @FXML
     private void addNewApplication(String newApplicationLocation)
     {
@@ -218,6 +222,11 @@ public class BlockedController implements Initializable {
         }
     }
 
+    /**
+     *
+     * @param exeLocation
+     * @return
+     */
     //C:\Program Files (x86)\Nisscan\NDS II 2.56\NDS II 2_56.exe
     public static String[] getExecutableTitleAndIcon(String exeLocation)
     {
@@ -245,6 +254,10 @@ public class BlockedController implements Initializable {
         return new String[]{fileIcon, foundTitle, exeLocation};
     }
 
+    /**
+     *
+     * @return
+     */
     public String fileSearch() {
         JFrame frame = new JFrame("Open File");
 
@@ -271,6 +284,10 @@ public class BlockedController implements Initializable {
         }
     }
 
+    /**
+     *
+     * @throws IOException
+     */
     @FXML
     protected void onCancelButtonClick() throws IOException {
         if(!changesSaved){
@@ -291,6 +308,9 @@ public class BlockedController implements Initializable {
 
     }
 
+    /**
+     *
+     */
     public void syncBlockedApplications()
     {
 //        ObservableList<BlockedApplication> dataList = blockedDAO.dataList(blockedDAO.getAllApplications());
@@ -340,6 +360,11 @@ public class BlockedController implements Initializable {
         });
     }
 
+    /**
+     *
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -354,6 +379,11 @@ public class BlockedController implements Initializable {
 
     }
 
+    /**
+     *
+     * @param actionEvent
+     * @throws IOException
+     */
 //    Add new websites and applications to database
     public void onSaveButtonClick(ActionEvent actionEvent) throws IOException {
 
@@ -381,6 +411,10 @@ public class BlockedController implements Initializable {
         stage.setScene(scene);
     }
 
+    /**
+     *
+     * @param actionEvent
+     */
 //    Navigate to form page or, open stack pane
     public void onWebsiteButtonClick(ActionEvent actionEvent) {
         blackOutStackPane.setVisible(true);
@@ -388,17 +422,29 @@ public class BlockedController implements Initializable {
 
     }
 
+    /**
+     *
+     * @param actionEvent
+     */
     public void onApplicationButtonClick(ActionEvent actionEvent) {
         blackOutStackPane.setVisible(true);
         addApplicationStackPane.setVisible(true);
     }
 
+    /**
+     *
+     * @param mouseEvent
+     */
     public void onXLabelClick(ActionEvent mouseEvent) {
         blackOutStackPane.setVisible(false);
         addWebsiteStackPane.setVisible(false);
         addApplicationStackPane.setVisible(false);
     }
 
+    /**
+     *
+     * @param actionEvent
+     */
 //    Store to temp database things, wait for save button to be clicked
     @FXML
     public void onAddButtonClick(ActionEvent actionEvent) {
@@ -418,18 +464,31 @@ public class BlockedController implements Initializable {
         addApplicationStackPane.setVisible(false);
     }
 
+    /**
+     *
+     * @param keyEvent
+     */
     public void websiteEntered(KeyEvent keyEvent) {
         addWebButton.setDisable(false);
     }
 
+    /**
+     *
+     */
     public void onFileClick() {
         fileLocation = fileSearch();
         addApplicationTextField.setText(fileLocation);
 
     }
 
+
     @FXML
     private Button confirmButton;
+
+    /**
+     *
+     * @throws IOException
+     */
     public void onConfirmButtonClick() throws IOException {
         Stage stage = (Stage) confirmButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
@@ -439,6 +498,9 @@ public class BlockedController implements Initializable {
         stage.setScene(scene);
     }
 
+    /**
+     *
+     */
     public void onAbortButtonClick() {
         blackOutStackPane.setVisible(false);
         confirmCancelStackPane.setVisible(false);

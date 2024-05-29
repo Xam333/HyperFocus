@@ -21,11 +21,21 @@ public class HomeController {
     @FXML
     private ImageView focusAppLogo;
 
+    /**
+     * Initialise the controller automatically after the FXML file is loaded
+     */
     @FXML
     private void initialize() {
 
     }
 
+    /**
+     * Handles the onRegisterButtonClick action by loading the
+     * register-view FXML and the appropriate stylesheet
+     *
+     * @throws IOException
+     *      If an exception occurred while loading the FXML file
+     */
     @FXML
     protected void onRegisterButtonClick() throws IOException {
         Stage stage = (Stage) registerButton.getScene().getWindow();
@@ -41,6 +51,13 @@ public class HomeController {
         stage.setScene(scene);
     }
 
+    /**
+     * Handles the onLoginButtonClick action by loading the
+     * login-view FXML and the appropriate stylesheet
+     *
+     * @throws IOException
+     *      If an exception occurred while loading the FXML file
+     */
     @FXML
     protected void onLoginButtonClick() throws IOException {
         Stage stage = (Stage) loginButton.getScene().getWindow();
@@ -56,6 +73,9 @@ public class HomeController {
         stage.setScene(scene);
     }
 
+    /**
+     * Constructs new HomeController when initialised
+     */
     public HomeController(){
     }
 

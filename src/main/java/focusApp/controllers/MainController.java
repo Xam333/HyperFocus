@@ -50,15 +50,11 @@ public class MainController implements Initializable {
     public Button startButton;
     public Pane blockedApplicationPane;
     public StackPane menuStackPane;
-    public Button parentalControlsButton;
-    public Button colourSettingsButton;
-    public Button soundSettingsButton;
     public VBox parentalControlsSection;
     public VBox soundSettingsSection;
     public VBox colourSettingsSection;
     public Slider volumeSlider;
     public ComboBox soundOptionsButton;
-
     public ToggleSwitch parentalControlToggleButton;
     public PasswordField parentalControlsPasswordField;
     public Button confirmPasswordButtonParentalControls;
@@ -67,19 +63,13 @@ public class MainController implements Initializable {
     public Label denyParentalControlsDisableLabel;
     public VBox accountInformationSection;
     public Label totalTimeFocused;
-    public Label userNameLabel;
     public TextField userNameTextField;
     public Button editUserNameButton;
     public Button editPasswordButton;
     public PasswordField passwordTextField;
-    public Label passwordLabel;
     public Label accountError;
-    public Button abortButton;
     public Button confirmButton;
     public StackPane confirmLogOutStackPane;
-
-
-
 
     @FXML
     private ComboBox presetsButton;
@@ -118,14 +108,14 @@ public class MainController implements Initializable {
     @FXML
     private Button editButton;
 
-    @FXML
-    private ImageView editImage;
-
     private Image editIcon;
     private Image tickIcon;
-    private boolean isEditing = false;
 
-
+    /**
+     * Constructs new MainController and initialises necessary
+     * components, such as userHolder, presetHolder,presetDAO,
+     * and userDAO, and retrieves user and presets from database
+     */
     public MainController() {
         userHolder = UserHolder.getInstance();
         presetHolder = PresetHolder.getInstance();
@@ -135,11 +125,19 @@ public class MainController implements Initializable {
         userDAO = new UserDAO();
     }
 
+    /**
+     * Initialise the controller automatically after the FXML file is loaded
+     *
+     * @param url
+     *      Used to resolve paths for objects. Returns null if path is unknown
+     * @param resourceBundle
+     *      Used to localise an object. Returns null if it can not localise.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Load images
-        editIcon = new Image(getClass().getResourceAsStream("/focusApp/images/editIcon.png"));
-        tickIcon = new Image(getClass().getResourceAsStream("/focusApp/images/tickIcon.png"));
+        editIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/focusApp/images/editIcon.png")));
+        tickIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/focusApp/images/tickIcon.png")));
 
         // Set initial image for edit button
         setButtonGraphic(editButton, editIcon, 30, 30);
@@ -162,9 +160,7 @@ public class MainController implements Initializable {
         String presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
         try {
             updateBlockList(presetName);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ImageReadException e) {
+        } catch (IOException | ImageReadException e) {
             throw new RuntimeException(e);
         }
 
@@ -218,6 +214,11 @@ public class MainController implements Initializable {
     private ColorPicker TertiaryColour;
     @FXML
     private ColorPicker BackgroundColour;
+
+    /**
+     * Sets the color palette by loading colors from the current
+     * palette and applying them to corresponding ColorPickers.
+     */
     private void setColourPalette(){
         HashMap<ColourPaletteKeys, ColorPicker> PaletteFormat =  getColourPaletteFormat();
         for(ColourPaletteKeys PaletteKey : ColourPaletteKeys.values()){
@@ -227,16 +228,33 @@ public class MainController implements Initializable {
             }
         }
     }
+
+    /**
+     * Handles the onColourPicker action by loading the colour palette
+     * with selected colours and updating the UI accordingly
+     */
     @FXML
     private void onColourPicker() {
         ColourPalette.LoadColourPalette(getAllColours());
         setColourPalette();
     }
+
+    /**
+     * Handles the oDefaultButton action by loading the default colour
+     * palette and updating the UI accordingly
+     */
     @FXML
     private void onDefaultButton(){
         ColourPalette.LoadDefaultColourPalette();
         setColourPalette();
     }
+
+    /**
+     * Retrieves the format of the colour palette by mapping each colour
+     * palette key to its corresponding colour picker in a HashMap
+     * @return
+     *      The associated HashMap with keys and colours
+     */
     private HashMap<ColourPaletteKeys, ColorPicker> getColourPaletteFormat(){
         return new HashMap<>() {{
             put(ColourPaletteKeys.Primary, PrimaryColour);
@@ -245,6 +263,12 @@ public class MainController implements Initializable {
             put(ColourPaletteKeys.Background, BackgroundColour);
         }};
     }
+
+    /**
+     * Retrieves all selected colours in the colour picker
+     * @return
+     *      The associated HashMap of keys and values is returned
+     */
     private HashMap<ColourPaletteKeys, Color> getAllColours(){
         return new HashMap<>(){{
             put(ColourPaletteKeys.Primary, PrimaryColour.getValue());
@@ -254,6 +278,9 @@ public class MainController implements Initializable {
         }};
     }
 
+    /**
+     * States identifiers used for start time and end time
+     */
     private enum TimeID{
         StartTime, EndTime
     }
@@ -270,6 +297,15 @@ public class MainController implements Initializable {
     @FXML
     private Slider DurationSlider;
 
+    /**
+     * Sets the slider colour to reflect the selected time
+     * @param TimerSlider
+     *      Used for selecting the time
+     * @param SliderLabel
+     *      Used to display the selected time
+     * @param TID
+     *      Used to distinguish between start and end time
+     */
     public void setSlider(Slider TimerSlider, Label SliderLabel, TimeID TID) {
         // Listen for changes to the slider and update the label
         TimerSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
@@ -308,8 +344,10 @@ public class MainController implements Initializable {
         });
     }
 
-
-
+    /**
+     * Loads the preset and ComboBox based off of the current user
+     * If no presets exist, a default preset is created called "Preset"
+     */
     public void loadPresets() {
         ArrayList<String> presetNames = new ArrayList<>();
 
@@ -333,7 +371,12 @@ public class MainController implements Initializable {
     }
 
     /**
-     * when clicking preset in dropdown menu
+     * Handles the action for when a preset is selected from the ComboBox
+     *
+     * @throws IOException
+     *      If an exception occurred while loading the FXML file
+     * @throws ImageReadException
+     *      If an exception occurred while reading an image
      */
     public void onPresetsButtonClick() throws IOException, ImageReadException {
         // Get preset name
@@ -378,6 +421,10 @@ public class MainController implements Initializable {
         updateBlockList(presetName);
     }
 
+    /**
+     * Handles the onDeleteButtonClick action by deleting the selected
+     * preset from the database, and removing it from the ComboBox
+     */
     public void onDeleteButtonClick() {
         // Get the currently selected preset name
         String presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
@@ -393,6 +440,14 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     * Handles the onEditButtonClick action by checking if the
+     * ComboBox is editable, then the changes are saved and the tick
+     * icon is changed to the edit icon with the setButtonGraphic function
+     * If the ComboBox is not editable, the ComboBox is set to editable,
+     * and the icon is changed to a tick icon with the setButtonGraphic
+     * function
+     */
     @FXML
     private void onEditButtonClick() {
         if (presetsButton.isEditable()) {
@@ -417,6 +472,11 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     * Saves an edited preset to the database and updates the combo box
+     * @return
+     *      True if the preset name was successfully changed, false if not
+     */
     public boolean saveEditedPresetName() {
         // Check if ComboBox is editable
         if (presetsButton.isEditable()) {
@@ -447,6 +507,11 @@ public class MainController implements Initializable {
         return false;
     }
 
+    /**
+     * Handles the onComboBoxKeyPressed event
+     * @param event
+     *      Triggered by the combo box
+     */
     @FXML
     private void onComboBoxKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
@@ -458,6 +523,17 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     * Sets the graphic and dimensions for a button
+     * @param button
+     *      The button whose graphic is being set
+     * @param image
+     *      The image for the button to ge set to
+     * @param width
+     *      The width of the image
+     * @param height
+     *      The height of the image
+     */
     private void setButtonGraphic(Button button, Image image, double width, double height) {
         ImageView imageView = new ImageView(image);
         imageView.setFitWidth(width);
@@ -465,9 +541,14 @@ public class MainController implements Initializable {
         button.setGraphic(imageView);
     }
 
-
     /**
-     * update the blocked items display
+     * Updates the blocked list display based off of the selected preset
+     * @param presetName
+     *      The name of the selected preset
+     * @throws IOException
+     *      If an exception occurred while loading the FXML file
+     * @throws ImageReadException
+     *      If an exception occurred while reading images
      */
     public void updateBlockList(String presetName) throws IOException, ImageReadException {
         Preset currentPreset = null;
@@ -544,7 +625,10 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Opens blocked applications page
+     * Handles the onBlockedApplicationsPaneClick action by loading the
+     * blocked-view FXML and the appropriate stylesheet
+     * @throws IOException
+     *      If an exception occurred while loading the FXML file
      */
     public void onBlockedApplicationsPaneClick() throws IOException {
         Stage stage = (Stage) blockedApplicationPane.getScene().getWindow();
@@ -561,7 +645,10 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Starts timer with specified start and end times
+     * Handles the onStartButtonClick action by loading the
+     * timer-view FXML and the appropriate stylesheet
+     * @throws IOException
+     *      If an exception occurred while loading the FXML file
      */
     public void onStartButtonClick() throws IOException {
         Stage stage = (Stage) startButton.getScene().getWindow();
@@ -587,31 +674,65 @@ public class MainController implements Initializable {
         stage.setScene(scene);
     }
 
-    private boolean SideMenuOpen = false;
     /**
-     * Toggle side menu (visible or not visible)
+     * Tracks the visibility and management of the side menu
+     */
+    private boolean SideMenuOpen = false;
+
+    /**
+     * Toggles the visibility of the side menu by using the
+     * UpdateSideMenu function and the menu's previous state
      */
     @FXML
     private void toggleMenu() {
         // Open and Close the menu.
         UpdateSideMenu(!SideMenuOpen);
     }
+
+    /**
+     * Handles the states of the side menu by making the side menu
+     * visible or hidden depending on the Control param
+     * @param Control
+     *      True to show the menu, false to hide it
+     */
     private void UpdateSideMenu(boolean Control){
         menuStackPane.setVisible(Control);
         SideMenuOpen = Control;
     }
 
     /**
-     * Stores what side menu item is open.
+     * Stores what side menu item is open, if no menu is open, it is set to null
      */
     private MenuAttribute MenuItemOpened = null;
+
+    /**
+     * States identifiers for different menu attributes:
+     * AccountInformation, ParentalControls, ColourSettings, SoundSettings
+     */
     private enum MenuAttribute{
         AccountInformation, ParentalControls, ColourSettings, SoundSettings
     }
+
+    /**
+     * Controls the visibility and layout of the side menu
+     *
+     * @param Section
+     *      The section being managed
+     * @param Visible
+     *      True is setting to visible and managed, false if not
+     */
     private void MenuControl(VBox Section, boolean Visible){
         Section.setManaged(Visible);
         Section.setVisible(Visible);
     }
+
+    /**
+     * Controls the visibility and management of sections based on the
+     * provided attribute through the use of the MenuControl function
+     *
+     * @param Attribute
+     *      The menu attribute being controlled
+     */
     private void MenuAttributeControl(MenuAttribute Attribute){
 
         MenuControl(accountInformationSection, false);
@@ -633,19 +754,53 @@ public class MainController implements Initializable {
             case SoundSettings -> MenuControl(soundSettingsSection, true);
         }
     }
+
+    /**
+     * Handles the onAccountButtonClick action by controlling
+     * the menu attribute to display the account information section
+     */
     public void onAccountButtonClick(){MenuAttributeControl(MenuAttribute.AccountInformation);}
+
+    /**
+     * Handles the onParentalControlsButtonClick action by controlling
+     * the menu attribute to display the parental controls section
+     */
     public void onParentalControlsButtonClick(){MenuAttributeControl(MenuAttribute.ParentalControls);}
+
+    /**
+     * Handles the onColourSettingsButtonClick action by controlling
+     * the menu attribute to display the colour settings section
+     */
     public void onColourSettingsButtonClick(){MenuAttributeControl(MenuAttribute.ColourSettings);}
+
+    /**
+     * Handles the onSoundSettingsButtonClick action by controlling
+     * the menu attribute to display the sound settings section
+     */
     public void onSoundSettingsButtonClick(){MenuAttributeControl(MenuAttribute.SoundSettings);}
 
+    /**
+     * Enables the confirm button for parental controls
+     * @param keyEvent
+     *      Triggered when a key is pressed in the field
+     */
     public void passwordEnteredParentalControls(KeyEvent keyEvent) {
         confirmPasswordButtonParentalControls.setDisable(false);
     }
 
+    /**
+     * Enables the confirm button for parental controls
+     * @param keyEvent
+     *      Triggered when a key is pressed in the field
+     */
     public void passwordEnteredPasswordAuth(KeyEvent keyEvent) {
         confirmPasswordButtonPasswordAuth.setDisable(false);
     }
 
+    /**
+     * Handles the XLabelClickPasswordAuth action by hiding the
+     * password authentication section and clearing the password section
+     */
     public void onXLabelClickPasswordAuth() {
         blackOutStackPane.setVisible(false);
         passwordAuthStackPane.setVisible(false);
@@ -653,6 +808,10 @@ public class MainController implements Initializable {
         passwordAuth.clear();
     }
 
+    /**
+     * Handles the XLabelClickParentalControls action by hiding the
+     * password authentication section and clearing the password section
+     */
     public void onXLabelClickParentalControls() {
         parentalControlToggleButton.setSelected(true);
         blackOutStackPane.setVisible(false);
@@ -661,8 +820,14 @@ public class MainController implements Initializable {
         parentalControlsPasswordField.clear();
     }
 
-
-
+    /**
+     * Handles the onEditUserNameButtonClick action by checking if the
+     * username field is editable, if so it checks the username is not
+     * already taken, if the password is taken, it displays an error
+     * message and changes the button text to "EDIT"
+     * If the username field is not editable, then the text is changed
+     * to "SAVE" and the field is set to editable
+     */
     public void onEditUserNameButtonClick() {
         if (userNameTextField.isEditable()) {
             if (userDAO.updateName(user.getId(), userNameTextField.getText())) {
@@ -681,6 +846,13 @@ public class MainController implements Initializable {
         userNameTextField.setEditable(!userNameTextField.isEditable());
     }
 
+    /**
+     * Handles the onEditPasswordButtonClick action by checking if the
+     * password field is editable, if so it checks the password is not blank,
+     * then it displays the password authentication pane
+     * If the password field is not editable, the password field is cleared,
+     * and then set to editable, and the button text is changed to "SAVE"
+     */
     public void onEditPasswordButtonClick() {
         if (passwordTextField.isEditable()) {
             if (passwordTextField.getText().isEmpty()) {
@@ -699,13 +871,36 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     * Sets the visibility of the blackout and confirm logout panes
+     * @param Display
+     *      True to make panes visible, false to make them hidden
+     */
     private void ShowPane(boolean Display){
         blackOutStackPane.setVisible(Display);
         confirmLogOutStackPane.setVisible(Display);
     }
+
+    /**
+     * Handles the onLogOutButton action by setting the visibility
+     * of the blackout and confirmation panes, through the use of the
+     * showPane function
+     */
     public void onLogOutButton() { ShowPane(true); }
+
+    /**
+     * Handles the onAbortButtonClick action by setting the visibility
+     * of the blackout and confirmation panes, through the use of the
+     * showPane function
+     */
     public void onAbortButtonClick(){ ShowPane(false); }
 
+    /**
+     * Handles the onConfirmLogOutButton action by loading the
+     * login-view FXML and the appropriate stylesheet
+     * @throws IOException
+     *      If an exception occurred while loading the FXML file
+     */
     public void onConfirmLogOutButtonClick() throws IOException {
         Stage stage = (Stage) confirmButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/login-view.fxml"));
@@ -719,6 +914,13 @@ public class MainController implements Initializable {
         stage.setScene(scene);
     }
 
+    /**
+     * Handles the onConfirmParentalControlsButtonClick action by
+     * checking if the password entered in correct.
+     * If so, the parental controls are disabled, and the status is
+     * updated in the database.
+     * Otherwise, the user is notified that the password is incorrect.
+     */
     public void onPasswordAuthenticationCheck() {
         // Check if password is correct
         User login_user = userDAO.login(user.getUserName(), passwordAuth.getText());
@@ -742,6 +944,13 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     * Handles the onConfirmParentalControlsButtonClick action by
+     * checking if the password entered in correct.
+     * If so, the parental controls are disabled, and the status is
+     * updated in the database.
+     * Otherwise, the user is notified that the password is incorrect.
+     */
     public void onConfirmParentalControlsButtonClick() {
         // Check if password is correct
         User login_user = userDAO.login(user.getUserName(), parentalControlsPasswordField.getText());

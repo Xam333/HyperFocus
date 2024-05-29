@@ -307,6 +307,8 @@
     -fx-pref-width: 40px;
     -fx-pref-height: 40px;
     -fx-background-color: #FFF;
+    -fx-background-radius: 8px;
+    -fx-background-insets: 1px;
 
     -fx-border-radius: 8px;
     -fx-border-color: #000000;

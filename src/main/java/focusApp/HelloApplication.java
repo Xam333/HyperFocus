@@ -21,17 +21,25 @@ public class HelloApplication extends Application {
     public static final int HEIGHT = 600;
 
 
+    /**
+     * Sets the configurations of the home page
+     *
+     * @param stage
+     *      The primary stage for HyperFocus that scenes can be set on
+     * @throws IOException
+     *      If an exception occurred while loading the FXML file
+     */
     @Override
     public void start(Stage stage) throws IOException {
         // Load fxml file
         FXMLLoader root = new FXMLLoader(HelloApplication.class.getResource("fxml/home-view.fxml"));
+
         // Set scene
         Scene scene = new Scene(root.load(), WIDTH, HEIGHT);
 
         // Set scene stylesheet
         if (UserConfig.FindCSSFile()){
             scene.getStylesheets().add(UserConfig.getCSSFilePath().toUri().toString());
-
         } else {
             UserConfig.SetUpEnvi();
             scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
@@ -39,7 +47,6 @@ public class HelloApplication extends Application {
 
         URIToPathConverter myConverter = uri -> UserConfig.getCSSFilePath();
         CSSFX.addConverter(myConverter).start();
-
 
         // Set application icon
         stage.getIcons().add(new Image(Objects.requireNonNull(HelloApplication.class.getResourceAsStream("images/logoSmall.png"))));
@@ -58,6 +65,11 @@ public class HelloApplication extends Application {
         stage.show();
     }
 
+    /**
+     * Launches the application
+     * @param args
+     *      Command line arguments
+     */
     public static void main(String[] args) {
         launch();
     }
