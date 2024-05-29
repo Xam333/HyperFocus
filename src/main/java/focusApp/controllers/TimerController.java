@@ -195,7 +195,9 @@ public class TimerController {
     /**
      *
      * @param Buttons
+     *      An array of the buttons to update
      * @param States
+     *      An array of the states for each button
      */
     private void UpdateButtons(Button[] Buttons, ButtonStates[] States){
         if (Buttons.length == States.length){
@@ -213,7 +215,9 @@ public class TimerController {
     }
 
     /**
-     *
+     * Manages the states of the control buttons on the timer.
+     * If in parental mode, button updates are bypassed until the timer
+     * is finished
      */
     public void ButtonStateManager(){
         Button[] AllButtons = new Button[]{PauseButton, ResumeButton, StopButton, RestartButton, ReturnButton};
@@ -227,8 +231,10 @@ public class TimerController {
     }
 
     /**
-     *
+     * Updates the states of the buttons provided based on the
+     * current timer state
      * @param AllButtons
+     *      An array for all buttons being updated
      */
     private void UpdateButtonStates(Button[] AllButtons){
         ButtonStates[] States;
@@ -255,8 +261,9 @@ public class TimerController {
     }
 
     /**
-     *
+     * Gets the running state configuration for the buttons provided
      * @return
+     *      An array representing the state of each button
      */
     private ButtonStates[] getRunningState(){
         return new ButtonStates[]{
@@ -269,8 +276,9 @@ public class TimerController {
     }
 
     /**
-     *
+     * Gets the pre-run state configuration for the buttons provided
      * @return
+     *      An array representing the state of each button
      */
     private ButtonStates[] getPreRunState(){
         return new ButtonStates[]{
@@ -283,8 +291,9 @@ public class TimerController {
     }
 
     /**
-     *
+     * Gets the paused state configuration for the buttons provided
      * @return
+     *      An array representing the state of each button
      */
     private ButtonStates[] getPausedState(){
         return new ButtonStates[]{
@@ -297,8 +306,9 @@ public class TimerController {
     }
 
     /**
-     *
+     * Gets the end state configuration for the buttons provided
      * @return
+     *      An array representing the state of each button
      */
     private ButtonStates[] getEndState(){
         return new ButtonStates[]{
