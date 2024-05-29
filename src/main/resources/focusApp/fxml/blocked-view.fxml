@@ -5,6 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import com.sun.javafx.scene.control.EmbeddedTextContextMenuContent?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="390.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.BlockedController">
     <Pane>
         <VBox spacing="20.0">
@@ -26,12 +27,13 @@
                     <!-- TABLE LAYOUT -->
                     <VBox prefHeight="300.0" prefWidth="370.0">
                         <Label styleClass="bodyLabel" text="Blocked Applications:"/>
-                        <TableView fx:id="tableView" styleClass="blockedTableView">
+                        <TableView fx:id="tableView" styleClass="blockedTableView" onContextMenuRequested="#handleContextMenuRequest" onMouseClicked="#handleContextMenuRequest">
                             <columns>
                                 <TableColumn fx:id="iconColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" resizable="false" styleClass="blockedTableColumn" text="Icon"/>
                                 <TableColumn fx:id="nameColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" resizable="false" styleClass="blockedTableColumn" text="Name"/>
                                 <TableColumn fx:id="locationColumn" maxWidth="198.0" minWidth="198.0" prefWidth="198.0" resizable="false" styleClass="blockedTableColumn" text="Web/File Link"/>
                             </columns>
+
                         </TableView>
                         <VBox.margin>
                             <Insets bottom="10.0"/>
@@ -111,6 +113,8 @@
                 </HBox>
             </VBox>
         </StackPane>
+
+        <!-- CONFIRM CANCEL PANE -->
         <StackPane fx:id="confirmCancelStackPane" layoutX="55.0" layoutY="200.0" prefHeight="180.0"
                    styleClass="confirmPane" visible="false">
 

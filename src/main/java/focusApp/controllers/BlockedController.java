@@ -9,6 +9,7 @@ import focusApp.database.ApplicationDAO;
 import focusApp.database.Preset;
 
 import focusApp.models.block.ApplicationItem;
+import focusApp.models.block.BlockedApplication;
 import focusApp.models.block.BlockedItem;
 import focusApp.models.block.WebsiteItem;
 import focusApp.models.colour.UserConfig;
@@ -27,11 +28,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-import javafx.scene.input.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -74,6 +75,7 @@ public class BlockedController implements Initializable {
     public StackPane blackOutStackPane;
     public StackPane confirmCancelStackPane;
 
+    private ContextMenu contextMenu;
 
 
     @FXML
@@ -377,6 +379,12 @@ public class BlockedController implements Initializable {
         // Automatically set as true until change is made
         changesSaved = true;
 
+        // Create and set context menu options
+        contextMenu = new ContextMenu();
+        MenuItem deleteMenuItem = new MenuItem("Delete");
+        deleteMenuItem.setOnAction(event -> handleDeleteAction());
+        contextMenu.getItems().add(deleteMenuItem);
+
     }
 
     /**
@@ -504,5 +512,33 @@ public class BlockedController implements Initializable {
     public void onAbortButtonClick() {
         blackOutStackPane.setVisible(false);
         confirmCancelStackPane.setVisible(false);
+    }
+
+    /**
+     * Handles the display for the context menu
+     * @param contextMenuEvent
+     *      The trigger for opening or closing the context menu
+     */
+    public void handleContextMenuRequest(ContextMenuEvent contextMenuEvent) {
+        BlockedItem selectedItem = tableView.getSelectionModel().getSelectedItem();
+        if (selectedItem != null){
+            // Show context menu next to mouse
+            contextMenu.show(tableView, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
+
+        }
+    }
+
+    /**
+     * Handles the delete action in the context menu
+     * If the item selected is not null, remove it from the table view and the database
+     */
+    private void handleDeleteAction() {
+        BlockedItem selectedItem = tableView.getSelectionModel().getSelectedItem();
+        if (selectedItem != null){
+            blockedDAO.deleteContact(user.getId(), selectedItem);
+
+            tableView.getItems().remove(selectedItem);
+
+        }
     }
 }

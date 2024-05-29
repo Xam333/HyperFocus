@@ -1,6 +1,7 @@
 package focusApp.database;
 
 import focusApp.models.block.BlockedApplication;
+import focusApp.models.block.BlockedItem;
 import javafx.collections.ObservableList;
 
 import java.util.List;
@@ -13,9 +14,12 @@ public interface IBlockedItemDAO {
     public void updateContact(BlockedApplication blockedApplication);
     /**
      * Deletes a contact from the database.
-     * @param blockedApplication The contact to delete.
+     *
+     * @param blockedItem The contact to delete.
      */
-    public void deleteContact(BlockedApplication blockedApplication);
+
+    public void deleteContact(int userID, BlockedItem blockedItem);
+
     /**
      * Retrieves a contact from the database.
      * @param id The id of the contact to retrieve.
