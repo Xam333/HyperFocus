@@ -460,6 +460,7 @@ public class BlockedController implements Initializable {
         if(addWebsiteStackPane.isVisible())
         {
             addNewWebsite("https://" + addWebsiteTextField.getText());
+            addWebsiteTextField.clear();
         }
         else
         {
@@ -537,7 +538,7 @@ public class BlockedController implements Initializable {
             blockedDAO.deleteContact(String.valueOf(selectedItem));
 
             tableView.getItems().remove(selectedItem);
-
+            changesSaved = false;
         }
     }
 }
