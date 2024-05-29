@@ -1,5 +1,6 @@
 package focusApp.models.timer;
 
+import focusApp.controllers.BlockedController;
 import focusApp.controllers.TimerController;
 import focusApp.database.UserDAO;
 import focusApp.models.user.*;
@@ -32,6 +33,7 @@ public class Timer {
     private LocalTime Timer_End;
     private LocalTime Timer_Start;
     private final TimerController Timer_Controller;
+    private final BlockedController Block_Controller;
 
     /**
      * Stores the value of the timer offset.
@@ -143,6 +145,9 @@ public class Timer {
         userDAO = new UserDAO();
         userHolder = UserHolder.getInstance();
         user = userHolder.getUser();
+
+        // Set the block controller field
+        Block_Controller = null;
 
         CreateTimer();
     }
@@ -295,6 +300,9 @@ public class Timer {
         // If the text to speech is on.
         if(Speak){ Notification.SpeakText("Timer running."); }
 
+        // Start Blocking here:
+
+
         // Start the Scheduler.
         TimeScheduler = Executors.newScheduledThreadPool(1);
         TimeScheduler.scheduleAtFixedRate(this::RunningTime, 0, 1, TimeUnit.MILLISECONDS);
@@ -317,6 +325,8 @@ public class Timer {
         Timer_Controller.ButtonStateManager();
 
         Alarm.PlaySound();
+
+        // Stop Blocking here:
 
         // If the text to speech is on.
         if(Speak){ Notification.SpeakText("Timer finished."); }
@@ -345,6 +355,9 @@ public class Timer {
         Timer_Controller.UpdateTimerStatus();
         Timer_Controller.UpdateStopWatch();
         Timer_Controller.ButtonStateManager();
+
+        // Stop Blocking here:
+
 
         // If the text to speech is on.
         if(Speak){ Notification.SpeakText("Timer stopped."); }
