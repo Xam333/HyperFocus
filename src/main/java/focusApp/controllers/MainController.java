@@ -28,8 +28,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -39,12 +37,7 @@ import javafx.scene.control.Slider;
 
 import focusApp.database.Preset;
 import focusApp.database.PresetDAO;
-import org.apache.commons.imaging.ImageReadException;
-import org.apache.commons.imaging.Imaging;
-import org.apache.commons.io.FileUtils;
 import org.controlsfx.control.ToggleSwitch;
-
-import javax.imageio.ImageIO;
 
 public class MainController implements Initializable {
     public Button startButton;
@@ -160,13 +153,7 @@ public class MainController implements Initializable {
         /* update the blocked list */
         // Get preset name
         String presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
-        try {
-            updateBlockList(presetName);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ImageReadException e) {
-            throw new RuntimeException(e);
-        }
+        updateBlockList(presetName);
 
         // Check if there is a saved value for the alarm, if not display alarm1.
         if (SelectedSound == null){
@@ -335,7 +322,7 @@ public class MainController implements Initializable {
     /**
      * when clicking preset in dropdown menu
      */
-    public void onPresetsButtonClick() throws IOException, ImageReadException {
+    public void onPresetsButtonClick() {
         // Get preset name
         String presetName = "";
         if (presetsButton.getSelectionModel().getSelectedItem() != null) {
@@ -469,7 +456,7 @@ public class MainController implements Initializable {
     /**
      * update the blocked items display
      */
-    public void updateBlockList(String presetName) throws IOException, ImageReadException {
+    public void updateBlockList(String presetName) {
         Preset currentPreset = null;
 
         for (Preset preset : presetDAO.getUsersPresets(user.getId())) {
@@ -506,10 +493,8 @@ public class MainController implements Initializable {
             Image img;
             if (item.getIconURI().endsWith("png")) {
                 img = new Image(item.getIconURI().toString(), true);
-            }
-            else if (item.getIconURI().endsWith("ico")) {
+            } else if (item.getIconURI().endsWith("ico")) {
                 // Download the .ico file
-                System.out.println("test?");
                 File icoFile = File.createTempFile("favicon", ".ico");
                 FileUtils.copyURLToFile(new URL(item.getIconURI()), icoFile);
 
@@ -527,12 +512,9 @@ public class MainController implements Initializable {
                 String url = getClass().getResource(defaultIcon).toString();
                 img = new Image(url, true);
             }
-            System.out.println(img);
             ImageView icon = new ImageView(img);
             icon.setFitWidth(imageSize);
             icon.setFitHeight(imageSize);
-            
-            
 
             // Create a StackPane to add padding around the image
             StackPane stackPane = new StackPane();
