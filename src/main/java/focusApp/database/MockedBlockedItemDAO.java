@@ -1,7 +1,6 @@
 package focusApp.database;
 
 import focusApp.models.block.BlockedApplication;
-import focusApp.models.block.BlockedItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -42,15 +41,14 @@ public class MockedBlockedItemDAO implements IBlockedItemDAO{
     }
 
     @Override
-    public void deleteContact(int userID, BlockedItem blockedItem) {
+    public void deleteContact(String blockedName) {
 
 //        blockedItems.remove(blockedItem);
         try {
-            String query = "SELECT websiteID FROM websites WHERE blockedItem = ? AND userID = ?";
+            String query = "SELECT websiteID FROM websites WHERE websiteName = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
-            statement.setString(1, String.valueOf(blockedItem));
-            statement.setInt(2, userID);
+            statement.setString(1, String.valueOf(blockedName));
 
             ResultSet res = statement.executeQuery();
 

@@ -9,7 +9,6 @@ import focusApp.database.ApplicationDAO;
 import focusApp.database.Preset;
 
 import focusApp.models.block.ApplicationItem;
-import focusApp.models.block.BlockedApplication;
 import focusApp.models.block.BlockedItem;
 import focusApp.models.block.WebsiteItem;
 import focusApp.models.colour.UserConfig;
@@ -22,6 +21,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -524,7 +524,6 @@ public class BlockedController implements Initializable {
         if (selectedItem != null){
             // Show context menu next to mouse
             contextMenu.show(tableView, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
-
         }
     }
 
@@ -535,7 +534,7 @@ public class BlockedController implements Initializable {
     private void handleDeleteAction() {
         BlockedItem selectedItem = tableView.getSelectionModel().getSelectedItem();
         if (selectedItem != null){
-            blockedDAO.deleteContact(user.getId(), selectedItem);
+            blockedDAO.deleteContact(String.valueOf(selectedItem));
 
             tableView.getItems().remove(selectedItem);
 

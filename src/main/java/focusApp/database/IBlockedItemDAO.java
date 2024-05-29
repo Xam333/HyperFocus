@@ -15,10 +15,10 @@ public interface IBlockedItemDAO {
     /**
      * Deletes a contact from the database.
      *
-     * @param blockedItem The contact to delete.
+     * @param blockedName The contact to delete.
      */
+    public void deleteContact(String blockedName);
 
-    public void deleteContact(int userID, BlockedItem blockedItem);
 
     /**
      * Retrieves a contact from the database.
