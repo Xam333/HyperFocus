@@ -209,7 +209,6 @@ public class TimerController {
         } else {
             System.out.println("Button State mapping failed: Error length is not equal.");
         }
-
     }
 
     /**

@@ -114,11 +114,6 @@ public class Timer {
 
 
     /**
-     * class used to save user state between pages and classes
-     */
-    private UserHolder userHolder;
-
-    /**
      * user class holding important user data
      * in this class used to update the users total focus time
      */
@@ -143,8 +138,7 @@ public class Timer {
 
         /* initialise the user */
         userDAO = new UserDAO();
-        userHolder = UserHolder.getInstance();
-        user = userHolder.getUser();
+        user = UserHolder.getInstance().getUser();
 
         // Set the block controller field
         Block_Controller = null;

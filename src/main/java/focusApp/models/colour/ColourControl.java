@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 public class ColourControl {
 
-    private static Path CSSFilePath = UserConfig.getCSSFilePath();
+    private static final Path CSSFilePath = UserConfig.getCSSFilePath();
     private HashMap<ColourPaletteKeys, Color> CurrentColourPalette = new HashMap<>();
     private static String CSSFileContent;
     public ColourControl(){
@@ -31,6 +31,9 @@ public class ColourControl {
         }
     }
 
+    /**
+     * This will inject the contents of the base CSS file into the users local CSS file.
+     */
     public static void InjectBasePalette(){
         try {
             GetContentFromBase();
@@ -40,16 +43,28 @@ public class ColourControl {
         }
     }
 
+    /**
+     * Calls the CSS file from the resources file.
+     * @throws IOException If the CSS file cant be read.
+     */
     private static void GetContentFromBase() throws IOException {
         // Read the Base CSS file.
         URI CSSURI = URI.create(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
         CSSFileContent = new String(Files.readAllBytes(Path.of(CSSURI)));
     }
+
+    /**
+     * Calls the CSS file from the users home directory.
+     * @throws IOException If the CSS file cant be read.
+     */
     private static void GetContentFromUser() throws IOException {
         // Read the users CSS file.
         CSSFileContent = new String(Files.readAllBytes(CSSFilePath));
     }
 
+    /**
+     * Loads the default colours for the application.
+     */
     public void LoadDefaultColourPalette() {
         CurrentColourPalette = new HashMap<>() {{
             put(ColourPaletteKeys.Primary, Color.rgb(89, 173, 255));
@@ -60,13 +75,26 @@ public class ColourControl {
         SaveColourPaletteToFile();
     }
 
+    /**
+     * Loads the current colour palette.
+     * @param ColourPalette This is the colour palette that will be loaded.
+     */
     public void LoadColourPalette(HashMap<ColourPaletteKeys, Color> ColourPalette) {
         CurrentColourPalette = ColourPalette;
         SaveColourPaletteToFile();
     }
+
+    /**
+     * Gets the Current colour palette that is being used.
+     * @return The colour palette being used currently.
+     */
     public HashMap<ColourPaletteKeys, Color> getCurrentColourPalette(){
         return CurrentColourPalette;
     }
+
+    /**
+     * Loads the colour palette from the CSS file. (Base or User)
+     */
     private void LoadColourPaletteFromFile(){
         for (ColourPaletteKeys Key : ColourPaletteKeys.values()){
 
@@ -80,6 +108,9 @@ public class ColourControl {
         }
     }
 
+    /**
+     * Saves the current colour palette to the User CSS file.
+     */
     public void SaveColourPaletteToFile() {
         try {
 
@@ -115,6 +146,12 @@ public class ColourControl {
             System.out.println(E);
         }
     }
+
+    /**
+     * Calculates the best text colour for the colour given.
+     * @param CurrentColour The current colour that the text will be on.
+     * @return The colour of the text that will be best based on the colour inputted.
+     */
     private Color getBestTextColour(Color CurrentColour){
 
         double RedLight = 0.2126 * CurrentColour.getRed();
@@ -126,6 +163,12 @@ public class ColourControl {
 
         return TotalLuminance > LightThreshold ? Color.BLACK : Color.WHITE;
     }
+
+    /**
+     * Converts color object to Hexadecimal values.
+     * @param CurrentColour The Colour to be converted.
+     * @return The Hexadecimal value of the input colour.
+     */
     private String toHex(Color CurrentColour){
 
         int Red = (int) (CurrentColour.getRed() * 255);
@@ -134,6 +177,13 @@ public class ColourControl {
 
         return String.format("#%02X%02X%02X", Red, Green, Blue);
     }
+
+    /**
+     * Used to get the main colour and the best Text colour.
+     * @param MainKey The main colour palette key.
+     * @param TextKey The text colour of the given palette key.
+     * @return The Hexadecimal representation of the keys given.
+     */
     public String[] getHexFromPalette(ColourPaletteKeys MainKey, ColourPaletteKeys TextKey){
         String MainColour = toHex(CurrentColourPalette.get(MainKey));
         String TextColour = toHex(getBestTextColour(CurrentColourPalette.get(TextKey)));

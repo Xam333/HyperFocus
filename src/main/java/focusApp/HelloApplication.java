@@ -41,7 +41,7 @@ public class HelloApplication extends Application {
         if (UserConfig.FindCSSFile()){
             scene.getStylesheets().add(UserConfig.getCSSFilePath().toUri().toString());
         } else {
-            UserConfig.SetUpEnvi();
+            UserConfig.SetUpEnvironment();
             scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
         }
 
