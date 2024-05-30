@@ -22,7 +22,7 @@ import javafx.scene.shape.Arc;
 import java.io.IOException;
 import java.util.Objects;
 
-public class TimerController {
+public class  TimerController {
 
     private Timer timer;
     private boolean InParentalControl;
@@ -61,7 +61,7 @@ public class TimerController {
 
 
     @FXML
-    protected void onStopButtonClick(){
+    protected void onStopButtonClick() throws IOException {
         // Add code to check Passwords here. if in parental control mode.
         timer.Control(Command.Stop);
     }
@@ -72,7 +72,7 @@ public class TimerController {
 
 
     @FXML
-    protected void onPauseButtonClick(){
+    protected void onPauseButtonClick() throws IOException {
         timer.Control(Command.Pause);
     }
     @FXML
@@ -82,7 +82,7 @@ public class TimerController {
 
 
     @FXML
-    protected void onResumeButtonClick(){
+    protected void onResumeButtonClick() throws IOException {
         timer.Control(Command.Resume);
     }
     @FXML
@@ -92,7 +92,7 @@ public class TimerController {
 
 
     @FXML
-    protected void onRestartButtonClick(){
+    protected void onRestartButtonClick() throws IOException {
         timer.Control(Command.Restart);
     }
     @FXML
@@ -103,6 +103,7 @@ public class TimerController {
 
     @FXML
     protected void onReturnButtonClick() throws IOException {
+        BlockedController.resetBlockedList();
         Stage stage = (Stage) ReturnButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
@@ -210,7 +211,7 @@ public class TimerController {
         };
     }
 
-    public void initialize(double startTime, double endTime, Notification Alarm) {
+    public void initialize(double startTime, double endTime, Notification Alarm) throws IOException {
         timer = new Timer(startTime, endTime, this, Alarm);
         timer.Control(Command.Start);
         // Get the bool of parent mode here.

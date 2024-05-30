@@ -107,7 +107,7 @@ public class BlockedController implements Initializable {
     private Preset currentPreset;
     private UserHolder userHolder;
     private User user;
-    private ArrayList<BlockedItem> blockedItems;
+    private static ArrayList<BlockedItem> blockedItems;
 
     public BlockedController(){
         blockedDAO = new MockedBlockedItemDAO();
@@ -289,8 +289,6 @@ public class BlockedController implements Initializable {
             } else {
                 scene.getStylesheets().add(Objects.requireNonNull(HelloApplication.class.getResource("stylesheet.css")).toExternalForm());
             }
-
-            resetBlockedList();
             stage.setScene(scene);
         }
 
@@ -367,7 +365,21 @@ public class BlockedController implements Initializable {
         return url;
     }
 
-    public void blockUrls(List<String> urls) throws IOException {
+    public static void blockCurrentUrls() throws IOException {
+        List<String> urlsToBlock = new ArrayList<>();
+
+        for (BlockedItem item : blockedItems) {
+            if (item.getClass() == WebsiteItem.class) {
+                System.out.println(item.getName() + " is website");
+                urlsToBlock.add(item.getURI());
+            }
+
+        }
+
+        blockUrls(urlsToBlock);
+    }
+
+    public static void blockUrls(List<String> urls) throws IOException {
         // Note that this code only works in Java 7+,
         // refer to the above link about appending files for more info
 
@@ -434,7 +446,7 @@ public class BlockedController implements Initializable {
     }
 
 
-    public void resetBlockedList() throws IOException
+    public static void resetBlockedList() throws IOException
     {
         // Note that this code only works in Java 7+,
         // refer to the above link about appending files for more info
@@ -488,13 +500,10 @@ public class BlockedController implements Initializable {
 
 //    Add new websites and applications to database
     public void onSaveButtonClick(ActionEvent actionEvent) throws IOException {
-        List<String> urlsToBlock = new ArrayList<>();
-
 
         for (BlockedItem item : blockedItems) {
             if (item.getClass() == WebsiteItem.class) {
                 System.out.println(item.getName() + " is website");
-                urlsToBlock.add(item.getURI());
                 presetDAO.addWebsitePreset(currentPreset.getPresetID(), item.getID());
             } else if (item.getClass() == ApplicationItem.class) {
                 System.out.println(item.getName() + " is application");
@@ -502,9 +511,6 @@ public class BlockedController implements Initializable {
             }
 
         }
-
-
-        blockUrls(urlsToBlock);
 
         changesSaved = true;
         Stage stage = (Stage) saveButton.getScene().getWindow();

@@ -28,6 +28,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -37,7 +39,12 @@ import javafx.scene.control.Slider;
 
 import focusApp.database.Preset;
 import focusApp.database.PresetDAO;
+import org.apache.commons.imaging.ImageReadException;
+import org.apache.commons.imaging.Imaging;
+import org.apache.commons.io.FileUtils;
 import org.controlsfx.control.ToggleSwitch;
+
+import javax.imageio.ImageIO;
 
 public class MainController implements Initializable {
     public Button startButton;
@@ -153,7 +160,13 @@ public class MainController implements Initializable {
         /* update the blocked list */
         // Get preset name
         String presetName = presetsButton.getSelectionModel().getSelectedItem().toString();
-        updateBlockList(presetName);
+        try {
+            updateBlockList(presetName);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ImageReadException e) {
+            throw new RuntimeException(e);
+        }
 
         // Check if there is a saved value for the alarm, if not display alarm1.
         if (SelectedSound == null){
@@ -322,7 +335,7 @@ public class MainController implements Initializable {
     /**
      * when clicking preset in dropdown menu
      */
-    public void onPresetsButtonClick() {
+    public void onPresetsButtonClick() throws IOException, ImageReadException {
         // Get preset name
         String presetName = "";
         if (presetsButton.getSelectionModel().getSelectedItem() != null) {
@@ -456,7 +469,7 @@ public class MainController implements Initializable {
     /**
      * update the blocked items display
      */
-    public void updateBlockList(String presetName) {
+    public void updateBlockList(String presetName) throws IOException, ImageReadException {
         Preset currentPreset = null;
 
         for (Preset preset : presetDAO.getUsersPresets(user.getId())) {

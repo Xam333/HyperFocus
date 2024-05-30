@@ -1,16 +1,29 @@
 package focusApp.models.timer;
 
+import focusApp.controllers.BlockedController;
+import focusApp.database.Preset;
+import focusApp.database.PresetDAO;
+
 import focusApp.controllers.TimerController;
 import focusApp.database.UserDAO;
+import focusApp.models.block.ApplicationItem;
+import focusApp.models.block.BlockedItem;
+import focusApp.models.block.WebsiteItem;
+import focusApp.models.preset.PresetHolder;
 import focusApp.models.user.*;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import static focusApp.controllers.BlockedController.blockUrls;
 
 /**
  * This class creates a timer and the methods to control it.
@@ -32,6 +45,8 @@ public class Timer {
     private LocalTime Timer_End;
     private LocalTime Timer_Start;
     private final TimerController Timer_Controller;
+
+
 
     /**
      * Stores the value of the timer offset.
@@ -173,7 +188,7 @@ public class Timer {
     /**
      * Delayed Time is when the timer state is delayed, all code in this method will execute every millisecond.
      */
-    public void DelayedTime(){
+    public void DelayedTime() throws IOException {
         Delayed_Counting_Duration = Delayed_Counting_Duration.minusMillis(1);
 
         if(Delayed_Counting_Duration.getSeconds() < 0) Start();
@@ -184,7 +199,7 @@ public class Timer {
     /**
      * Running Time is when the timer state is running, all code in this method will execute every millisecond.
      */
-    public void RunningTime(){
+    public void RunningTime() throws IOException {
         Running_Counting_Duration = Running_Counting_Duration.minusMillis(1);
 
         if(Running_Counting_Duration.getSeconds() < 0) Finish();
@@ -245,7 +260,7 @@ public class Timer {
      * Issues a command to the timer, check Command Enum for valid commands.
      * @param command The command to run.
      */
-    public void Control(Command command){
+    public void Control(Command command) throws IOException {
         switch (command) {
             case Start -> { if(Timer_State == TimerState.Delayed) DelayedStart(); else Start(); }
             case Stop -> Stop();
@@ -269,41 +284,78 @@ public class Timer {
         Timer_Controller.ButtonStateManager();
 
         // If the text to speech is on.
-        if(Speak){ Notification.SpeakText("Timer starting at:" + Timer_Start.format(Timer_12_Format)); }
+        if (Speak) {
+            Notification.SpeakText("Timer starting at:" + Timer_Start.format(Timer_12_Format));
+        }
 
         // Start the Scheduler.
         TimeScheduler = Executors.newScheduledThreadPool(1);
-        TimeScheduler.scheduleAtFixedRate(this::DelayedTime, 0, 1, TimeUnit.MILLISECONDS);
+        TimeScheduler.scheduleAtFixedRate(() -> {
+            try {
+                DelayedTime();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }, 0, 1, TimeUnit.MILLISECONDS);
     }
 
     /**
      * Puts the timer in a Running state and updates the GUI based on the state.
      */
-    private void Start(){
-        // If timer is in a state of Delayed shutdown the existing scheduler and enforce Running state,
-        // otherwise state is enforced in the constructor.
-        if(TimeScheduler != null && !TimeScheduler.isShutdown() && Timer_State == TimerState.Delayed){
-            EnforceState(TimerState.Running);
-            TimeScheduler.shutdownNow();
+    private void Start() throws IOException {
+        try {
+            // If timer is in a state of Delayed, shutdown the existing scheduler and enforce Running state,
+            // otherwise state is enforced in the constructor.
+            if(TimeScheduler != null && !TimeScheduler.isShutdown() && Timer_State == TimerState.Delayed) {
+                EnforceState(TimerState.Running);
+                TimeScheduler.shutdownNow();
+            }
+
+            // Update GUI elements to their Pre-State for the current state.
+            Timer_Controller.UpdateGUI();
+            Timer_Controller.UpdateTimerStatus();
+            Timer_Controller.ButtonStateManager();
+
+            // If the text to speech is on.
+            if(Speak) {
+                Notification.SpeakText("Timer running.");
+            }
+
+            // Start the Scheduler.
+            TimeScheduler = Executors.newScheduledThreadPool(1);
+            try {
+                TimeScheduler.scheduleAtFixedRate(() -> {
+                    try {
+                        RunningTime();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }, 0, 1, TimeUnit.MILLISECONDS);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new IOException("Error scheduling the task", e);
+            }
+
+            BlockCurrentWebsites();
+        } catch (IOException e) {
+            // Handle the IO Exception
+            e.printStackTrace();
+            throw e; // rethrow if you want to propagate the exception
+        } catch (Exception e) {
+            // Handle other exceptions
+            e.printStackTrace();
         }
-
-        // Update GUI elements to their Pre-State for the current state.
-        Timer_Controller.UpdateGUI();
-        Timer_Controller.UpdateTimerStatus();
-        Timer_Controller.ButtonStateManager();
-
-        // If the text to speech is on.
-        if(Speak){ Notification.SpeakText("Timer running."); }
-
-        // Start the Scheduler.
-        TimeScheduler = Executors.newScheduledThreadPool(1);
-        TimeScheduler.scheduleAtFixedRate(this::RunningTime, 0, 1, TimeUnit.MILLISECONDS);
     }
+
+    private void BlockCurrentWebsites() throws IOException {
+        BlockedController.blockCurrentUrls();
+    }
+
 
     /**
      * Puts the timer in a Finished state and updates the GUI based on the state.
      */
-    private void Finish(){
+    private void Finish() throws IOException {
         // If timer is in a state of Running shutdown the existing scheduler and enforce Finished state.
         if(TimeScheduler != null && !TimeScheduler.isShutdown() && Timer_State == TimerState.Running){
             EnforceState(TimerState.Finished);
@@ -322,6 +374,7 @@ public class Timer {
         if(Speak){ Notification.SpeakText("Timer finished."); }
         user.setTotalFocusTime(userDAO.addToTotalTime(user.getId(), (long)Timer_Duration));
 
+        //BlockedController.resetBlockedList();
     }
 
     /**
@@ -353,7 +406,7 @@ public class Timer {
     /**
      * Puts the timer in a Restart state and updates the GUI based on the state then calls for a new timer.
      */
-    private void Restart(){
+    private void Restart() throws IOException {
         // Time scheduler has been shutdown either through the timer finishing or the timer being stopped early.
         EnforceState(TimerState.Restarting);
 
@@ -381,11 +434,19 @@ public class Timer {
         Timer_Controller.ButtonStateManager();
 
         // If the text to speech is on.
-        if(Speak){ Notification.SpeakText("Timer resumed."); }
+        if (Speak) {
+            Notification.SpeakText("Timer resumed.");
+        }
 
         // Start the Scheduler.
         TimeScheduler = Executors.newScheduledThreadPool(1);
-        TimeScheduler.scheduleAtFixedRate(this::RunningTime, 0, 1, TimeUnit.MILLISECONDS);
+        TimeScheduler.scheduleAtFixedRate(() -> {
+            try {
+                RunningTime();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }, 0, 1, TimeUnit.MILLISECONDS);
     }
 
     /**
