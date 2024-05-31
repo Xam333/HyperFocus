@@ -5,6 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import com.sun.javafx.scene.control.EmbeddedTextContextMenuContent?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="390.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="focusApp.controllers.BlockedController">
     <Pane>
         <VBox spacing="20.0">
@@ -26,7 +27,7 @@
                     <!-- TABLE LAYOUT -->
                     <VBox prefHeight="300.0" prefWidth="370.0">
                         <Label styleClass="bodyLabel" text="Blocked Applications:"/>
-                        <TableView fx:id="tableView" styleClass="blockedTableView">
+                        <TableView fx:id="tableView" styleClass="blockedTableView" onContextMenuRequested="#handleContextMenuRequest">
                             <columns>
                                 <TableColumn fx:id="iconColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" resizable="false" styleClass="blockedTableColumn" text="Icon"/>
                                 <TableColumn fx:id="nameColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" resizable="false" styleClass="blockedTableColumn" text="Name"/>
@@ -111,13 +112,15 @@
                 </HBox>
             </VBox>
         </StackPane>
+
+        <!-- CONFIRM CANCEL PANE -->
         <StackPane fx:id="confirmCancelStackPane" layoutX="55.0" layoutY="200.0" prefHeight="180.0"
                    styleClass="confirmPane" visible="false">
 
             <VBox alignment="CENTER" prefHeight="137.0" prefWidth="259.0" spacing="10.0">
-                <VBox alignment="CENTER_LEFT" spacing="2.0">
-                    <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="279.0" styleClass="bodyLabel" text="You have unsaved changes!" wrapText="true"/>
-                    <Label alignment="TOP_LEFT" styleClass="bodyLabel" text="Do you want to exit without saving?" wrapText="true"/>
+                <VBox alignment="CENTER" spacing="2.0">
+                    <Label alignment="CENTER" prefHeight="18.0" prefWidth="279.0" styleClass="bodyLabel" text="You have unsaved changes!" wrapText="true"/>
+                    <Label alignment="CENTER" styleClass="bodyLabel" text="Do you want to exit without saving?" wrapText="true"/>
                 </VBox>
                 <HBox alignment="CENTER" prefHeight="32.0" prefWidth="270.0" spacing="55.0">
                     <Button mnemonicParsing="false" onAction="#onAbortButtonClick" prefWidth="80.0" styleClass="tinySecondaryButton" text="No" textAlignment="CENTER"/>

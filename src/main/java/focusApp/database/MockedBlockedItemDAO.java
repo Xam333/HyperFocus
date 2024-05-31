@@ -4,6 +4,9 @@ import focusApp.models.block.BlockedApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 public class MockedBlockedItemDAO implements IBlockedItemDAO{
@@ -12,12 +15,12 @@ public class MockedBlockedItemDAO implements IBlockedItemDAO{
     public static final ArrayList<BlockedApplication> blockedItems = new ArrayList<>();
     public static int autoIncrementedID = 0;
 
+    private Connection connection;
+
     public MockedBlockedItemDAO()
     {
-        //Add initial data
-        //addApplication(new BlockedApplication("youtubeIcon", "Youtube", "www.youtube.com"));
-        //addApplication(new BlockedApplication("redditIcon", "Reddit", "www.reddit.com"));
-
+        this.connection = DatabaseConnection.getInstance();
+        Tables.createTables();
     }
 
     @Override
@@ -38,8 +41,35 @@ public class MockedBlockedItemDAO implements IBlockedItemDAO{
     }
 
     @Override
-    public void deleteContact(BlockedApplication blockedApplication) {
-        blockedItems.remove(blockedApplication);
+    public void deleteContact(String blockedName) {
+
+//        blockedItems.remove(blockedItem);
+        try {
+            String query = "SELECT websiteID FROM websites WHERE websiteName = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setString(1, String.valueOf(blockedName));
+
+            ResultSet res = statement.executeQuery();
+
+            if (res == null) {
+                return;
+            }
+
+            int websiteID = res.getInt("websiteID");
+
+            /* delete dependencies */
+            query = "DELETE FROM websites WHERE websiteID = ?";
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, websiteID);
+            statement.executeUpdate();
+
+
+            if (statement.executeUpdate() != 0) {
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
