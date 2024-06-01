@@ -24,7 +24,7 @@
                <children>
                   <Circle fill="#333333" radius="180.0" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="clockFace" />
                   <Arc fill="TRANSPARENT" length="360.0" radiusX="175.0" radiusY="175.0" stroke="#868686" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="15.0" styleClass="arcBase" />
-                  <Arc fx:id="arc" centerX="175.0" centerY="100.0" fill="TRANSPARENT" layoutX="-175.0" layoutY="-100.0" length="360.0" radiusX="175.0" radiusY="175.0" startAngle="90.0" stroke="#1b81e0" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="10.0" styleClass="arcMain" />
+                  <Arc fx:id="MainArc" centerX="175.0" centerY="100.0" fill="TRANSPARENT" layoutX="-175.0" layoutY="-100.0" length="360.0" radiusX="175.0" radiusY="175.0" startAngle="90.0" stroke="#1b81e0" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="10.0" styleClass="arcMain" />
                   <Arc fx:id="MiniArc" fill="#b8b8b880" length="360.0" radiusX="165.0" radiusY="165.0" startAngle="90.0" stroke="#a1a1a1fe" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeType="INSIDE" strokeWidth="0.0" type="ROUND" />
             
                     <HBox alignment="CENTER" layoutX="-127.0" layoutY="61.0" prefHeight="30.0" prefWidth="254.0" styleClass="TimerStatusBox" stylesheets="@../stylesheet.css">

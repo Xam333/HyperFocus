@@ -6,7 +6,6 @@ import focusApp.models.timer.Timer;
 import focusApp.HelloApplication;
 
 import focusApp.models.colour.UserConfig;
-import focusApp.models.timer.TimerState;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,21 +19,19 @@ import javafx.scene.control.Label;
 import javafx.scene.shape.Arc;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class  TimerController {
 
     private Timer timer;
-    private boolean InParentalControl;
-    private boolean PasswordGood;
-
 
     @FXML
     private Label StopWatch;
     @FXML
     private Label TimerStatus;
     @FXML
-    private Arc arc;
+    private Arc MainArc;
     @FXML
     private Arc MiniArc;
     @FXML
@@ -55,55 +52,43 @@ public class  TimerController {
     private ToggleButton ToggleListen;
 
     @FXML
-    protected void onToggleListenClick() {
-        timer.TurnOnTTS(ToggleListen.isSelected());
-    }
+    protected void onToggleListenClick(){ timer.TurnOnTTS(ToggleListen.isSelected()); }
 
 
     @FXML
-    protected void onStopButtonClick() throws IOException {
-        // Add code to check Passwords here. if in parental control mode.
-        timer.Control(Command.Stop);
-    }
+    protected void onStopButtonClick(){ timer.Control(Command.Stop); }
     @FXML
     protected void mouseInStopButton(){ StopButton.setContentDisplay(ContentDisplay.LEFT); }
     @FXML
-    protected void mouseOutStopButton(){ StopButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
+    protected void mouseOutStopButton(){ StopButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY); }
 
 
     @FXML
-    protected void onPauseButtonClick() throws IOException {
-        timer.Control(Command.Pause);
-    }
+    protected void onPauseButtonClick(){ timer.Control(Command.Pause); }
     @FXML
-    protected void mouseInPauseButton(){ PauseButton.setContentDisplay(ContentDisplay.LEFT);}
+    protected void mouseInPauseButton(){ PauseButton.setContentDisplay(ContentDisplay.LEFT); }
     @FXML
-    protected void mouseOutPauseButton(){ PauseButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
+    protected void mouseOutPauseButton(){ PauseButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY); }
 
 
     @FXML
-    protected void onResumeButtonClick() throws IOException {
-        timer.Control(Command.Resume);
-    }
+    protected void onResumeButtonClick(){ timer.Control(Command.Resume); }
     @FXML
-    protected void mouseInResumeButton(){ ResumeButton.setContentDisplay(ContentDisplay.LEFT);}
+    protected void mouseInResumeButton(){ ResumeButton.setContentDisplay(ContentDisplay.LEFT); }
     @FXML
-    protected void mouseOutResumeButton(){ ResumeButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
+    protected void mouseOutResumeButton(){ ResumeButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY); }
 
 
     @FXML
-    protected void onRestartButtonClick() throws IOException {
-        timer.Control(Command.Restart);
-    }
+    protected void onRestartButtonClick(){ timer.Control(Command.Restart); }
     @FXML
-    protected void mouseInRestartButton(){ RestartButton.setContentDisplay(ContentDisplay.LEFT);}
+    protected void mouseInRestartButton(){ RestartButton.setContentDisplay(ContentDisplay.LEFT); }
     @FXML
-    protected void mouseOutRestartButton(){ RestartButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
+    protected void mouseOutRestartButton(){ RestartButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY); }
 
 
     @FXML
     protected void onReturnButtonClick() throws IOException {
-        BlockedController.resetBlockedList();
         Stage stage = (Stage) ReturnButton.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), HelloApplication.WIDTH, HelloApplication.HEIGHT);
@@ -117,9 +102,9 @@ public class  TimerController {
         stage.setScene(scene);
     }
     @FXML
-    protected void mouseInReturnButton(){ ReturnButton.setContentDisplay(ContentDisplay.LEFT);}
+    protected void mouseInReturnButton(){ ReturnButton.setContentDisplay(ContentDisplay.LEFT); }
     @FXML
-    protected void mouseOutReturnButton(){ ReturnButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
+    protected void mouseOutReturnButton(){ ReturnButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY); }
 
 
     private enum ButtonStates{
@@ -142,15 +127,6 @@ public class  TimerController {
     public void ButtonStateManager(){
         Button[] AllButtons = new Button[]{PauseButton, ResumeButton, StopButton, RestartButton, ReturnButton};
 
-        // Bypass Button updates while in  parent control mode until the timer state is "finished".
-        if (InParentalControl && timer.getTimerState() != TimerState.Finished){
-            return;
-        }
-
-        UpdateButtonStates(AllButtons);
-    }
-
-    private void UpdateButtonStates(Button[] AllButtons){
         ButtonStates[] States;
         switch(timer.getTimerState()) {
 
@@ -211,11 +187,9 @@ public class  TimerController {
         };
     }
 
-    public void initialize(double startTime, double endTime, Notification Alarm) throws IOException {
+    public void initialize(double startTime, double endTime, Notification Alarm) {
         timer = new Timer(startTime, endTime, this, Alarm);
         timer.Control(Command.Start);
-        // Get the bool of parent mode here.
-        InParentalControl = false;
         ButtonStateManager();
     }
 
@@ -226,38 +200,74 @@ public class  TimerController {
         Platform.runLater(() -> StopWatch.setText(timer.FormatTime()));
     }
     public void UpdateArc(){
-        Platform.runLater(() -> arc.setLength(((timer.getRCDinMS() + 1) / timer.getRTDinMS()) * 360));
+        Platform.runLater(() -> MainArc.setLength(((timer.getRCDinMS() + 1) / timer.getRTDinMS()) * 360));
     }
     public void UpdateMiniArc(){
         Platform.runLater(() ->  MiniArc.setLength(((timer.getDCDinMS() + 1) / timer.getDTDinMS()) * 360));
     }
 
-    private void UpdateArcAttributes(Arc ThisArc, int Length, Boolean Visibility){
-        ThisArc.setLength(Length);
-        if (Visibility != null){
-            ThisArc.setVisible(Visibility);
+    private void UpdateArcAttributes(HashMap<Arc,ArcProperties> ArcMap){
+        for(Arc arc : ArcMap.keySet()){
+            // Get the properties for this arc
+            ArcProperties Properties = ArcMap.get(arc);
+
+            if (Properties.getLength() != null){
+                arc.setLength(Properties.getLength());
+            }
+
+            if (Properties.isVisibility() != null){
+                arc.setVisible(Properties.isVisibility());
+            }
         }
     }
+
     public void UpdateGUI(){
+        HashMap<Arc,ArcProperties> ArcMap = new HashMap<>();
+
         Platform.runLater(() -> {
             switch (timer.getTimerState()){
                 case Delayed, Restarting-> {
+
                     DelayedGroup.setVisible(true);
-                    UpdateArcAttributes(MiniArc, 360, true);
-                    UpdateArcAttributes(arc, 360, true);
+
+                    ArcMap.put(MiniArc, new ArcProperties(360.0, true));
+                    ArcMap.put(MainArc, new ArcProperties(360.0, true));
+
                     StopWatch.setVisible(false);
                 }
 
                 case Running, Stopped -> {
                     DelayedGroup.setVisible(false);
-                    UpdateArcAttributes(MiniArc, 0, false);
-                    UpdateArcAttributes(arc, 360, null);
+
+                    ArcMap.put(MiniArc, new ArcProperties(0.0, false));
+                    ArcMap.put(MainArc, new ArcProperties(360.0, null));
+
                     StopWatch.setVisible(true);
                 }
 
-                case Finished -> UpdateArcAttributes(arc, 0, false);
+                case Finished -> ArcMap.put(MainArc, new ArcProperties(0.0, false));
             }
+            UpdateArcAttributes(ArcMap);
         });
     }
+}
 
+/**
+ * small class used to hold the properties of Arc objects.
+ */
+class ArcProperties{
+    private final Double Length;
+    private final Boolean Visibility;
+
+    public ArcProperties(Double Length, Boolean Visibility){
+        this.Length = Length;
+        this.Visibility = Visibility;
+    }
+    public Double getLength() {
+        return Length;
+    }
+
+    public Boolean isVisibility() {
+        return Visibility;
+    }
 }
