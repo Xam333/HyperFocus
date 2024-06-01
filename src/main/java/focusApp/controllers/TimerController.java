@@ -6,7 +6,6 @@ import focusApp.models.timer.Timer;
 import focusApp.HelloApplication;
 
 import focusApp.models.colour.UserConfig;
-import focusApp.models.timer.TimerState;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,23 +19,25 @@ import javafx.scene.control.Label;
 import javafx.scene.shape.Arc;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class TimerController {
 
     private Timer timer;
-    private boolean InParentalControl;
 
     @FXML
     private Label StopWatch;
     @FXML
     private Label TimerStatus;
     @FXML
-    private Arc arc;
+    private Arc MainArc;
     @FXML
     private Arc MiniArc;
     @FXML
     private Group DelayedGroup;
+
+
     @FXML
     private Button PauseButton;
     @FXML
@@ -55,18 +56,13 @@ public class TimerController {
      * function off or on depending on its previous state
      */
     @FXML
-    protected void onToggleListenClick() {
-        timer.TurnOnTTS(ToggleListen.isSelected());
-    }
+    protected void onToggleListenClick(){ timer.TurnOnTTS(ToggleListen.isSelected()); }
 
     /**
      * Handles the onStopButtonClick action by stopping the timer
      */
     @FXML
-    protected void onStopButtonClick(){
-        // Add code to check Passwords here. if in parental control mode.
-        timer.Control(Command.Stop);
-    }
+    protected void onStopButtonClick(){ timer.Control(Command.Stop); }
 
     /**
      * Handles mouse hover event over stop button by highlighting the
@@ -80,7 +76,7 @@ public class TimerController {
      * button when mouse exits the field
      */
     @FXML
-    protected void mouseOutStopButton(){ StopButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
+    protected void mouseOutStopButton(){ StopButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY); }
 
     /**
      * Handles the onPauseButtonClick action by pausing the timer
@@ -102,7 +98,7 @@ public class TimerController {
      * button when mouse exits the field
      */
     @FXML
-    protected void mouseOutPauseButton(){ PauseButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
+    protected void mouseOutPauseButton(){ PauseButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY); }
 
     /**
      * Handles the onResumeButtonClick action by resuming the timer
@@ -117,14 +113,9 @@ public class TimerController {
      * button when mouse enters the field
      */
     @FXML
-    protected void mouseInResumeButton(){ ResumeButton.setContentDisplay(ContentDisplay.LEFT);}
-
-    /**
-     * Handles mouse hover event over resume button by un-highlighting the
-     * button when mouse exits the field
-     */
+    protected void mouseInResumeButton(){ ResumeButton.setContentDisplay(ContentDisplay.LEFT); }
     @FXML
-    protected void mouseOutResumeButton(){ ResumeButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
+    protected void mouseOutResumeButton(){ ResumeButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY); }
 
     /**
      * Handles the onRestartButtonClick action by restarting the timer
@@ -146,7 +137,7 @@ public class TimerController {
      * button when mouse exits the field
      */
     @FXML
-    protected void mouseOutRestartButton(){ RestartButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
+    protected void mouseOutRestartButton(){ RestartButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY); }
 
     /**
      * Handles the onReturnButtonClick action by loading the
@@ -174,14 +165,9 @@ public class TimerController {
      * button when mouse enters the field
      */
     @FXML
-    protected void mouseInReturnButton(){ ReturnButton.setContentDisplay(ContentDisplay.LEFT);}
-
-    /**
-     * Handles mouse hover event over return button by un-highlighting the
-     * button when mouse exits the field
-     */
+    protected void mouseInReturnButton(){ ReturnButton.setContentDisplay(ContentDisplay.LEFT); }
     @FXML
-    protected void mouseOutReturnButton(){ ReturnButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);}
+    protected void mouseOutReturnButton(){ ReturnButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY); }
 
     /**
      * States button identifiers used for disabled, enabled, graphic display states
@@ -219,21 +205,6 @@ public class TimerController {
     public void ButtonStateManager(){
         Button[] AllButtons = new Button[]{PauseButton, ResumeButton, StopButton, RestartButton, ReturnButton};
 
-        // Bypass Button updates while in  parent control mode until the timer state is "finished".
-        if (InParentalControl && timer.getTimerState() != TimerState.Finished){
-            return;
-        }
-
-        UpdateButtonStates(AllButtons);
-    }
-
-    /**
-     * Updates the states of the buttons provided based on the
-     * current timer state
-     * @param AllButtons
-     *      An array for all buttons being updated
-     */
-    private void UpdateButtonStates(Button[] AllButtons){
         ButtonStates[] States;
         switch(timer.getTimerState()) {
 
@@ -330,8 +301,6 @@ public class TimerController {
     public void initialize(double startTime, double endTime, Notification Alarm) {
         timer = new Timer(startTime, endTime, this, Alarm);
         timer.Control(Command.Start);
-        // Get the bool of parent mode here.
-        InParentalControl = false;
         ButtonStateManager();
     }
 
@@ -353,7 +322,7 @@ public class TimerController {
      * Updates the length of the arc based on current timer value
      */
     public void UpdateArc(){
-        Platform.runLater(() -> arc.setLength(((timer.getRCDinMS() + 1) / timer.getRTDinMS()) * 360));
+        Platform.runLater(() -> MainArc.setLength(((timer.getRCDinMS() + 1) / timer.getRTDinMS()) * 360));
     }
 
     /**
@@ -363,21 +332,18 @@ public class TimerController {
         Platform.runLater(() ->  MiniArc.setLength(((timer.getDCDinMS() + 1) / timer.getDTDinMS()) * 360));
     }
 
-    /**
-     * Updates the attributes of a specific arc element
-     *
-     * @param ThisArc
-     *      The arc being updated
-     * @param Length
-     *      The length of the arc
-     * @param Visibility
-     *      Used to track the visibility of the arc, if null the
-     *      visibility is no changed
-     */
-    private void UpdateArcAttributes(Arc ThisArc, int Length, Boolean Visibility){
-        ThisArc.setLength(Length);
-        if (Visibility != null){
-            ThisArc.setVisible(Visibility);
+    private void UpdateArcAttributes(HashMap<Arc,ArcProperties> ArcMap){
+        for(Arc arc : ArcMap.keySet()){
+            // Get the properties for this arc
+            ArcProperties Properties = ArcMap.get(arc);
+
+            if (Properties.getLength() != null){
+                arc.setLength(Properties.getLength());
+            }
+
+            if (Properties.isVisibility() != null){
+                arc.setVisible(Properties.isVisibility());
+            }
         }
     }
 
@@ -386,25 +352,52 @@ public class TimerController {
      * based on the timer state
      */
     public void UpdateGUI(){
+        HashMap<Arc,ArcProperties> ArcMap = new HashMap<>();
+
         Platform.runLater(() -> {
             switch (timer.getTimerState()){
                 case Delayed, Restarting-> {
+
                     DelayedGroup.setVisible(true);
-                    UpdateArcAttributes(MiniArc, 360, true);
-                    UpdateArcAttributes(arc, 360, true);
+
+                    ArcMap.put(MiniArc, new ArcProperties(360.0, true));
+                    ArcMap.put(MainArc, new ArcProperties(360.0, true));
+
                     StopWatch.setVisible(false);
                 }
 
                 case Running, Stopped -> {
                     DelayedGroup.setVisible(false);
-                    UpdateArcAttributes(MiniArc, 0, false);
-                    UpdateArcAttributes(arc, 360, null);
+
+                    ArcMap.put(MiniArc, new ArcProperties(0.0, false));
+                    ArcMap.put(MainArc, new ArcProperties(360.0, null));
+
                     StopWatch.setVisible(true);
                 }
 
-                case Finished -> UpdateArcAttributes(arc, 0, false);
+                case Finished -> ArcMap.put(MainArc, new ArcProperties(0.0, false));
             }
+            UpdateArcAttributes(ArcMap);
         });
     }
+}
 
+/**
+ * small class used to hold the properties of Arc objects.
+ */
+class ArcProperties{
+    private final Double Length;
+    private final Boolean Visibility;
+
+    public ArcProperties(Double Length, Boolean Visibility){
+        this.Length = Length;
+        this.Visibility = Visibility;
+    }
+    public Double getLength() {
+        return Length;
+    }
+
+    public Boolean isVisibility() {
+        return Visibility;
+    }
 }

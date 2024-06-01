@@ -33,7 +33,8 @@ public class Timer {
     private LocalTime Timer_End;
     private LocalTime Timer_Start;
     private final TimerController Timer_Controller;
-    private final BlockedController Block_Controller;
+
+
 
     /**
      * Stores the value of the timer offset.
@@ -139,9 +140,6 @@ public class Timer {
         /* initialise the user */
         userDAO = new UserDAO();
         user = UserHolder.getInstance().getUser();
-
-        // Set the block controller field
-        Block_Controller = null;
 
         CreateTimer();
     }
@@ -268,7 +266,7 @@ public class Timer {
         Timer_Controller.ButtonStateManager();
 
         // If the text to speech is on.
-        if(Speak){ Notification.SpeakText("Timer starting at:" + Timer_Start.format(Timer_12_Format)); }
+        if (Speak) Notification.SpeakText("Timer starting at:" + Timer_Start.format(Timer_12_Format));
 
         // Start the Scheduler.
         TimeScheduler = Executors.newScheduledThreadPool(1);
@@ -279,9 +277,9 @@ public class Timer {
      * Puts the timer in a Running state and updates the GUI based on the state.
      */
     private void Start(){
-        // If timer is in a state of Delayed shutdown the existing scheduler and enforce Running state,
+        // If timer is in a state of Delayed, shutdown the existing scheduler and enforce Running state,
         // otherwise state is enforced in the constructor.
-        if(TimeScheduler != null && !TimeScheduler.isShutdown() && Timer_State == TimerState.Delayed){
+        if(TimeScheduler != null && !TimeScheduler.isShutdown() && Timer_State == TimerState.Delayed) {
             EnforceState(TimerState.Running);
             TimeScheduler.shutdownNow();
         }
@@ -292,14 +290,14 @@ public class Timer {
         Timer_Controller.ButtonStateManager();
 
         // If the text to speech is on.
-        if(Speak){ Notification.SpeakText("Timer running."); }
-
-        // Start Blocking here:
-
+        if(Speak) Notification.SpeakText("Timer running.");
 
         // Start the Scheduler.
         TimeScheduler = Executors.newScheduledThreadPool(1);
         TimeScheduler.scheduleAtFixedRate(this::RunningTime, 0, 1, TimeUnit.MILLISECONDS);
+
+        // Block URLS.
+        BlockedController.blockCurrentUrls();
     }
 
     /**
@@ -320,12 +318,12 @@ public class Timer {
 
         Alarm.PlaySound();
 
-        // Stop Blocking here:
-
         // If the text to speech is on.
-        if(Speak){ Notification.SpeakText("Timer finished."); }
+        if(Speak) Notification.SpeakText("Timer finished.");
         user.setTotalFocusTime(userDAO.addToTotalTime(user.getId(), (long)Timer_Duration));
 
+        // Unblock URLS.
+        BlockedController.resetBlockedList();
     }
 
     /**
@@ -350,11 +348,11 @@ public class Timer {
         Timer_Controller.UpdateStopWatch();
         Timer_Controller.ButtonStateManager();
 
-        // Stop Blocking here:
-
-
         // If the text to speech is on.
-        if(Speak){ Notification.SpeakText("Timer stopped."); }
+        if(Speak) Notification.SpeakText("Timer stopped.");
+
+        // Unblock URLS.
+        BlockedController.resetBlockedList();
     }
 
     /**
@@ -388,7 +386,7 @@ public class Timer {
         Timer_Controller.ButtonStateManager();
 
         // If the text to speech is on.
-        if(Speak){ Notification.SpeakText("Timer resumed."); }
+        if (Speak) Notification.SpeakText("Timer resumed.");
 
         // Start the Scheduler.
         TimeScheduler = Executors.newScheduledThreadPool(1);
@@ -412,7 +410,7 @@ public class Timer {
         Timer_Controller.ButtonStateManager();
 
 
-        if(Speak){ Notification.SpeakText("Timer paused."); }
+        if(Speak) Notification.SpeakText("Timer paused.");
     }
 
     /**
@@ -421,6 +419,7 @@ public class Timer {
     public static void ForceStopTimer(){
         if(TimeScheduler != null && !TimeScheduler.isShutdown()){
             TimeScheduler.shutdown();
+            BlockedController.resetBlockedList();
             try{
                 if(!TimeScheduler.awaitTermination(5, TimeUnit.SECONDS)){
                     TimeScheduler.shutdownNow();

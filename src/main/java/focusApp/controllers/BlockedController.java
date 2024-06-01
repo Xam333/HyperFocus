@@ -21,22 +21,24 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import javafx.scene.input.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 import org.apache.commons.imaging.ImageReadException;
@@ -60,6 +62,13 @@ import java.util.regex.Matcher;
 
 public class BlockedController implements Initializable {
 
+
+
+
+    public StackPane turnOffParentalControlsStackPane;
+    public PasswordField parentalControlsPasswordField;
+    public Label denyParentalControlsDisableLabel;
+
     private String fileLocation;
     public StackPane addWebsiteStackPane;
     public TextField addWebsiteTextField;
@@ -75,7 +84,6 @@ public class BlockedController implements Initializable {
     public StackPane blackOutStackPane;
     public StackPane confirmCancelStackPane;
 
-    private ContextMenu contextMenu;
 
 
     @FXML
@@ -99,7 +107,7 @@ public class BlockedController implements Initializable {
     private Preset currentPreset;
     private UserHolder userHolder;
     private User user;
-    private ArrayList<BlockedItem> blockedItems;
+    private static ArrayList<BlockedItem> blockedItems;
 
     /**
      * Constructs new BlockedController and initialises necessary
@@ -389,12 +397,153 @@ public class BlockedController implements Initializable {
         // Automatically set as true until change is made
         changesSaved = true;
 
-        // Create and set context menu options
-        contextMenu = new ContextMenu();
-        MenuItem deleteMenuItem = new MenuItem("Delete");
-        deleteMenuItem.setOnAction(event -> handleDeleteAction());
-        contextMenu.getItems().add(deleteMenuItem);
+    }
 
+
+
+    public static String removeHttp(String url) {
+        if (url.startsWith("https://")) {
+            return url.substring(8);
+        }
+        return url;
+    }
+
+    public static void blockCurrentUrls() {
+        List<String> urlsToBlock = new ArrayList<>();
+
+        for (BlockedItem item : blockedItems) {
+            if (item.getClass() == WebsiteItem.class) {
+                System.out.println(item.getName() + " is website");
+                urlsToBlock.add(item.getURI());
+            }
+
+        }
+
+        try{
+            blockUrls(urlsToBlock);
+        } catch (IOException e){
+            System.out.println(e);
+        }
+
+    }
+
+    public static void blockUrls(List<String> urls) throws IOException {
+        // Note that this code only works in Java 7+,
+        // refer to the above link about appending files for more info
+
+        //resetBlockedList();
+        List<String> newURLs = new ArrayList<>();
+
+        String headerContent =  "# Copyright (c) 1993-2009 Microsoft Corp.\n" +
+                "#\n" +
+                "# This is a sample HOSTS file used by Microsoft TCP/IP for Windows.\n" +
+                "#\n" +
+                "# This file contains the mappings of IP addresses to host names. Each\n" +
+                "# entry should be kept on an individual line. The IP address should\n" +
+                "# be placed in the first column followed by the corresponding host name.\n" +
+                "# The IP address and the host name should be separated by at least one\n" +
+                "# space.\n" +
+                "#\n" +
+                "# Additionally, comments (such as these) may be inserted on individual\n" +
+                "# lines or following the machine name denoted by a '#' symbol.\n" +
+                "#\n" +
+                "# For example:\n" +
+                "#\n" +
+                "#      102.54.94.97     rhino.acme.com          # source server\n" +
+                "#       38.25.63.10     x.acme.com              # x client host\n" +
+                "\n" +
+                "# localhost name resolution is handled within DNS itself.\n" +
+                "#\t127.0.0.1       localhost\n" +
+                "#\t::1             localhost\n";
+
+        newURLs.add(headerContent);
+
+        for (String url : urls) {
+            newURLs.add("127.0.0.1 " + removeHttp(url) + "\n");
+        }
+
+
+        // Get OS name
+        String OS = System.getProperty("os.name").toLowerCase();
+
+        // Use OS name to find correct location of hosts file
+        String hostsFile = "";
+        if ((OS.indexOf("win") >= 0)) {
+            // Doesn't work before Windows 2000
+            hostsFile = "C:\\Windows\\System32\\drivers\\etc\\hosts";
+        } else if ((OS.indexOf("mac") >= 0)) {
+            // Doesn't work before OS X 10.2
+            hostsFile = "etc/hosts";
+        } else if ((OS.indexOf("nux") >= 0)) {
+            hostsFile = "/etc/hosts";
+        } else {
+            // Handle error when platform is not Windows, Mac, or Linux
+            System.err.println("Sorry, but your OS doesn't support blocking.");
+            System.exit(0);
+        }
+
+        System.out.println("Block Websites: " + urls);
+        // Actually block site
+//        Files.write(Paths.get(hostsFile),
+//                ("127.0.0.1 " + url + "\n").getBytes(),
+//                StandardOpenOption.APPEND);}
+        //Files.write(Paths.get(hostsFile), headerContent.getBytes(), StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
+        //Files.write(Paths.get(hostsFile), newURLs, StandardOpenOption.APPEND);
+        Files.write(Paths.get(hostsFile), newURLs, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
+    }
+
+
+    public static void resetBlockedList() {
+        // Note that this code only works in Java 7+,
+        // refer to the above link about appending files for more info
+
+        // Get OS name
+        String OS = System.getProperty("os.name").toLowerCase();
+
+        // Use OS name to find correct location of hosts file
+        String hostsFile = "";
+        if ((OS.indexOf("win") >= 0)) {
+            // Doesn't work before Windows 2000
+            hostsFile = "C:\\Windows\\System32\\drivers\\etc\\hosts";
+        } else if ((OS.indexOf("mac") >= 0)) {
+            // Doesn't work before OS X 10.2
+            hostsFile = "etc/hosts";
+        } else if ((OS.indexOf("nux") >= 0)) {
+            hostsFile = "/etc/hosts";
+        } else {
+            // Handle error when platform is not Windows, Mac, or Linux
+            System.err.println("Sorry, but your OS doesn't support blocking.");
+            System.exit(0);
+        }
+
+        // Actually block site
+        try{
+            Files.write(Paths.get(hostsFile),
+                    ("# Copyright (c) 1993-2009 Microsoft Corp.\n" +
+                            "#\n" +
+                            "# This is a sample HOSTS file used by Microsoft TCP/IP for Windows.\n" +
+                            "#\n" +
+                            "# This file contains the mappings of IP addresses to host names. Each\n" +
+                            "# entry should be kept on an individual line. The IP address should\n" +
+                            "# be placed in the first column followed by the corresponding host name.\n" +
+                            "# The IP address and the host name should be separated by at least one\n" +
+                            "# space.\n" +
+                            "#\n" +
+                            "# Additionally, comments (such as these) may be inserted on individual\n" +
+                            "# lines or following the machine name denoted by a '#' symbol.\n" +
+                            "#\n" +
+                            "# For example:\n" +
+                            "#\n" +
+                            "#      102.54.94.97     rhino.acme.com          # source server\n" +
+                            "#       38.25.63.10     x.acme.com              # x client host\n" +
+                            "\n" +
+                            "# localhost name resolution is handled within DNS itself.\n" +
+                            "#\t127.0.0.1       localhost\n" +
+                            "#\t::1             localhost\n").getBytes(),
+                    StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
+        } catch (IOException e){
+            System.out.println(e);
+        }
     }
 
     /**
@@ -405,7 +554,6 @@ public class BlockedController implements Initializable {
      * @throws IOException
      *      If an exception occurred while loading the FXML file
      */
-//    Add new websites and applications to database
     public void onSaveButtonClick(ActionEvent actionEvent) throws IOException {
 
         for (BlockedItem item : blockedItems) {
@@ -534,32 +682,5 @@ public class BlockedController implements Initializable {
     public void onAbortButtonClick() {
         blackOutStackPane.setVisible(false);
         confirmCancelStackPane.setVisible(false);
-    }
-
-    /**
-     * Handles the display for the context menu
-     * @param contextMenuEvent
-     *      The trigger for opening or closing the context menu
-     */
-    public void handleContextMenuRequest(ContextMenuEvent contextMenuEvent) {
-        BlockedItem selectedItem = tableView.getSelectionModel().getSelectedItem();
-        if (selectedItem != null){
-            // Show context menu next to mouse
-            contextMenu.show(tableView, contextMenuEvent.getScreenX(), contextMenuEvent.getScreenY());
-        }
-    }
-
-    /**
-     * Handles the delete action in the context menu
-     * If the item selected is not null, remove it from the table view and the database
-     */
-    private void handleDeleteAction() {
-        BlockedItem selectedItem = tableView.getSelectionModel().getSelectedItem();
-        if (selectedItem != null){
-            blockedDAO.deleteContact(String.valueOf(selectedItem));
-
-            tableView.getItems().remove(selectedItem);
-            changesSaved = false;
-        }
     }
 }
