@@ -27,7 +27,7 @@
                     <!-- TABLE LAYOUT -->
                     <VBox prefHeight="300.0" prefWidth="370.0">
                         <Label styleClass="bodyLabel" text="Blocked Applications:"/>
-                        <TableView fx:id="tableView" styleClass="blockedTableView" onContextMenuRequested="#handleContextMenuRequest">
+                        <TableView fx:id="tableView" styleClass="blockedTableView" >
                             <columns>
                                 <TableColumn fx:id="iconColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" resizable="false" styleClass="blockedTableColumn" text="Icon"/>
                                 <TableColumn fx:id="nameColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" resizable="false" styleClass="blockedTableColumn" text="Name"/>
